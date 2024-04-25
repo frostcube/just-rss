@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Saved
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Saved</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Bookmark list -->
+  <ion-list>
+    <div *ngFor="let entry of bookmarks.getBookmarks()">
+      <ion-card [button]="true" (click)="platformService.openUrlInPlatformBrowser(entry.link)">
+        <ion-card-header>
+          <ion-card-subtitle>
+            {{entry.source}} | {{formatDate(entry.pubDate, "en-AU")}}            
+          </ion-card-subtitle>
+          <ion-card-title>
+            <ion-item class="ion-no-padding">
+              <ion-label>{{entry.title}}</ion-label>                  
+              <ion-button slot="end" fill="clear" (click)="removeBookmark($event, entry)">
+                <ion-icon color="medium" name="bookmark"></ion-icon>
+              </ion-button>
+            </ion-item>  
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            {{entry.contentStripped}}
+        </ion-card-content>
+      </ion-card>
+      </div>
+  </ion-list>
+</ion-content>

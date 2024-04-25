@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Just RSS</string>
+    <string name="title_activity_main">Just RSS</string>
+    <string name="package_name">com.frostcube.justrss</string>
+    <string name="custom_url_scheme">com.frostcube.justrss</string>
+</resources>

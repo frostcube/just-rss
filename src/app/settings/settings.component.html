@@ -1,0 +1,37 @@
+<ion-content class="ion-padding">
+  <h1>Preferences</h1>
+  <ion-list>
+    <ion-item>
+      <ion-toggle checked="currentSettings.preview" [(ngModel)]="currentSettings.preview" 
+      (ionChange)="update()"> Show entry preview </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle checked="currentSettings.showImages" [(ngModel)]="currentSettings.showImages" 
+      (ionChange)="update()"> Show entry images </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle checked="currentSettings.compressedFeed" [(ngModel)]="currentSettings.compressedFeed" 
+      (ionChange)="update()"> Compress feed display </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Country" placeholder="currentSettings.locale" [(ngModel)]="currentSettings.locale">
+        <!-- Locale list https://www.oracle.com/java/technologies/javase/java8locales.html -->
+        <ion-select-option value="en-AU">Australia (AU)</ion-select-option>
+        <ion-select-option value="de-DE">Germany</ion-select-option>
+        <ion-select-option value="en-US">United States (US)</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Feed Retrieval Timeout (ms)" labelPlacement="stacked" [value]="currentSettings.retrievalTimeout"
+      (ionChange)="update()"[(ngModel)]="currentSettings.retrievalTimeout"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Default Polling Frequency (s) - 0 for unlimited" labelPlacement="stacked" [value]="currentSettings.defaultPollingFrequency"
+      (ionChange)="update()"[(ngModel)]="currentSettings.defaultPollingFrequency"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Max Feed Items per Feed (Can impact app performance) - 0 for unlimited" labelPlacement="stacked" [value]="currentSettings.maxFeedLength"
+      (ionChange)="update()"[(ngModel)]="currentSettings.maxFeedLength"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>

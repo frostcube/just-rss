@@ -1,0 +1,34 @@
+{
+    "/verge": {
+        "target": "https://www.theverge.com",
+        "changeOrigin": true,
+        "secure": false,
+        "pathRewrite": {
+            "^/verge": ""
+        }
+    },
+    "/polygon": {
+        "target": "https://www.polygon.com",
+        "changeOrigin": true,
+        "secure": false,
+        "pathRewrite": {
+            "^/polygon": ""
+        }
+    },
+    "/dw": {
+        "target": "https://rss.dw.com",
+        "changeOrigin": true,
+        "secure": false,
+        "pathRewrite": {
+            "^/dw": ""
+        }
+    },
+    "/forbes": {
+        "target": "https://www.forbes.com",
+        "changeOrigin": true,
+        "secure": false,
+        "pathRewrite": {
+            "^/forbes": ""
+        }
+    }
+}

@@ -1,0 +1,129 @@
+<!-- Menu Bar -->
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Sources</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item-sliding *ngFor="let source of sourcesService.getSources()">
+          <ion-item (click)="filterByUrl(source.url)">
+              <ion-icon *ngIf="source.url === filter" aria-hidden="true" name="chevron-forward" slot="start"></ion-icon>
+              <ion-label>
+                <strong>{{source.title}}</strong>
+                <br />
+                <ion-text>{{source.url}}</ion-text>
+              </ion-label>
+          </ion-item>
+  
+          <ion-item-options side="end">
+            <ion-item-option color="danger">
+              <ion-icon slot="icon-only" name="trash" (click)="sourcesService.removeSource(source.url)"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    <ion-button ion-button (click)="filterClear()" [disabled]="filter === ''">Clear Filter</ion-button>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="main-content">
+  <ion-header [translucent]="true">
+    <ion-toolbar color="primary">
+      <ion-buttons collapse="true" slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Feed</ion-title>
+      <ion-buttons collapse="true" slot="end">
+        <ion-button slot="end" (click)="openSettings()">
+          <ion-icon color="medium" name="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Collapsable Header iOS -->
+  <ion-content #mainFeed id="main-feed" [scrollEvents]="true" (ionScroll)="handleScroll($any($event))" [fullscreen]="true">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-buttons collapse="true" slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title size="large">Feed</ion-title>
+        <ion-buttons collapse="true" slot="end">
+          <ion-button slot="end" (click)="openSettings()">
+            <ion-icon color="medium" name="ellipsis-vertical"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <!-- Pull to refresh -->
+    <ion-refresher slot="fixed" (ionRefresh)="feedService.parseUrls($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <!-- Feed list -->
+    <ion-list>
+      <div *ngFor="let entry of feedService.entries">
+        <div *ngIf="filter === '' || entry.feedUrl === filter">
+          <div *ngIf="!settingsService.getSettings().compressedFeed">
+            <ion-card [button]="true" (click)="openPreview(entry.title, entry.content, entry.link)">
+              <div *ngIf="settingsService.getSettings().showImages" class="card-image">
+                <img *ngIf="entry.imgLink !== null" alt="Entry Cover Image" src="{{ entry.imgLink }}" />
+              </div>
+              <ion-card-header>
+                <ion-card-subtitle>
+                  {{entry.source}} | {{formatDate(entry.isoDate, settingsService.getSettings().locale)}}            
+                </ion-card-subtitle>
+                <ion-card-title>
+                  <!---ToDo: We override the background as the colour is slightly different on iOS-->
+                  <ion-item class="ion-no-padding" style="--ion-item-background: transparent;">
+                    <ion-label>{{entry.title}}</ion-label>                  
+                    <ion-button *ngIf="entry.bookmark !== true" slot="end" fill="clear" (click)="addBookmark($event, entry)">
+                      <ion-icon color="medium" name="bookmark-outline"></ion-icon>
+                    </ion-button>
+                    <ion-button *ngIf="entry.bookmark !== false" slot="end" fill="clear" (click)="removeBookmark($event, entry)">
+                      <ion-icon color="medium" name="bookmark"></ion-icon>
+                    </ion-button>
+                  </ion-item>  
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                  {{entry.contentStripped}}
+              </ion-card-content>
+            </ion-card>
+          </div>
+          <div *ngIf="settingsService.getSettings().compressedFeed">
+            <ion-item-sliding>
+              <ion-item [button]="true" (click)="openPreview(entry.title, entry.content, entry.link)">
+                <div *ngIf="settingsService.getSettings().showImages">
+                  <ion-thumbnail *ngIf="entry.imgLink !== null" slot="start">
+                    <img alt="Entry Cover Image" src="{{ entry.imgLink }}" />
+                  </ion-thumbnail>
+                </div>
+                <ion-label>
+                  <strong>{{entry.title}}</strong><br />
+                  <ion-text>{{entry.source}}</ion-text><br />
+                  <ion-note color="medium" class="ion-text-wrap">{{entry.contentStripped}}</ion-note>
+                </ion-label>
+                <div class="metadata-end-wrapper" slot="end">
+                  <ion-note color="medium">{{formatDateAsDay(entry.isoDate, settingsService.getSettings().locale)}}</ion-note>
+                  <!-- <ion-icon color="medium" name="chevron-forward"></ion-icon> -->
+                </div>
+              </ion-item>
+            </ion-item-sliding>
+          </div>
+        </div>
+      </div>
+    </ion-list>
+
+    <!--Return to top button-->
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button *ngIf="currentScrollOffset > 10" (click)="scrollToTop()">
+        <ion-icon name="chevron-up-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ion-content>
+</div>

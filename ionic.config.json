@@ -1,0 +1,7 @@
+{
+  "name": "just-rss",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

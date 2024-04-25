@@ -1,0 +1,141 @@
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle, IonCardTitle,
+  IonContent,
+  IonFab, IonFabButton,
+  IonHeader, IonIcon, IonInput, IonItem,
+  IonItemOption, IonItemOptions,
+  IonItemSliding,
+  IonLabel, IonList,
+  IonMenu,
+  IonMenuButton,
+  IonNote, IonRefresher,
+  IonRefresherContent, IonText,
+  IonThumbnail,
+  IonTitle, IonToolbar,
+  ModalController,
+  ScrollDetail
+} from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { bookmark, bookmarkOutline, chevronForward, chevronUpOutline, ellipsisVertical, shareSocialOutline, trash } from 'ionicons/icons';
+import { PreviewComponent } from '../preview/preview.component';
+import { BookmarkService } from '../services/bookmark.service';
+import { FeedService } from '../services/feed.service';
+import { PlatformService } from '../services/platform.service';
+import { SettingsService } from '../services/settings.service';
+import { SourcesService } from '../services/sources.service';
+import { SettingsComponent } from '../settings/settings.component';
+
+@Component({
+  selector: 'app-feed',
+  templateUrl: 'feed.page.html',
+  styleUrls: ['feed.page.scss'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, IonCard, IonCardHeader, IonCardContent, 
+    IonCardSubtitle, IonCardTitle, IonHeader, IonToolbar, IonTitle, IonNote, 
+    IonContent, IonList, IonInput, IonItem, IonItemOption, IonItemOptions, 
+    IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuButton, 
+    IonItemSliding, IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
+    SettingsComponent]
+})
+
+export class FeedPage {
+
+  @ViewChild('mainFeed', { static: true })
+  public mainFeed!: IonContent;
+  public filter: string = '';
+  public currentScrollOffset: number = 0;
+
+  constructor(public sourcesService: SourcesService, public platformService: PlatformService, 
+              public bookmarkService: BookmarkService, public feedService: FeedService,
+              private modalController: ModalController, public elementRef: ElementRef,
+              public settingsService: SettingsService) {
+    addIcons({ bookmark, bookmarkOutline, shareSocialOutline, ellipsisVertical, chevronForward, chevronUpOutline, 
+      trash });
+  }
+
+  public formatDate(dateStr: string, locale: string) {
+    const date = new Date(dateStr);
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric'
+    };
+    return date.toLocaleDateString(locale, dateOptions);        
+  }
+
+  public formatDateAsDay(dateStr: string, locale: string) {
+    const date = new Date(dateStr);
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      weekday: 'short'
+    };
+    return date.toLocaleDateString(locale, dateOptions);     
+  }
+
+  public scrollToTop() {
+    this.mainFeed.scrollToTop(400);
+  }
+
+  public filterByUrl(url: string) {
+    this.filter = url;
+    console.log('[FeedPage] Filter set: ' + this.filter);
+  }
+
+  public filterClear() {
+    this.filter = '';
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public addBookmark(event: Event, entry: any) {
+    this.bookmarkService.addEntry(entry);
+    event.stopPropagation();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public removeBookmark(event: Event, entry: any) {
+    this.bookmarkService.removeEntry(entry);
+    event.stopPropagation();
+  }
+
+  async openPreview(title: string, content: string, url: string) {
+    if (this.settingsService.getSettings().preview) {
+      const preview = await this.modalController.create({
+        component: PreviewComponent,
+        componentProps: {
+          articleTitle: title,
+          articleContent: content,
+          articleLink: url
+        },
+        presentingElement: this.elementRef.nativeElement,
+
+      });
+
+      preview.present();
+    }
+    else {
+      this.platformService.openUrlInPlatformBrowser(url);
+    }
+  }
+
+  async openSettings() {
+    const settings = await this.modalController.create({
+      component: SettingsComponent,
+      breakpoints: [0, 0.5],
+      initialBreakpoint: 0.5
+    });
+
+    settings.present();
+  }
+
+  public handleScroll(ev: CustomEvent<ScrollDetail>) {
+    this.currentScrollOffset = ev.detail.currentY;
+  }
+
+}

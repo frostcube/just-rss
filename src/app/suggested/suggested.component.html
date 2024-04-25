@@ -1,0 +1,9 @@
+<ion-content class="ion-padding">
+  <h1>Suggested Feeds</h1>
+  <ion-list>
+    <ion-item *ngFor="let feed of suggestedFeeds">
+      <ion-checkbox [(ngModel)]="feed.selected">  {{ feed.title }} </ion-checkbox>
+    </ion-item>
+  </ion-list>
+  <ion-button ion-button (click)="addFeeds()">Import Feeds</ion-button>
+</ion-content>

@@ -1,0 +1,11 @@
+@media (orientation: landscape) {
+    #main-feed {
+        --padding-start: 20%;
+        --padding-end: 20%;
+    }
+}
+
+.card-image {
+    display: flex;
+    justify-content: center;
+}
