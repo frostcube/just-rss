@@ -84,7 +84,10 @@ export class FeedPage {
   }
 
   public filterByUrl(url: string) {
-    this.filter = url;
+    if (this.filter === url)
+      this.filterClear();
+    else
+      this.filter = url;
     console.log('[FeedPage] Filter set: ' + this.filter);
   }
 
