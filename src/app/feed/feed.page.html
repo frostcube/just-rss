@@ -2,7 +2,7 @@
 <ion-menu contentId="main-content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Sources</ion-title>
+      <ion-title>Filter</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
@@ -32,7 +32,11 @@
   <ion-header [translucent]="true">
     <ion-toolbar color="primary">
       <ion-buttons collapse="true" slot="start">
-        <ion-menu-button></ion-menu-button>
+        <ion-menu-toggle>
+          <ion-button>
+            <ion-icon color="medium" name="filter-outline"></ion-icon>
+          </ion-button>
+        </ion-menu-toggle>
       </ion-buttons>
       <ion-title>Feed</ion-title>
       <ion-buttons collapse="true" slot="end">
@@ -48,7 +52,11 @@
     <ion-header collapse="condense">
       <ion-toolbar>
         <ion-buttons collapse="true" slot="start">
-          <ion-menu-button></ion-menu-button>
+          <ion-menu-toggle>
+            <ion-button>
+              <ion-icon color="medium" name="filter-outline"></ion-icon>
+            </ion-button>
+          </ion-menu-toggle>
         </ion-buttons>
         <ion-title size="large">Feed</ion-title>
         <ion-buttons collapse="true" slot="end">

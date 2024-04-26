@@ -15,7 +15,7 @@ import {
   IonItemSliding,
   IonLabel, IonList,
   IonMenu,
-  IonMenuButton,
+  IonMenuToggle,
   IonNote, IonRefresher,
   IonRefresherContent, IonText,
   IonThumbnail,
@@ -24,7 +24,7 @@ import {
   ScrollDetail
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { bookmark, bookmarkOutline, chevronForward, chevronUpOutline, ellipsisVertical, shareSocialOutline, trash } from 'ionicons/icons';
+import { bookmark, bookmarkOutline, chevronForward, chevronUpOutline, ellipsisVertical, filterOutline, shareSocialOutline, trash } from 'ionicons/icons';
 import { PreviewComponent } from '../preview/preview.component';
 import { BookmarkService } from '../services/bookmark.service';
 import { FeedService } from '../services/feed.service';
@@ -41,7 +41,7 @@ import { SettingsComponent } from '../settings/settings.component';
   imports: [CommonModule, FormsModule, IonCard, IonCardHeader, IonCardContent, 
     IonCardSubtitle, IonCardTitle, IonHeader, IonToolbar, IonTitle, IonNote, 
     IonContent, IonList, IonInput, IonItem, IonItemOption, IonItemOptions, 
-    IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuButton, 
+    IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuToggle, 
     IonItemSliding, IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
     SettingsComponent]
 })
@@ -57,8 +57,8 @@ export class FeedPage {
               public bookmarkService: BookmarkService, public feedService: FeedService,
               private modalController: ModalController, public elementRef: ElementRef,
               public settingsService: SettingsService) {
-    addIcons({ bookmark, bookmarkOutline, shareSocialOutline, ellipsisVertical, chevronForward, chevronUpOutline, 
-      trash });
+    addIcons({ bookmark, bookmarkOutline, shareSocialOutline, ellipsisVertical, filterOutline, chevronForward, 
+      chevronUpOutline, trash });
   }
 
   public formatDate(dateStr: string, locale: string) {
@@ -84,7 +84,10 @@ export class FeedPage {
   }
 
   public filterByUrl(url: string) {
-    this.filter = url;
+    if (this.filter === url)
+      this.filterClear();
+    else
+      this.filter = url;
     console.log('[FeedPage] Filter set: ' + this.filter);
   }
 
