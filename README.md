@@ -5,16 +5,20 @@ Just RSS was created so that people would have a RSS client that could run on th
 Core pillars:
 
 - Open Source (Yah!)
-- No AI
+- All processing done on-device
 - No Ads
 - No Subscription
 - Distraction free
 
 The intention is to keep Just RSS a simple app with as few features as possible, however the open source nature means that you are able to fork it and add your dream feature if that's what you want and that's cool too.
 
+## Beta Access
+
+[![Google Play](./docs/en_google_play_download.png)](https://play.google.com/store/apps/details?id=com.frostcube.justrss)[![Testflight](./docs/testflight.png)](https://testflight.apple.com/join/WsfbPUH1)
+
 ![Just RSS Feed Page](./docs/just_rss_feed.png)
 
-## Getting started
+# Developer Getting Started
 
 ```bash
 npm install -g @ionic/cli native-run cordova-res
