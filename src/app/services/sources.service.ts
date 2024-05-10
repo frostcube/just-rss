@@ -60,6 +60,8 @@ export class SourcesService {
       tags: []
     };
 
+    this.updateLocalCache(feedInfo, feedData);
+
     this.addSource(feedInfo);
   }
 
@@ -172,6 +174,28 @@ export class SourcesService {
     return feed;
   }
 
+  public updateLocalCache(feed: any, feedData: any): any {
+    const tempFeedData: Array<any> = [];
+
+    for (const item of feedData.items) {
+      item.source = feed.title;
+      item.contentStripped = item.contentSnippet.substring(0, 120);
+      item.imgLink = this.getItemMedia(item);
+      item.feedUrl = feed.url;
+      item.bookmark = false;
+      tempFeedData.push(item);
+    }
+
+    this.storageService.set(feed.url, JSON.stringify(tempFeedData));
+
+    const source = this.getSource(feed.url);
+    source.healthy = true;
+    source.lastRetrieved = Date.now();
+    this.setSource(feed.url, source);
+
+    return tempFeedData;
+  }
+
   async presentErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -183,4 +207,38 @@ export class SourcesService {
 
     await toast.present();
   }
+
+  private getItemMedia(item: any): string | null {
+    let mediaLinkURL = item.mediaContent;
+
+    if (mediaLinkURL !== undefined) {
+      mediaLinkURL = mediaLinkURL[0].$.url;
+    }
+
+    if (mediaLinkURL === undefined)
+      mediaLinkURL = this.findMediaInHTML(item.content);
+
+    if (mediaLinkURL === undefined || mediaLinkURL === null) {
+      console.warn('[FeedService] No media link found for article');
+      return null;
+    }
+    else {
+      return mediaLinkURL;
+    }
+  }
+
+  private findMediaInHTML(htmlString: string): string | null {
+    
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+    const mediaLink = doc.querySelector('img');
+    
+    if (mediaLink) {
+      const mediaLinkURL = mediaLink.getAttribute('src');
+      return mediaLinkURL;
+    } else {
+      return null;
+    }
+  }
+
 }

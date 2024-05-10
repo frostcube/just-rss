@@ -68,7 +68,7 @@
     </ion-header>
 
     <!-- Pull to refresh -->
-    <ion-refresher slot="fixed" (ionRefresh)="feedService.parseUrls($event)">
+    <ion-refresher slot="fixed" (ionRefresh)="feedService.syncEntriesWithUpstream($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
