@@ -60,9 +60,8 @@ export class SourcesService {
       tags: []
     };
 
-    this.updateLocalCache(feedInfo, feedData);
-
     this.addSource(feedInfo);
+    this.updateLocalCache(feedInfo, feedData);
   }
 
   addSource(feed: IFeedDict) {
