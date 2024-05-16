@@ -62,6 +62,7 @@ export class SourcesService {
 
     this.addSource(feedInfo);
     this.updateLocalCache(feedInfo, feedData);
+    // TODO: Update master feed
   }
 
   addSource(feed: IFeedDict) {
