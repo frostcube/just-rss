@@ -56,6 +56,7 @@ export class FeedService {
         }
         catch (error) {
           console.error('[FeedService] ' + error);
+          // Get the cache as the feed isn't accessible
           feedData = await this.storageService.getObjectFromStorage(feed.url);
         }
       }
