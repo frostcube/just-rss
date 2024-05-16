@@ -43,28 +43,33 @@ export class FeedService {
     // Update the cache for any feeds that need updating
     for (const feed of feedList) {
       const nextPollDate = feed.lastRetrieved + (feed.pollingFrequency * 1000); // Milliseconds
+      let feedData = null;
 
       if (Date.now() < nextPollDate) {
         console.warn('[FeedService] Too soon to retrieve: ' + feed.url);
-        const feedData = await this.storageService.getObjectFromStorage(feed.url);
+        feedData = await this.storageService.getObjectFromStorage(feed.url);
+      }
+      else {
+        try {
+          const feedDataDownloaded = await this.sourcesService.downloadAndParseFeed(feed.url);
+          feedData = this.sourcesService.updateLocalCache(feed, feedDataDownloaded);
+        }
+        catch (error) {
+          console.error('[FeedService] ' + error);
+          feedData = await this.storageService.getObjectFromStorage(feed.url);
+        }
+      }
 
+      // Update master feed
+      if (feedData !== null) {
         for (const item of feedData) {
           tempFeedMasterData.push(item);
         }
+      }
+      else {
+        console.error('[FeedService] No Feed Data for ' + feed.url);
         continue;
       }
-
-      try {
-        const feedDataDownloaded = await this.sourcesService.downloadAndParseFeed(feed.url);
-        const feedResult = this.sourcesService.updateLocalCache(feed, feedDataDownloaded);
-        for (const item of feedResult) {
-          tempFeedMasterData.push(item);
-        }
-      }
-      catch (error) {
-        console.error('[FeedService] ' + error);
-        continue;
-      }      
     }
 
     // Update cache and values
