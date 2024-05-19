@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
 import { SettingsService } from './settings.service';
 import { ToastController } from '@ionic/angular/standalone';
+import { Subject } from 'rxjs';
 declare const RSSParser: any;
 
 const STORAGE_FEED_LIST = 'storage_feed_list';
@@ -31,6 +32,7 @@ export interface IFeedDict {
   providedIn: 'root'
 })
 export class SourcesService {
+  public newSource = new Subject<string>();
   private _feedList: Array<IFeedDict> = [];
 
   constructor(private storageService: StorageService, private settingsService: SettingsService,
@@ -68,7 +70,7 @@ export class SourcesService {
 
     this.addSource(feedInfo);
     this.updateLocalCache(feedInfo, feedData);
-    // TODO: Update master feed
+    this.newSource.next(feedInfo.url);
   }
 
   addSource(feed: IFeedDict) {

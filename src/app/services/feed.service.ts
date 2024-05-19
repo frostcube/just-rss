@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Disabled as we are using an untyped library: RSSPhaser
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { StorageService } from './storage.service';
 import { SourcesService } from './sources.service';
 
@@ -9,7 +9,7 @@ const STORAGE_FEED_DATA = 'storage_list_feed_data';
 @Injectable({
   providedIn: 'root'
 })
-export class FeedService {
+export class FeedService implements OnDestroy {
 
   public entries: any = [];
 
@@ -17,6 +17,15 @@ export class FeedService {
     this.storageService.onReady.subscribe(() => {
       this.initFeedData(this.storageService.onReady.value);
     });
+
+    this.sourcesService.newSource.subscribe(() => {
+      this.rebuildEntriesFromCache();
+    });
+  }
+
+  ngOnDestroy() {
+    this.storageService.onReady.unsubscribe();
+    this.sourcesService.newSource.unsubscribe();
   }
 
   private initFeedData(status: boolean) {
@@ -76,6 +85,7 @@ export class FeedService {
     // Update cache and values
     this.entries = this.sortByDate(tempFeedMasterData);
     this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
+    console.log('[FeedService] Rebuilt master feed from upstream');
     event.target.complete();
   }
 
@@ -92,6 +102,7 @@ export class FeedService {
 
     this.entries = this.sortByDate(tempFeedMasterData);
     this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
+    console.log('[FeedService] Rebuilt master feed from cache');
   }
 
   public updateBookmarkStatus(item: any, status: boolean) {
