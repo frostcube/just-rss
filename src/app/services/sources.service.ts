@@ -13,11 +13,17 @@ export interface IFeedDict {
   title: boolean,
   iconUrl: string | undefined,
   description: string,
-  lastPublished: number, // Date
-  lastRetrieved: number, // Date
-  pollingFrequency: number, // minutes
+  /** When the feed was last updated upstream in milliseconds since epoch */
+  lastPublished: number,
+  /** When the feed was last fetched in milliseconds since epoch */
+  lastRetrieved: number,
+  /** Time between fetch attempts in seconds */
+  pollingFrequency: number,
+  /** True if the last fetch of the feed was successful */
   healthy: boolean,
+  /** True if the source contains podcast information */
   podcast: boolean,
+  /** Locally assigned tags/groups */
   tags: Array<string>
 }
 
