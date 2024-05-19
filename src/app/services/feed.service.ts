@@ -79,6 +79,21 @@ export class FeedService {
     event.target.complete();
   }
 
+  public async rebuildEntriesFromCache() {
+    const tempFeedMasterData: Array<any> = [];
+    const feedList = this.sourcesService.getSources();
+
+    for (const feed of feedList) {
+      const feedData = await this.storageService.getObjectFromStorage(feed.url);
+      for (const item of feedData) {
+        tempFeedMasterData.push(item);
+      }
+    }
+
+    this.entries = this.sortByDate(tempFeedMasterData);
+    this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
+  }
+
   public updateBookmarkStatus(item: any, status: boolean) {
     const index = this.entries.indexOf(item);
     if (index !== -1)
