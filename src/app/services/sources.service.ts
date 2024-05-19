@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
 import { SettingsService } from './settings.service';
 import { ToastController } from '@ionic/angular/standalone';
+import { Subject } from 'rxjs';
 declare const RSSParser: any;
 
 const STORAGE_FEED_LIST = 'storage_feed_list';
@@ -13,11 +14,17 @@ export interface IFeedDict {
   title: boolean,
   iconUrl: string | undefined,
   description: string,
-  lastPublished: number, // Date
-  lastRetrieved: number, // Date
-  pollingFrequency: number, // minutes
+  /** When the feed was last updated upstream in milliseconds since epoch */
+  lastPublished: number,
+  /** When the feed was last fetched in milliseconds since epoch */
+  lastRetrieved: number,
+  /** Time between fetch attempts in seconds */
+  pollingFrequency: number,
+  /** True if the last fetch of the feed was successful */
   healthy: boolean,
+  /** True if the source contains podcast information */
   podcast: boolean,
+  /** Locally assigned tags/groups */
   tags: Array<string>
 }
 
@@ -25,6 +32,7 @@ export interface IFeedDict {
   providedIn: 'root'
 })
 export class SourcesService {
+  public newSource = new Subject<string>();
   private _feedList: Array<IFeedDict> = [];
 
   constructor(private storageService: StorageService, private settingsService: SettingsService,
@@ -61,6 +69,8 @@ export class SourcesService {
     };
 
     this.addSource(feedInfo);
+    this.updateLocalCache(feedInfo, feedData);
+    this.newSource.next(feedInfo.url);
   }
 
   addSource(feed: IFeedDict) {
@@ -172,6 +182,28 @@ export class SourcesService {
     return feed;
   }
 
+  public updateLocalCache(feed: any, feedData: any): any {
+    const tempFeedData: Array<any> = [];
+
+    for (const item of feedData.items) {
+      item.source = feed.title;
+      item.contentStripped = item.contentSnippet.substring(0, 120);
+      item.imgLink = this.getItemMedia(item);
+      item.feedUrl = feed.url;
+      item.bookmark = false;
+      tempFeedData.push(item);
+    }
+
+    this.storageService.set(feed.url, JSON.stringify(tempFeedData));
+
+    const source = this.getSource(feed.url);
+    source.healthy = true;
+    source.lastRetrieved = Date.now();
+    this.setSource(feed.url, source);
+
+    return tempFeedData;
+  }
+
   async presentErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -183,4 +215,38 @@ export class SourcesService {
 
     await toast.present();
   }
+
+  private getItemMedia(item: any): string | null {
+    let mediaLinkURL = item.mediaContent;
+
+    if (mediaLinkURL !== undefined) {
+      mediaLinkURL = mediaLinkURL[0].$.url;
+    }
+
+    if (mediaLinkURL === undefined)
+      mediaLinkURL = this.findMediaInHTML(item.content);
+
+    if (mediaLinkURL === undefined || mediaLinkURL === null) {
+      console.warn('[FeedService] No media link found for article');
+      return null;
+    }
+    else {
+      return mediaLinkURL;
+    }
+  }
+
+  private findMediaInHTML(htmlString: string): string | null {
+    
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+    const mediaLink = doc.querySelector('img');
+    
+    if (mediaLink) {
+      const mediaLinkURL = mediaLink.getAttribute('src');
+      return mediaLinkURL;
+    } else {
+      return null;
+    }
+  }
+
 }
