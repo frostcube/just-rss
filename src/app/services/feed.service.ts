@@ -98,7 +98,7 @@ export class FeedService implements OnDestroy {
 
     this.entries = this.sortByDate(this.entries);
     this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
-    console.log('[FeedService] Rebuilt master feed from cache');
+    console.log('[FeedService] Appended feed ' + feedUrl + ' from cache');
   }
 
   public updateBookmarkStatus(item: any, status: boolean) {
