@@ -18,8 +18,8 @@ export class FeedService implements OnDestroy {
       this.initFeedData(this.storageService.onReady.value);
     });
 
-    this.sourcesService.newSource.subscribe(() => {
-      this.rebuildEntriesFromCache();
+    this.sourcesService.newSource.subscribe((feedUrl) => {
+      this.appendEntryFromCache(feedUrl);
     });
   }
 
@@ -89,20 +89,16 @@ export class FeedService implements OnDestroy {
     event.target.complete();
   }
 
-  public async rebuildEntriesFromCache() {
-    const tempFeedMasterData: Array<any> = [];
-    const feedList = this.sourcesService.getSources();
+  public async appendEntryFromCache(feedUrl: string) {
+    const feedData = await this.storageService.getObjectFromStorage(feedUrl);
 
-    for (const feed of feedList) {
-      const feedData = await this.storageService.getObjectFromStorage(feed.url);
-      for (const item of feedData) {
-        tempFeedMasterData.push(item);
-      }
+    for (const item of feedData) {
+      this.entries.push(item);
     }
 
-    this.entries = this.sortByDate(tempFeedMasterData);
+    this.entries = this.sortByDate(this.entries);
     this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
-    console.log('[FeedService] Rebuilt master feed from cache');
+    console.log('[FeedService] Appended feed ' + feedUrl + ' from cache');
   }
 
   public updateBookmarkStatus(item: any, status: boolean) {
