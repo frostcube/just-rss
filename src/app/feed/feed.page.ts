@@ -61,7 +61,7 @@ export class FeedPage {
       chevronUpOutline, trash });
   }
 
-  public formatDate(dateStr: string, locale: string) {
+  public formatDate(dateStr: string | number, locale: string) {
     const date = new Date(dateStr);
     const dateOptions: Intl.DateTimeFormatOptions = {
       weekday: 'short',
@@ -71,12 +71,24 @@ export class FeedPage {
     return date.toLocaleDateString(locale, dateOptions);        
   }
 
-  public formatDateAsDay(dateStr: string, locale: string) {
+  public formatDateAsDay(dateStr: string | number, locale: string) {
     const date = new Date(dateStr);
     const dateOptions: Intl.DateTimeFormatOptions = {
       weekday: 'short'
     };
     return date.toLocaleDateString(locale, dateOptions);     
+  }
+
+  public formatDateAsLong(dateStr: string | number, locale: string) {
+    const date = new Date(dateStr);
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      hour: 'numeric',
+      minute: 'numeric',
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric'
+    };
+    return date.toLocaleDateString(locale, dateOptions);        
   }
 
   public scrollToTop() {
