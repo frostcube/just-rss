@@ -64,7 +64,7 @@
 
   <!-- // Onboarding -->
   <div *ngIf="sourcesService.getSources().length === 0" class="ion-text-center" >
-      It doesn't look like you have any sources yet, would you like to <a (click)="openSuggestions()">add some?</a>
+      It doesn't look like you have any sources yet, would you like to <a (click)="openSuggestions()" style="color: var(--ion-color-secondary);">add some?</a>
   </div>
 
 </ion-content>

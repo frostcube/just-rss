@@ -6,6 +6,9 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
+    Last Updated: {{ formatDateAsLong(feedService.lastUpdated, settingsService.getSettings().locale) }}
+    <br />
+    <br />
     <ion-list>
       <ion-item-sliding *ngFor="let source of sourcesService.getSources()">
           <ion-item (click)="filterByUrl(source.url)">
@@ -24,6 +27,7 @@
           </ion-item-options>
       </ion-item-sliding>
     </ion-list>
+    <br />
     <ion-button ion-button (click)="filterClear()" [disabled]="filter === ''">Clear Filter</ion-button>
   </ion-content>
 </ion-menu>
@@ -127,11 +131,16 @@
       </div>
     </ion-list>
 
-    <!--Return to top button-->
+    <!-- Return to top button -->
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">
       <ion-fab-button *ngIf="currentScrollOffset > 10" (click)="scrollToTop()">
         <ion-icon name="chevron-up-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>
+
+    <!-- Onboarding -->
+    <div *ngIf="feedService.entries.length === 0" class="ion-text-center" color="primary">
+      It doesn't look like you have any feed items yet, would you like to <a href="/tabs/sources" style="color: var(--ion-color-secondary);">add some sources?</a>
+    </div>
   </ion-content>
 </div>

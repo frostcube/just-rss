@@ -5,6 +5,7 @@ import { StorageService } from './storage.service';
 import { SourcesService } from './sources.service';
 
 const STORAGE_FEED_DATA = 'storage_list_feed_data';
+const STORAGE_FEED_DATA_TIMESTAMP = 'storage_list_feed_data_timestamp';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ const STORAGE_FEED_DATA = 'storage_list_feed_data';
 export class FeedService implements OnDestroy {
 
   public entries: any = [];
+  public lastUpdated: number = 0;
 
   constructor(private sourcesService: SourcesService, private storageService: StorageService) { 
     this.storageService.onReady.subscribe(() => {
@@ -40,6 +42,7 @@ export class FeedService implements OnDestroy {
 
   private async loadEntries() {
     const storage_feed = await this.storageService.getObjectFromStorage(STORAGE_FEED_DATA);
+    this.lastUpdated = await this.storageService.getObjectFromStorage(STORAGE_FEED_DATA_TIMESTAMP);
     
     if (storage_feed !== null)
       this.entries = storage_feed;
@@ -86,6 +89,8 @@ export class FeedService implements OnDestroy {
     this.entries = this.sortByDate(tempFeedMasterData);
     this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
     console.log('[FeedService] Rebuilt master feed from upstream');
+    this.lastUpdated = Date.now();
+    this.storageService.set(STORAGE_FEED_DATA_TIMESTAMP, this.lastUpdated);
     event.target.complete();
   }
 
