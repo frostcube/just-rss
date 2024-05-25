@@ -30,16 +30,27 @@ export class PlatformService {
     return this.platform.ready();
   }
 
+  /**
+   * Sets the current platform for the application.
+   *
+   * This function checks the platform on which the application is running and sets the `_currentPlatform` property accordingly.
+   * If the application is running on 'ios' or 'android' and not on 'desktop' or 'mobileweb', it sets `_currentPlatform` to 'native'.
+   * Otherwise, it sets `_currentPlatform` to 'browser'.
+   * After setting the platform, it logs the detected platform to the console.
+   */
   private setCurrentPlatform() {
-    // Are we on mobile platform? Yes if platform is ios or android, but not desktop or mobileweb, no otherwise
+    // Check if the platform is 'ios' or 'android' and not 'desktop' or 'mobileweb'
     if (
       this.platform.is('ios')
         || this.platform.is('android')
         && !( this.platform.is('desktop') || this.platform.is('mobileweb') ) ) {
+      // If the condition is true, set the current platform to 'native'
       this._currentPlatform = 'native';
     } else {
+      // If the condition is false, set the current platform to 'browser'
       this._currentPlatform = 'browser';
     }
+    // Log the detected platform to the console
     console.log('[PlatformService] Detected platform: ' + this._currentPlatform);
   }
 

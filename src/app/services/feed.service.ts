@@ -94,15 +94,28 @@ export class FeedService implements OnDestroy {
     event.target.complete();
   }
 
+  /**
+   * This function appends feed entries from the cache to the existing entries.
+   *
+   * @param feedUrl - The URL of the feed to be appended.
+   */
   public async appendEntryFromCache(feedUrl: string) {
+    // Retrieve the feed data from the storage using the feed URL
     const feedData = await this.storageService.getObjectFromStorage(feedUrl);
 
+    // Iterate over each item in the retrieved feed data
     for (const item of feedData) {
+      // Push each item to the entries array
       this.entries.push(item);
     }
 
+    // Sort the entries array by date
     this.entries = this.sortByDate(this.entries);
+
+    // Store the sorted entries array in the storage
     this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
+
+    // Log the successful appending of the feed from the cache
     console.log('[FeedService] Appended feed ' + feedUrl + ' from cache');
   }
 
