@@ -3,7 +3,7 @@
 
 /* This sets a different item border color for the default theme on ios and md */
 :root {
-  /** primary **/
+	/* primary */
 	--ion-color-primary: #28294f;
 	--ion-color-primary-rgb: 40,41,79;
 	--ion-color-primary-contrast: #ffffff;
@@ -11,7 +11,7 @@
 	--ion-color-primary-shade: #232446;
 	--ion-color-primary-tint: #3e3e61;
 
-  /** secondary **/
+	/* secondary */
 	--ion-color-secondary: #469FEB;
 	--ion-color-secondary-rgb: 70,159,235;
 	--ion-color-secondary-contrast: #000000;
@@ -19,61 +19,13 @@
 	--ion-color-secondary-shade: #3e8ccf;
 	--ion-color-secondary-tint: #59a9ed;
 
-  /** tertiary **/
+	/* tertiary */
 	--ion-color-tertiary: #EB8D5E;
 	--ion-color-tertiary-rgb: 235,141,94;
 	--ion-color-tertiary-contrast: #000000;
 	--ion-color-tertiary-contrast-rgb: 0,0,0;
 	--ion-color-tertiary-shade: #cf7c53;
 	--ion-color-tertiary-tint: #ed986e;
-
-  /** success **/
-	--ion-color-success: #75EBA0;
-	--ion-color-success-rgb: 117,235,160;
-	--ion-color-success-contrast: #000000;
-	--ion-color-success-contrast-rgb: 0,0,0;
-	--ion-color-success-shade: #67cf8d;
-	--ion-color-success-tint: #83edaa;
-
-  /** warning **/
-  --ion-color-warning: #EBB96A;
-	--ion-color-warning-rgb: 235,185,106;
-	--ion-color-warning-contrast: #000000;
-	--ion-color-warning-contrast-rgb: 0,0,0;
-	--ion-color-warning-shade: #cfa35d;
-	--ion-color-warning-tint: #edc079;
-
-  /** danger **/
-  --ion-color-danger: #EB5852;
-	--ion-color-danger-rgb: 235,88,82;
-	--ion-color-danger-contrast: #000000;
-	--ion-color-danger-contrast-rgb: 0,0,0;
-	--ion-color-danger-shade: #cf4d48;
-	--ion-color-danger-tint: #ed6963;
-
-  /** dark **/
-  --ion-color-dark: #222428;
-  --ion-color-dark-rgb: 34, 36, 40;
-  --ion-color-dark-contrast: #ffffff;
-  --ion-color-dark-contrast-rgb: 255, 255, 255;
-  --ion-color-dark-shade: #1e2023;
-  --ion-color-dark-tint: #383a3e;
-  
-    /** medium **/
-	--ion-color-medium: #92949c;
-	--ion-color-medium-rgb: 146,148,156;
-	--ion-color-medium-contrast: #000000;
-	--ion-color-medium-contrast-rgb: 0,0,0;
-	--ion-color-medium-shade: #808289;
-	--ion-color-medium-tint: #9d9fa6;
-
-  /** light **/
-	--ion-color-light: #f4f5f8;
-	--ion-color-light-rgb: 244,245,248;
-	--ion-color-light-contrast: #000000;
-	--ion-color-light-contrast-rgb: 0,0,0;
-	--ion-color-light-shade: #d7d8da;
-	--ion-color-light-tint: #f5f6f9;
 }
 
 html {
@@ -81,9 +33,17 @@ html {
    * For more information on dynamic font scaling, visit the documentation:
    * https://ionicframework.com/docs/layout/dynamic-font-scaling
    */
-  --ion-dynamic-font: var(--ion-default-dynamic-font);
+  --ion-dynamic-font: var(--ion-color-secondary);
 }
 
 a {
-	color: var(--ion-color-secondary);
+	color: var(--ion-color-tertiary-shade);
+}
+
+/* This sets a different item background when dark mode is enabled on ios and md */
+@media (prefers-color-scheme: dark) {
+	:root.ios,
+	:root.md a {
+		color: var(--ion-color-tertiary-tint);
+	}
 }
