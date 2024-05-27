@@ -37,13 +37,13 @@ html {
 }
 
 a {
-	color: var(--ion-color-tertiary-shade);
+	color: var(--ion-color-secondary-shade);
 }
 
 /* This sets a different item background when dark mode is enabled on ios and md */
 @media (prefers-color-scheme: dark) {
-	:root.ios,
+	:root.ios a,
 	:root.md a {
-		color: var(--ion-color-tertiary-tint);
+		color: var(--ion-color-secondary-tint);
 	}
 }
