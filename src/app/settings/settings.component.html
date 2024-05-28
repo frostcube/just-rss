@@ -14,7 +14,8 @@
       (ionChange)="update()"> Compress feed display </ion-toggle>
     </ion-item>
     <ion-item>
-      <ion-select label="Country" placeholder="currentSettings.locale" [(ngModel)]="currentSettings.locale">
+      <ion-select label="Country" placeholder="currentSettings.locale" [(ngModel)]="currentSettings.locale"
+      (ionChange)="update()">
         <!-- Locale list https://www.oracle.com/java/technologies/javase/java8locales.html -->
         <ion-select-option value="en-AU">Australia (AU)</ion-select-option>
         <ion-select-option value="de-DE">Germany</ion-select-option>
@@ -22,16 +23,33 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input label="Feed Retrieval Timeout (ms)" labelPlacement="stacked" [value]="currentSettings.retrievalTimeout"
-      (ionChange)="update()"[(ngModel)]="currentSettings.retrievalTimeout"></ion-input>
+      <ion-select label="Network Connection" placeholder="currentSettings.retrievalTimeout" [(ngModel)]="currentSettings.retrievalTimeout"
+      (ionChange)="update()">
+        <ion-select-option value=2500>Fast</ion-select-option>
+        <ion-select-option value=5000>Average (Default)</ion-select-option>
+        <ion-select-option value=10000>Slow</ion-select-option>
+        <ion-select-option value=60000>Unbearable</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input label="Default Polling Frequency (s) - 0 for unlimited" labelPlacement="stacked" [value]="currentSettings.defaultPollingFrequency"
-      (ionChange)="update()"[(ngModel)]="currentSettings.defaultPollingFrequency"></ion-input>
+      <ion-select label="Default Polling Frequency" placeholder="currentSettings.defaultPollingFrequency" 
+      [(ngModel)]="currentSettings.defaultPollingFrequency" (ionChange)="update()">
+        <ion-select-option value=0>Unlimited (Default)</ion-select-option>
+        <ion-select-option value=60>1 minute</ion-select-option>
+        <ion-select-option value=600>10 minutes</ion-select-option>
+        <ion-select-option value=3600>1 hour</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input label="Max Feed Items per Feed (Can impact app performance) - 0 for unlimited" labelPlacement="stacked" [value]="currentSettings.maxFeedLength"
-      (ionChange)="update()"[(ngModel)]="currentSettings.maxFeedLength"></ion-input>
+      <ion-select label="Max Feed Items per Feed (Can impact app performance)" placeholder="currentSettings.maxFeedLength" 
+      [(ngModel)]="currentSettings.maxFeedLength" (ionChange)="update()">
+        <ion-select-option value=1>1 item</ion-select-option>
+        <ion-select-option value=10>10 items (Default)</ion-select-option>        
+        <ion-select-option value=25>25 items</ion-select-option>
+        <ion-select-option value=50>50 items</ion-select-option>
+        <ion-select-option value=100>100 items</ion-select-option>
+        <ion-select-option value=0>Unlimited</ion-select-option>
+      </ion-select>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -142,8 +142,8 @@ export class FeedPage {
   async openSettings() {
     const settings = await this.modalController.create({
       component: SettingsComponent,
-      breakpoints: [0, 0.75],
-      initialBreakpoint: 0.5
+      breakpoints: [0, 0.33, 0.66],
+      initialBreakpoint: 0.33
     });
 
     settings.present();
