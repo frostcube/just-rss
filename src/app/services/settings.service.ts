@@ -25,7 +25,7 @@ export class SettingsService {
     retrievalTimeout: 2000, // 2 seconds
     defaultPollingFrequency: 0, // Unlimited
     maxFeedLength: 10
-  }
+  };
 
   constructor(private storageService: StorageService) {
     this.storageService.onReady.subscribe(() => {
