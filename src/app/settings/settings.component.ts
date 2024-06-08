@@ -31,4 +31,13 @@ export class SettingsComponent  implements OnInit {
     return country.officialLanguageCode + '-' + country.countryCode;
   }
 
+  // Getter/Setters for settings stored as numbers to ensure types are correct
+  get retrievalTimeout() { return String(this.currentSettings.retrievalTimeout); }
+  set retrievalTimeout(v) { this.currentSettings.retrievalTimeout = Number(v); }
+
+  get defaultPollingFrequency() { return String(this.currentSettings.defaultPollingFrequency); }
+  set defaultPollingFrequency(v) { this.currentSettings.defaultPollingFrequency = Number(v); }
+
+  get maxFeedLength() { return String(this.currentSettings.maxFeedLength); }
+  set maxFeedLength(v) { this.currentSettings.maxFeedLength = Number(v); }
 }
