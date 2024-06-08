@@ -73,10 +73,16 @@ export class SourcesService {
     this.newSource.next(feedInfo.url);
   }
 
-  addSource(feed: IFeedDict) {
-    this._feedList.push(feed);
-    console.log('[SourcesService] Adding new feed: ' + feed);
-    this.storageService.set(STORAGE_FEED_LIST, JSON.stringify(this._feedList));
+  addSource(newFeed: IFeedDict) {
+    if (this._feedList.findIndex(feed => feed.url === newFeed.url) === -1) {
+      this._feedList.push(newFeed);
+      console.log('[SourcesService] Adding new feed: ' + newFeed);
+      this.storageService.set(STORAGE_FEED_LIST, JSON.stringify(this._feedList));
+    }
+    else {
+      this.presentErrorToast('Feed already exists!');
+      console.error('[SourcesService] Feed already in feedList');
+    }
   }
 
   public removeSource(feedUrl: string) {
