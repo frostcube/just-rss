@@ -22,7 +22,7 @@ export class SettingsService {
     showImages: false,
     compressedFeed: false,
     locale: 'en-AU',
-    retrievalTimeout: 2000, // 2 seconds
+    retrievalTimeout: 5000, // 5 seconds
     defaultPollingFrequency: 0, // Unlimited
     maxFeedLength: 10
   };
