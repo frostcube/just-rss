@@ -16,10 +16,9 @@
     <ion-item>
       <ion-select label="Country" placeholder="currentSettings.locale" [(ngModel)]="currentSettings.locale"
       (ionChange)="update()">
-        <!-- Locale list https://www.oracle.com/java/technologies/javase/java8locales.html -->
-        <ion-select-option value="en-AU">Australia (AU)</ion-select-option>
-        <ion-select-option value="de-DE">Germany</ion-select-option>
-        <ion-select-option value="en-US">United States (US)</ion-select-option>
+      @for (country of countryCodeList; track country.countryNameEn) {
+        <ion-select-option value={{getCountryTag(country)}}>{{country.countryNameEn}}</ion-select-option>
+      }
       </ion-select>
     </ion-item>
     <ion-item>
