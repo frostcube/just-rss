@@ -12,15 +12,13 @@
     <ion-list>
       @for (source of sourcesService.getSources(); track source.url) {
         <ion-item-sliding>
-          <ion-item (click)="filterByUrl(source.url)">
+          <ion-item button (click)="filterByUrl(source.url)">
             @if (source.url === filter) {
-              <ion-icon aria-hidden="true" name="chevron-forward" slot="start"></ion-icon>
+              <ion-label color="secondary">{{source.title}}</ion-label>
             }
-            <ion-label>
-              <strong>{{source.title}}</strong>
-              <br />
-              <ion-text>{{source.url}}</ion-text>
-            </ion-label>
+            @else {
+              <ion-label>{{source.title}}</ion-label>
+            }            
           </ion-item>
           <ion-item-options side="end">
             <ion-item-option color="danger">
