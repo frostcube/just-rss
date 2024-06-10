@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { suggestFeeds } from './suggested-feeds';
 import { IonButton, IonCheckbox, IonContent, IonItem, IonList } from '@ionic/angular/standalone';
@@ -10,7 +9,7 @@ import { SourcesService } from '../services/sources.service';
   templateUrl: './suggested.component.html',
   styleUrls: ['./suggested.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonContent, IonList, IonItem, IonCheckbox, IonButton]
+  imports: [FormsModule, IonContent, IonList, IonItem, IonCheckbox, IonButton]
 })
 export class SuggestedComponent implements OnInit {
 

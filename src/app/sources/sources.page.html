@@ -23,34 +23,38 @@
     </ion-toolbar>
   </ion-header>
 
-<form [formGroup]="rssForm">
-  <ion-input
-    [(ngModel)]="inputUrl"
-    formControlName="url"
-    type="url"
-    placeholder="Please enter an RSS/Atom Feed URL"
-    helperText="Enter a valid url"
-    errorText="Invalid url"
-    [clearOnEdit]="true"
+  <form [formGroup]="rssForm">
+    <ion-input
+      [(ngModel)]="inputUrl"
+      formControlName="url"
+      type="url"
+      placeholder="Please enter an RSS/Atom Feed URL"
+      helperText="Enter a valid url"
+      errorText="Invalid url"
+      [clearOnEdit]="true"
     ></ion-input>
   </form>
   <ion-button ion-button (click)="discoverUrl(inputUrl)" [disabled]="!rssForm.valid">Search for Feed</ion-button>
   <ion-button ion-button (click)="addUrl(inputUrl)" [disabled]="!rssForm.valid">Add Feed</ion-button>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let source of sourcesService.getSources()">
+    @for (source of sourcesService.getSources(); track source.url) {
+      <ion-item-sliding>
         <ion-item>
-            <ion-label>
-              <strong>{{source.title}}</strong>
-              <br />
-              <ion-text>{{source.url}}</ion-text>
-              <br />
-              <ion-note color="medium">{{source.description}}</ion-note>
-            </ion-label>
-            <ion-icon *ngIf="source.healthy" color="success" slot="end" name="checkmark-circle-outline"></ion-icon>
-            <ion-icon *ngIf="!source.healthy" color="danger" slot="end" name="close-circle-outline"></ion-icon>
+          <ion-label>
+            <strong>{{source.title}}</strong>
+            <br />
+            <ion-text>{{source.url}}</ion-text>
+            <br />
+            <ion-note color="medium">{{source.description}}</ion-note>
+          </ion-label>
+          @if (source.healthy) {
+            <ion-icon color="success" slot="end" name="checkmark-circle-outline"></ion-icon>
+          }
+          @else {
+            <ion-icon color="danger" slot="end" name="close-circle-outline"></ion-icon>
+          }
         </ion-item>
-
         <ion-item-options side="end">
           <ion-item-option color="secondary">
             <ion-icon slot="icon-only" name="create" (click)="editUrl(source)"></ion-icon>
@@ -59,12 +63,15 @@
             <ion-icon slot="icon-only" name="trash" (click)="sourcesService.removeSource(source.url)"></ion-icon>
           </ion-item-option>
         </ion-item-options>
-    </ion-item-sliding>
+      </ion-item-sliding>
+    }
   </ion-list>
 
   <!-- // Onboarding -->
-  <div *ngIf="sourcesService.getSources().length === 0" class="ion-text-center" >
+  @if (sourcesService.getSources().length === 0) {
+    <div class="ion-text-center" >
       It doesn't look like you have any sources yet, would you like to <a (click)="openSuggestions()">add some?</a>
-  </div>
+    </div>
+  }
 
 </ion-content>

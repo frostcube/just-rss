@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
@@ -31,7 +30,7 @@ const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?
   templateUrl: 'sources.page.html',
   styleUrls: ['sources.page.scss'],
   standalone: true,
-  imports: [ CommonModule, FormsModule, IonHeader, IonNote, IonToolbar, IonTitle, IonContent, IonList, 
+  imports: [FormsModule, IonHeader, IonNote, IonToolbar, IonTitle, IonContent, IonList, 
     IonInput, IonItem, IonIcon, IonButton, IonButtons, IonText, IonItemSliding, IonLabel, IonItemOption, 
     IonItemOptions, ReactiveFormsModule]
 })
