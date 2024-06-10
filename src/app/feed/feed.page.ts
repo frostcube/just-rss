@@ -11,7 +11,6 @@ import {
   IonFab, IonFabButton,
   IonHeader, IonIcon, IonInput, IonItem,
   IonItemOption, IonItemOptions,
-  IonItemSliding,
   IonLabel, IonList,
   IonMenu,
   IonMenuToggle,
@@ -23,7 +22,7 @@ import {
   ScrollDetail
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { bookmark, bookmarkOutline, chevronForward, chevronUpOutline, ellipsisVertical, filterOutline, shareSocialOutline, trash } from 'ionicons/icons';
+import { bookmark, bookmarkOutline, chevronForward, chevronUpOutline, ellipsisVertical, filterOutline, shareSocialOutline } from 'ionicons/icons';
 import { PreviewComponent } from '../preview/preview.component';
 import { BookmarkService } from '../services/bookmark.service';
 import { FeedService } from '../services/feed.service';
@@ -41,7 +40,7 @@ import { SettingsComponent } from '../settings/settings.component';
     IonCardSubtitle, IonCardTitle, IonHeader, IonToolbar, IonTitle, IonNote, 
     IonContent, IonList, IonInput, IonItem, IonItemOption, IonItemOptions, 
     IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuToggle, 
-    IonItemSliding, IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
+    IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
     SettingsComponent]
 })
 
@@ -57,7 +56,7 @@ export class FeedPage {
               private modalController: ModalController, public elementRef: ElementRef,
               public settingsService: SettingsService) {
     addIcons({ bookmark, bookmarkOutline, shareSocialOutline, ellipsisVertical, filterOutline, chevronForward, 
-      chevronUpOutline, trash });
+      chevronUpOutline });
   }
 
   public formatDate(dateStr: string | number, locale: string) {
