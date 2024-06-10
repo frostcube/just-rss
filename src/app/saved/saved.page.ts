@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
   IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,
   IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonTitle, IonToolbar
@@ -14,7 +13,7 @@ import { PlatformService } from '../services/platform.service';
   templateUrl: 'saved.page.html',
   styleUrls: ['saved.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardContent, 
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardContent, 
     IonCardSubtitle, IonCardTitle, IonButton, IonLabel, IonList, IonIcon, IonItem],
 })
 export class SavedPage {

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
@@ -38,7 +37,7 @@ import { SettingsComponent } from '../settings/settings.component';
   templateUrl: 'feed.page.html',
   styleUrls: ['feed.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonCard, IonCardHeader, IonCardContent, 
+  imports: [FormsModule, IonCard, IonCardHeader, IonCardContent, 
     IonCardSubtitle, IonCardTitle, IonHeader, IonToolbar, IonTitle, IonNote, 
     IonContent, IonList, IonInput, IonItem, IonItemOption, IonItemOptions, 
     IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuToggle, 
