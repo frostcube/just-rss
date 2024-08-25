@@ -48,50 +48,51 @@ export class FeedService implements OnDestroy {
       this.entries = storage_feed;
   }
 
-  public async syncEntriesWithUpstream(event: any) {
-    const tempFeedMasterData: Array<any> = [];
-    const feedList = this.sourcesService.getSources();
+  public async syncEntriesWithUpstream(event: any): Promise<void> {
+    try {
+      const feedList = this.sourcesService.getSources();
+      const tempFeedMasterData = await Promise.all(
+        feedList.map(async (feed) => {
+          const nextPollDate = feed.lastRetrieved + (feed.pollingFrequency * 1000); // Milliseconds
+          let feedData: Array<any> | null = null;
 
-    // Update the cache for any feeds that need updating
-    for (const feed of feedList) {
-      const nextPollDate = feed.lastRetrieved + (feed.pollingFrequency * 1000); // Milliseconds
-      let feedData = null;
+          if (Date.now() < nextPollDate) {
+            console.warn(`[FeedService] Too soon to retrieve: ${feed.url}`);
+            feedData = await this.storageService.getObjectFromStorage(feed.url);
+          } else {
+            feedData = await this.fetchAndUpdateFeed(feed);
+          }
 
-      if (Date.now() < nextPollDate) {
-        console.warn('[FeedService] Too soon to retrieve: ' + feed.url);
-        feedData = await this.storageService.getObjectFromStorage(feed.url);
-      }
-      else {
-        try {
-          const feedDataDownloaded = await this.sourcesService.downloadAndParseFeed(feed.url);
-          feedData = this.sourcesService.updateLocalCache(feed, feedDataDownloaded);
-        }
-        catch (error) {
-          console.error('[FeedService] ' + error);
-          // Get the cache as the feed isn't accessible
-          feedData = await this.storageService.getObjectFromStorage(feed.url);
-        }
-      }
+          if (!feedData) {
+            console.error(`[FeedService] No Feed Data for ${feed.url}`);
+            return [];
+          }
 
-      // Update master feed
-      if (feedData !== null) {
-        for (const item of feedData) {
-          tempFeedMasterData.push(item);
-        }
-      }
-      else {
-        console.error('[FeedService] No Feed Data for ' + feed.url);
-        continue;
-      }
+          return feedData;
+        })
+      );
+
+      // Flatten the array of arrays and update master feed
+      this.entries = this.sortByDate(tempFeedMasterData.flat());
+      this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
+      console.log('[FeedService] Rebuilt master feed from upstream');
+      this.lastUpdated = Date.now();
+      this.storageService.set(STORAGE_FEED_DATA_TIMESTAMP, this.lastUpdated);
+      event.target.complete();
+    } catch (error) {
+      console.error('[FeedService] An error occurred:', error);
     }
+  }
 
-    // Update cache and values
-    this.entries = this.sortByDate(tempFeedMasterData);
-    this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
-    console.log('[FeedService] Rebuilt master feed from upstream');
-    this.lastUpdated = Date.now();
-    this.storageService.set(STORAGE_FEED_DATA_TIMESTAMP, this.lastUpdated);
-    event.target.complete();
+  private async fetchAndUpdateFeed(feed: any): Promise<any> {
+    try {
+      const feedDataDownloaded = await this.sourcesService.downloadAndParseFeed(feed.url);
+      return this.sourcesService.updateLocalCache(feed, feedDataDownloaded);
+    } catch (error) {
+      console.error(`[FeedService] ${error}`);
+      // Fallback to cached data
+      return await this.storageService.getObjectFromStorage(feed.url);
+    }
   }
 
   public async appendEntryFromCache(feedUrl: string) {
