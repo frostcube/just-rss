@@ -192,15 +192,16 @@ export class SourcesService {
     const tempFeedData: Array<any> = [];
 
     for (const item of feedData.items) {
-      item.source = feed.title;
+      item.bookmark = false;
       if (item['content:encoded'] !== undefined) { // Prefer full content
         item.content = item['content:encoded'];
         item['content:encoded'] = '';
       }
       item.contentStripped = item.contentSnippet.substring(0, 120);
-      item.imgLink = this.getItemMedia(item);
       item.feedUrl = feed.url;
-      item.bookmark = false;
+      item.imgLink = this.getItemMedia(item);
+      item.source = feed.title;
+      item.title = item.title.replace('&#8217;', '\'');
       tempFeedData.push(item);
     }
 
