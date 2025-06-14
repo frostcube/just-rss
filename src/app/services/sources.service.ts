@@ -193,6 +193,10 @@ export class SourcesService {
 
     for (const item of feedData.items) {
       item.source = feed.title;
+      if (item['content:encoded'] !== undefined) { // Prefer full content
+        item.content = item['content:encoded'];
+        item['content:encoded'] = '';
+      }
       item.contentStripped = item.contentSnippet.substring(0, 120);
       item.imgLink = this.getItemMedia(item);
       item.feedUrl = feed.url;
