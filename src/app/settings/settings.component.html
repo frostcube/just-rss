@@ -50,5 +50,9 @@
         <ion-select-option value="0">Unlimited</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item button (click)="openMutedWordsDialog()">
+      <ion-label>Muted Words</ion-label>
+      <ion-note slot="end">{{ (currentSettings.mutedWords || []).length }}</ion-note>
+    </ion-item>
   </ion-list>
 </ion-content>

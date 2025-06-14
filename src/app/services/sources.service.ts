@@ -210,12 +210,24 @@ export class SourcesService {
     return tempFeedData;
   }
 
-  async presentErrorToast(message: string) {
+  public async presentErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000,
       position: 'bottom',
       color: 'danger',
+      positionAnchor: 'tab-bar'
+    });
+
+    await toast.present();
+  }
+
+  public async presentWarnToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'bottom',
+      color: 'warning',
       positionAnchor: 'tab-bar'
     });
 

@@ -3,6 +3,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { StorageService } from './storage.service';
 import { SourcesService } from './sources.service';
+import { ISettingsDict, SettingsService } from './settings.service';
 
 const STORAGE_FEED_DATA = 'storage_list_feed_data';
 const STORAGE_FEED_DATA_TIMESTAMP = 'storage_list_feed_data_timestamp';
@@ -14,8 +15,9 @@ export class FeedService implements OnDestroy {
 
   public entries: any = [];
   public lastUpdated: number = 0;
+  public hidden: number = 0;
 
-  constructor(private sourcesService: SourcesService, private storageService: StorageService) { 
+  constructor(private settingsService: SettingsService, private sourcesService: SourcesService, private storageService: StorageService) { 
     this.storageService.onReady.subscribe(() => {
       this.initFeedData(this.storageService.onReady.value);
     });
@@ -51,7 +53,7 @@ export class FeedService implements OnDestroy {
   public async syncEntriesWithUpstream(event: any): Promise<void> {
     try {
       const feedList = this.sourcesService.getSources();
-      const tempFeedMasterData = await Promise.all(
+      let tempFeedMasterData = await Promise.all(
         feedList.map(async (feed) => {
           const nextPollDate = feed.lastRetrieved + (feed.pollingFrequency * 1000); // Milliseconds
           let feedData: Array<any> | null = null;
@@ -73,11 +75,15 @@ export class FeedService implements OnDestroy {
       );
 
       // Flatten the array of arrays and update master feed
-      this.entries = this.sortByDate(tempFeedMasterData.flat());
+      tempFeedMasterData = this.sortByDate(tempFeedMasterData.flat());
+      this.entries = this.filterArticles(tempFeedMasterData, this.settingsService.getSettings());
+      this.hidden = tempFeedMasterData.length - this.entries.length; 
       this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
       console.log('[FeedService] Rebuilt master feed from upstream');
       this.lastUpdated = Date.now();
       this.storageService.set(STORAGE_FEED_DATA_TIMESTAMP, this.lastUpdated);
+      if (this.hidden > 0)
+        this.sourcesService.presentWarnToast(`${this.hidden} articles muted`);
       event.target.complete();
     } catch (error) {
       console.error('[FeedService] An error occurred:', error);
@@ -103,6 +109,11 @@ export class FeedService implements OnDestroy {
     }
 
     this.entries = this.sortByDate(this.entries);
+    const fullLength = this.entries.length;
+    this.entries = this.filterArticles(this.entries, this.settingsService.getSettings());
+    this.hidden = fullLength - this.entries.length;
+    if (this.hidden > 0)
+      this.sourcesService.presentWarnToast(`${this.hidden} articles muted`);
     this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
     console.log('[FeedService] Appended feed ' + feedUrl + ' from cache');
   }
@@ -115,9 +126,19 @@ export class FeedService implements OnDestroy {
       console.warn(`[FeedService] ${item.url} not found for bookmark status change`);
   }
 
-  private sortByDate(array: Array<any>): Array<any> {
+  public sortByDate(array: Array<any>): Array<any> {
     return array.sort((a: any, b: any) => {
       return new Date(b.isoDate).valueOf() - new Date(a.isoDate).valueOf();
     });
   }
+
+  public filterArticles(array: Array<any>, settings: ISettingsDict): Array<any> {
+    const muted = settings.mutedWords.map(w => w.toLowerCase());
+    return array.filter(a => {
+      const content = (a.title + ' ' + a.content).toLowerCase();
+      return !muted.some(word => content.includes(word));
+    });
+  }
+
+
 }

@@ -10,7 +10,8 @@ export interface ISettingsDict {
     locale: string,
     retrievalTimeout: number,
     defaultPollingFrequency: number,
-    maxFeedLength: number
+    maxFeedLength: number,
+    mutedWords: Array<string>
 }
 
 @Injectable({
@@ -24,7 +25,8 @@ export class SettingsService {
     locale: 'en-AU',
     retrievalTimeout: 5000, // 5 seconds
     defaultPollingFrequency: 0, // Unlimited
-    maxFeedLength: 10
+    maxFeedLength: 10,
+    mutedWords: []
   };
 
   constructor(private storageService: StorageService) {
@@ -54,10 +56,17 @@ export class SettingsService {
   }
 
   public async loadSettingsDict() {
+    console.log('[SettingsService] Loading settings from storage');
     const storage_feed = await this.storageService.getObjectFromStorage(SETTINGS_DICT);
     
-    if (storage_feed !== null)
+    if (storage_feed !== null) {
+      // Backwards compatible check with <= 2.3.4
+      if (!Array.isArray(storage_feed.mutedWords)) {
+        storage_feed.mutedWords = [];
+      }
+
       this._settingsDict = storage_feed;
+    }
     else
       this.storageService.set(SETTINGS_DICT, JSON.stringify(this._settingsDict));
   }
