@@ -47,7 +47,8 @@ export class PlatformService {
     if (entry !== undefined) {
       if (this.isNative()) {
         const config: OpenOptions = {
-          url: entry
+          url: entry,
+          entersReaderIfAvailable: true
         };
       
         Browser.open(config);
