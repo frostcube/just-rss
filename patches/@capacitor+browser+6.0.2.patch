@@ -1,0 +1,67 @@
+diff --git a/node_modules/@capacitor/browser/README.md b/node_modules/@capacitor/browser/README.md
+index 0c6a744..af61ca9 100644
+--- a/node_modules/@capacitor/browser/README.md
++++ b/node_modules/@capacitor/browser/README.md
+@@ -148,7 +148,7 @@ Represents the options passed to `open`.
+ | **`presentationStyle`** | <code>'fullscreen' \| 'popover'</code> | iOS only: The presentation style of the browser. Defaults to fullscreen. Ignored on other platforms.                                       | 1.0.0 |
+ | **`width`**             | <code>number</code>                    | iOS only: The width the browser when using presentationStyle 'popover' on iPads. Ignored on other platforms.                               | 4.0.0 |
+ | **`height`**            | <code>number</code>                    | iOS only: The height the browser when using presentationStyle 'popover' on iPads. Ignored on other platforms.                              | 4.0.0 |
+-
++| **`entersReaderIfAvailable`** | <code>boolean</code> | iOS only: Whether to automatically enter Reader mode if available for the url Ignored on other platforms. | 4.0.0 |
+ 
+ #### PluginListenerHandle
+ 
+diff --git a/node_modules/@capacitor/browser/dist/esm/definitions.d.ts b/node_modules/@capacitor/browser/dist/esm/definitions.d.ts
+index e554f0d..f9aa53a 100644
+--- a/node_modules/@capacitor/browser/dist/esm/definitions.d.ts
++++ b/node_modules/@capacitor/browser/dist/esm/definitions.d.ts
+@@ -88,6 +88,15 @@ export interface OpenOptions {
+      * @since 4.0.0
+      */
+     height?: number;
++
++    /**
++     * iOS only: Whether to automatically enter Reader mode if available for the url
++     *
++     * Ignored on other platforms.
++     *
++     * @since 5.0.0
++     */
++    entersReaderIfAvailable?: boolean;
+ }
+ /**
+  * @deprecated Use `OpenOptions`.
+diff --git a/node_modules/@capacitor/browser/ios/Sources/BrowserPlugin/Browser.swift b/node_modules/@capacitor/browser/ios/Sources/BrowserPlugin/Browser.swift
+index 3f1d1ad..e14f36a 100644
+--- a/node_modules/@capacitor/browser/ios/Sources/BrowserPlugin/Browser.swift
++++ b/node_modules/@capacitor/browser/ios/Sources/BrowserPlugin/Browser.swift
+@@ -15,9 +15,12 @@ import SafariServices
+         return safariViewController
+     }
+ 
+-    @objc public func prepare(for url: URL, withTint tint: UIColor? = nil, modalPresentation style: UIModalPresentationStyle = .fullScreen) -> Bool {
++    @objc public func prepare(for url: URL, withTint tint: UIColor? = nil, modalPresentation style: UIModalPresentationStyle = .fullScreen, entersReaderIfAvailable: Bool = false) -> Bool {
+         if safariViewController == nil, let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme) {
+-            let safariVC = SFSafariViewController(url: url)
++            let config = SFSafariViewController.Configuration()
++            config.entersReaderIfAvailable = entersReaderIfAvailable
++            
++            let safariVC = SFSafariViewController(url: url, configuration: config)
+             safariVC.delegate = self
+             if let color = tint {
+                 safariVC.preferredBarTintColor = color
+diff --git a/node_modules/@capacitor/browser/ios/Sources/BrowserPlugin/BrowserPlugin.swift b/node_modules/@capacitor/browser/ios/Sources/BrowserPlugin/BrowserPlugin.swift
+index d7db98b..438938b 100644
+--- a/node_modules/@capacitor/browser/ios/Sources/BrowserPlugin/BrowserPlugin.swift
++++ b/node_modules/@capacitor/browser/ios/Sources/BrowserPlugin/BrowserPlugin.swift
+@@ -23,8 +23,9 @@ public class CAPBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
+             color = UIColor.capacitor.color(fromHex: toolbarColor)
+         }
+         let style = self.presentationStyle(for: call.getString("presentationStyle"))
++        let entersReaderIfAvailable = call.getBool("entersReaderIfAvailable") ?? false
+         // prepare for display
+-        guard implementation.prepare(for: url, withTint: color, modalPresentation: style), let viewController = implementation.viewController else {
++        guard implementation.prepare(for: url, withTint: color, modalPresentation: style, entersReaderIfAvailable: entersReaderIfAvailable), let viewController = implementation.viewController else {
+             call.reject("Unable to display URL")
+             return
+         }
