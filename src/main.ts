@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { enableProdMode, importProvidersFrom, isDevMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
@@ -9,11 +9,12 @@ import { environment } from './environments/environment';
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { SQLite } from 'capacitor-sqlite-storage';
 import { PlatformService } from './app/services/platform.service';
 import { StorageService } from './app/services/storage.service';
 import { SourcesService } from './app/services/sources.service';
 import { SettingsService } from './app/services/settings.service';
+import { provideServiceWorker } from '@angular/service-worker';
 
 if (environment.production) {
   enableProdMode();
@@ -24,12 +25,16 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     importProvidersFrom(IonicStorageModule.forRoot({
-      driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB, Drivers.LocalStorage]
+      driverOrder: [SQLite, Drivers.IndexedDB, Drivers.LocalStorage]
     })),
     provideRouter(routes),
     PlatformService,
     StorageService,
     SourcesService,
-    SettingsService
+    SettingsService, 
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
 });
