@@ -46,4 +46,8 @@ a {
 	:root.md a {
 		color: var(--ion-color-secondary-tint);
 	}
+
+	:root.md {
+		--ion-background-color: #1e1e1e;
+	}
 }
