@@ -1,5 +1,5 @@
 diff --git a/node_modules/@capacitor/browser/README.md b/node_modules/@capacitor/browser/README.md
-index 0c6a744..af61ca9 100644
+index ac7553a..918ffd0 100644
 --- a/node_modules/@capacitor/browser/README.md
 +++ b/node_modules/@capacitor/browser/README.md
 @@ -148,7 +148,7 @@ Represents the options passed to `open`.
