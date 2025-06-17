@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { enableProdMode, importProvidersFrom, isDevMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
@@ -14,6 +14,7 @@ import { PlatformService } from './app/services/platform.service';
 import { StorageService } from './app/services/storage.service';
 import { SourcesService } from './app/services/sources.service';
 import { SettingsService } from './app/services/settings.service';
+import { provideServiceWorker } from '@angular/service-worker';
 
 if (environment.production) {
   enableProdMode();
@@ -30,6 +31,10 @@ bootstrapApplication(AppComponent, {
     PlatformService,
     StorageService,
     SourcesService,
-    SettingsService
+    SettingsService, 
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
 });
