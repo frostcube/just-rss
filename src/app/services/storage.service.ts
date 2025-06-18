@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { SQLiteDriver } from '@derme302/ionic-storage-capacitorsqlitedriver'
+import { SQLiteDriver } from '@derme302/ionic-storage-capacitorsqlitedriver';
 import { BehaviorSubject } from 'rxjs';
 
 
@@ -17,7 +17,7 @@ export class StorageService {
   }
 
   async init() {
-    await this.storage.defineDriver(SQLiteDriver);
+    await this.storage.defineDriver(new SQLiteDriver());
     const storage = await this.storage.create();
     this._storage = storage;
     this.isReady = true;

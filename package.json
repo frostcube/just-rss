@@ -32,7 +32,7 @@
     "@capacitor/keyboard": "^7.0.0",
     "@capacitor/status-bar": "^7.0.0",
     "@capacitor-community/sqlite": "^7.0.0",
-    "@derme302/ionic-storage-capacitorsqlitedriver": "^1.0.3",
+    "@derme302/ionic-storage-capacitorsqlitedriver": "^1.1.0",
     "@ionic/angular": "8.6.1",
     "@ionic/storage-angular": "^4.0.0",
     "ionicons": "^7.2.2",
