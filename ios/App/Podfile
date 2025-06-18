@@ -16,7 +16,7 @@ def capacitor_pods
   pod 'CapacitorHaptics', :path => '../../node_modules/@capacitor/haptics'
   pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
-  pod 'CapacitorSqliteStorage', :path => '../../node_modules/capacitor-sqlite-storage'
+  pod 'CapacitorCommunitySqlite', :path => '../../node_modules/@capacitor-community/sqlite'
 end
 
 target 'App' do
