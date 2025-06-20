@@ -9,7 +9,7 @@ import { environment } from './environments/environment';
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import { CAPACITOR_SQLITE_DRIVER } from '@derme302/ionic-storage-capacitorsqlitedriver';
+import { CAPACITOR_SQLITE_DRIVER } from '@derme302/localforage-capacitorsqlitedriver';
 import { PlatformService } from './app/services/platform.service';
 import { StorageService } from './app/services/storage.service';
 import { SourcesService } from './app/services/sources.service';

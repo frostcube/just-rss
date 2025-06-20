@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { SQLiteDriver } from '@derme302/ionic-storage-capacitorsqlitedriver';
+import { SQLiteDriver } from '@derme302/localforage-capacitorsqlitedriver';
 import { BehaviorSubject } from 'rxjs';
 
 
