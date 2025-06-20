@@ -10,13 +10,15 @@ import {
   IonInput,
   IonItem,
   IonItemOption, IonItemOptions,
-  IonItemSliding, IonLabel,
+  IonReorder, IonReorderGroup, IonItemSliding,
+  IonLabel,
   IonList,
   IonNote,
   IonText,
   IonTitle,
   IonToolbar,
-  ModalController
+  ModalController,
+  ItemReorderEventDetail
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { create, trash, checkmarkCircleOutline, closeCircleOutline, compassOutline } from 'ionicons/icons';
@@ -31,8 +33,8 @@ const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?
   styleUrls: ['sources.page.scss'],
   standalone: true,
   imports: [FormsModule, IonHeader, IonNote, IonToolbar, IonTitle, IonContent, IonList, 
-    IonInput, IonItem, IonIcon, IonButton, IonButtons, IonText, IonItemSliding, IonLabel, IonItemOption, 
-    IonItemOptions, ReactiveFormsModule]
+    IonInput, IonItem, IonIcon, IonButton, IonButtons, IonText, IonReorder, IonReorderGroup, 
+    IonItemSliding, IonLabel, IonItemOption, IonItemOptions, ReactiveFormsModule]
 })
 export class SourcesPage {
   inputUrl: string = '';
@@ -70,6 +72,17 @@ export class SourcesPage {
         console.error('[SourcesComponent] Error discovering RSS feed:', error);
         this.sourcesService.presentErrorToast('Error when trying to discover RSS Feed');
       });
+  }
+
+  public handleReorder(ev: CustomEvent<ItemReorderEventDetail>) {
+    // The `from` and `to` properties contain the index of the item
+    // when the drag started and ended, respectively
+    console.log('Dragged from index', ev.detail.from, 'to', ev.detail.to);
+
+    // Finish the reorder and position the item in the DOM based on
+    // where the gesture ended. This method can also be called directly
+    // by the reorder group
+    ev.detail.complete();
   }
 
   public load() {
