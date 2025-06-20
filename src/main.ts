@@ -9,7 +9,7 @@ import { environment } from './environments/environment';
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import { SQLite } from 'capacitor-sqlite-storage';
+import { CAPACITOR_SQLITE_DRIVER } from '@derme302/localforage-capacitorsqlitedriver';
 import { PlatformService } from './app/services/platform.service';
 import { StorageService } from './app/services/storage.service';
 import { SourcesService } from './app/services/sources.service';
@@ -25,7 +25,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     importProvidersFrom(IonicStorageModule.forRoot({
-      driverOrder: [SQLite, Drivers.IndexedDB, Drivers.LocalStorage]
+      driverOrder: [CAPACITOR_SQLITE_DRIVER, Drivers.IndexedDB, Drivers.LocalStorage]
     })),
     provideRouter(routes),
     PlatformService,

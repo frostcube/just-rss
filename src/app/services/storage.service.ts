@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { SQLiteDriver } from '@derme302/localforage-capacitorsqlitedriver';
 import { BehaviorSubject } from 'rxjs';
 
 
@@ -17,7 +17,7 @@ export class StorageService {
   }
 
   async init() {
-    await this.storage.defineDriver(CordovaSQLiteDriver);
+    await this.storage.defineDriver(new SQLiteDriver());
     const storage = await this.storage.create();
     this._storage = storage;
     this.isReady = true;
