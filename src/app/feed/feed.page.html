@@ -71,77 +71,16 @@
     </ion-refresher>
 
     <!-- Feed list -->
-    <ion-list>
-      @for (entry of feedService.entries; track entry) {
-        <div>
-          @if (filter === '' || entry.feedUrl === filter) {
-            <div>
-              @if (!settingsService.getSettings().compressedFeed) {
-                <div>
-                  <ion-card [button]="true" (click)="openPreview(entry.title, entry.content, entry.link)">
-                    @if (settingsService.getSettings().showImages) {
-                      <div class="card-image">
-                        @if (entry.imgLink !== null) {
-                          <img alt="Entry Cover Image" src="{{ entry.imgLink }}" />
-                        }
-                      </div>
-                    }
-                    <ion-card-header>
-                      <ion-card-subtitle>
-                        {{entry.source}} | {{formatDateRelative(entry.isoDate, settingsService.getSettings().locale)}}
-                      </ion-card-subtitle>
-                      <ion-card-title>
-                        <!---ToDo: We override the background as the colour is slightly different on iOS-->
-                        <ion-item class="ion-no-padding" style="--ion-item-background: transparent;">
-                          <ion-label>{{entry.title}}</ion-label>
-                          @if (entry.bookmark !== true) {
-                            <ion-button slot="end" fill="clear" (click)="addBookmark($event, entry)">
-                              <ion-icon color="medium" name="bookmark-outline"></ion-icon>
-                            </ion-button>
-                          }
-                          @if (entry.bookmark !== false) {
-                            <ion-button slot="end" fill="clear" (click)="removeBookmark($event, entry)">
-                              <ion-icon color="medium" name="bookmark"></ion-icon>
-                            </ion-button>
-                          }
-                        </ion-item>
-                      </ion-card-title>
-                    </ion-card-header>
-                    <ion-card-content>
-                      {{entry.contentStripped}}
-                    </ion-card-content>
-                  </ion-card>
-                </div>
-              }
-              @if (settingsService.getSettings().compressedFeed) {
-                <div>
-                  <ion-item [button]="true" (click)="openPreview(entry.title, entry.content, entry.link)">
-                    @if (settingsService.getSettings().showImages) {
-                      <div>
-                        @if (entry.imgLink !== null) {
-                          <ion-thumbnail slot="start">
-                            <img alt="Entry Cover Image" src="{{ entry.imgLink }}" />
-                          </ion-thumbnail>
-                        }
-                      </div>
-                    }
-                    <ion-label>
-                      <strong>{{entry.title}}</strong><br />
-                      <ion-text>{{entry.source}}</ion-text><br />
-                      <ion-note color="medium" class="ion-text-wrap">{{entry.contentStripped}}</ion-note>
-                    </ion-label>
-                    <div class="metadata-end-wrapper" slot="end">
-                      <ion-note color="medium">{{formatDateAsDay(entry.isoDate, settingsService.getSettings().locale)}}</ion-note>
-                      <!-- <ion-icon color="medium" name="chevron-forward"></ion-icon> -->
-                    </div>
-                  </ion-item>
-                </div>
-              }
-            </div>
-          }
-        </div>
-      }
-    </ion-list>
+    <app-article-list
+      [entries]="feedService.entries"
+      [filter]="filter"
+      [settingsService]="settingsService"
+      [formatDateRelative]="formatDateRelative"
+      [formatDateAsDay]="formatDateAsDay"
+      [openPreview]="openPreview"
+      [addBookmark]="addBookmark"
+      [removeBookmark]="removeBookmark"
+    ></app-article-list>
 
     <!-- Return to top button -->
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">
