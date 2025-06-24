@@ -218,7 +218,7 @@ export class SourcesService {
       item.feedUrl = feed.url;
       item.imgLink = this.getItemMedia(item);
       item.source = feed.title;
-      item.title = item.title.replace('&#8217;', '\'');
+      item.title = this.replaceXMLChars(item.title);
       tempFeedData.push(item);
     }
 
@@ -348,6 +348,13 @@ export class SourcesService {
       default: return c;
       }
     });
+  }
+
+  private replaceXMLChars(str: string): string {
+    return str.replace('&#8217;', '\'')
+      .replace('&#038;', '&')
+      .replace('&#8216;', '\'')
+      .replace('&amp;', '&');
   }
 
 }
