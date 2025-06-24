@@ -30,6 +30,7 @@ import { PlatformService } from '../services/platform.service';
 import { SettingsService } from '../services/settings.service';
 import { SourcesService } from '../services/sources.service';
 import { SettingsComponent } from '../settings/settings.component';
+import { formatDateAsDay, formatDateAsLong, formatDateRelative } from '../lib/date-utils';
 
 @Component({
   selector: 'app-feed',
@@ -51,42 +52,16 @@ export class FeedPage {
   public filter: string = '';
   public currentScrollOffset: number = 0;
 
+  public formatDateAsDay = formatDateAsDay;
+  public formatDateAsLong = formatDateAsLong;
+  public formatDateRelative = formatDateRelative;
+
   constructor(public sourcesService: SourcesService, public platformService: PlatformService, 
               public bookmarkService: BookmarkService, public feedService: FeedService,
               private modalController: ModalController, public elementRef: ElementRef,
               public settingsService: SettingsService) {
     addIcons({ bookmark, bookmarkOutline, shareSocialOutline, ellipsisVertical, filterOutline, chevronForward, 
       chevronUpOutline });
-  }
-
-  public formatDate(dateStr: string | number, locale: string) {
-    const date = new Date(dateStr);
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric'
-    };
-    return date.toLocaleDateString(locale, dateOptions);        
-  }
-
-  public formatDateAsDay(dateStr: string | number, locale: string) {
-    const date = new Date(dateStr);
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      weekday: 'short'
-    };
-    return date.toLocaleDateString(locale, dateOptions);     
-  }
-
-  public formatDateAsLong(dateStr: string | number, locale: string) {
-    const date = new Date(dateStr);
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      hour: 'numeric',
-      minute: 'numeric',
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric'
-    };
-    return date.toLocaleDateString(locale, dateOptions);        
   }
 
   public scrollToTop() {

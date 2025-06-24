@@ -20,7 +20,7 @@
         <ion-card [button]="true" (click)="platformService.openUrlInPlatformBrowser(entry.link)">
           <ion-card-header>
             <ion-card-subtitle>
-              {{entry.source}} | {{formatDate(entry.pubDate, "en-AU")}}
+              {{entry.source}} | {{formatDateRelative(entry.pubDate, "en-AU")}}
             </ion-card-subtitle>
             <ion-card-title>
               <ion-item class="ion-no-padding">

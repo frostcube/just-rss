@@ -7,6 +7,7 @@ import { addIcons } from 'ionicons';
 import { bookmark } from 'ionicons/icons';
 import { BookmarkService } from '../services/bookmark.service';
 import { PlatformService } from '../services/platform.service';
+import { formatDateRelative } from '../lib/date-utils';
 
 @Component({
   selector: 'app-saved',
@@ -17,19 +18,10 @@ import { PlatformService } from '../services/platform.service';
     IonCardSubtitle, IonCardTitle, IonButton, IonLabel, IonList, IonIcon, IonItem],
 })
 export class SavedPage {
+  public formatDateRelative = formatDateRelative;
+
   constructor(public bookmarks: BookmarkService, public platformService: PlatformService) {
     addIcons({ bookmark });
-  }
-
-  public formatDate(dateStr: string, locale: string)
-  {
-    const date = new Date(dateStr);
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric'
-    };
-    return date.toLocaleDateString(locale, dateOptions);        
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
