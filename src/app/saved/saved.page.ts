@@ -18,6 +18,8 @@ import { formatDateRelative } from '../lib/date-utils';
     IonCardSubtitle, IonCardTitle, IonButton, IonLabel, IonList, IonIcon, IonItem],
 })
 export class SavedPage {
+  public formatDateRelative = formatDateRelative;
+
   constructor(public bookmarks: BookmarkService, public platformService: PlatformService) {
     addIcons({ bookmark });
   }

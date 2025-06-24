@@ -52,6 +52,10 @@ export class FeedPage {
   public filter: string = '';
   public currentScrollOffset: number = 0;
 
+  public formatDateAsDay = formatDateAsDay;
+  public formatDateAsLong = formatDateAsLong;
+  public formatDateRelative = formatDateRelative;
+
   constructor(public sourcesService: SourcesService, public platformService: PlatformService, 
               public bookmarkService: BookmarkService, public feedService: FeedService,
               private modalController: ModalController, public elementRef: ElementRef,
