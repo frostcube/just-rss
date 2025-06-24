@@ -15,7 +15,7 @@ import {
   ScrollDetail
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { bookmark, bookmarkOutline, chevronForward, chevronUpOutline, ellipsisVertical, filterOutline, shareSocialOutline } from 'ionicons/icons';
+import { chevronForward, chevronUpOutline, ellipsisVertical, filterOutline, shareSocialOutline } from 'ionicons/icons';
 import { ArticleListComponent } from '../article-list/article-list.component';
 import { formatDateAsDay, formatDateAsLong, formatDateRelative } from '../lib/date-utils';
 import { BookmarkService } from '../services/bookmark.service';

@@ -23,6 +23,7 @@ export class ArticleListComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() entries: any[] = [];
   @Input() filter: string = '';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() presentingElementId: any;
 
   public formatDateRelative = formatDateRelative;
