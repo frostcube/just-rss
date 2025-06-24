@@ -22,6 +22,9 @@ import { addIcons } from 'ionicons';
 import { create, trash, checkmarkCircleOutline, closeCircleOutline, compassOutline } from 'ionicons/icons';
 import { IFeedDict, SourcesService } from '../services/sources.service';
 import { SuggestedComponent } from '../suggested/suggested.component';
+import { PlatformService } from '../services/platform.service';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 
 // AngularJS URL Validation
 const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?(?:\/[\w#!:.?+=&%@\-/]*)?$/;
@@ -38,8 +41,13 @@ export class SourcesPage {
   inputUrl: string = '';
   public rssForm: FormGroup;
 
-  constructor(public sourcesService: SourcesService, public formBuild: FormBuilder,
-              private alertController: AlertController, private modalController: ModalController) {
+  constructor(
+    public sourcesService: SourcesService,
+    public formBuild: FormBuilder,
+    private alertController: AlertController,
+    private modalController: ModalController,
+    private platformService: PlatformService
+  ) {
     addIcons({ trash, create, checkmarkCircleOutline, closeCircleOutline, compassOutline });
 
     this.rssForm = this.formBuild.group({
@@ -136,15 +144,35 @@ export class SourcesPage {
 
   async exportOPML(): Promise<void> {
     const opml = this.sourcesService.exportSourcesToOPML();
-    const blob = new Blob([opml], { type: 'text/xml' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'sources.opml';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    if (this.platformService.isNative()) {
+      // Use Capacitor Filesystem to save file natively
+      const fileName = `sources_${Date.now()}.opml`;
+      const writeResult = await Filesystem.writeFile({
+        path: fileName,
+        data: opml,
+        directory: Directory.Documents,
+        encoding: Encoding.UTF8
+      });
+      // Share the file using the native share sheet
+      await Share.share({
+        title: 'Exported OPML',
+        text: 'Your exported RSS sources (OPML file)',
+        url: writeResult.uri,
+        dialogTitle: 'Share your OPML file',
+      });
+      await this.sourcesService.presentWarnToast('OPML exported and ready to share!');
+    } else {
+      // Browser fallback
+      const blob = new Blob([opml], { type: 'text/xml' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sources.opml';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
   }
 
   async importOPML(event: Event): Promise<void> {
