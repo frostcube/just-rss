@@ -88,7 +88,7 @@
                     }
                     <ion-card-header>
                       <ion-card-subtitle>
-                        {{entry.source}} | {{formatDate(entry.isoDate, settingsService.getSettings().locale)}}
+                        {{entry.source}} | {{formatDateRelative(entry.isoDate, settingsService.getSettings().locale)}}
                       </ion-card-subtitle>
                       <ion-card-title>
                         <!---ToDo: We override the background as the colour is slightly different on iOS-->
