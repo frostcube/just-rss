@@ -7,6 +7,7 @@ import { formatDateAsDay, formatDateRelative } from '../lib/date-utils';
 import { PreviewComponent } from 'src/app/preview/preview.component';
 import { bookmark, bookmarkOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { FeedService } from '../services/feed.service';
 
 @Component({
   selector: 'app-article-list',
@@ -30,6 +31,7 @@ export class ArticleListComponent {
   public formatDateAsDay = formatDateAsDay;
 
   constructor(public bookmarkService: BookmarkService,
+              public feedService: FeedService,
               public modalController: ModalController,
               public platformService: PlatformService, 
               public settingsService: SettingsService) { 
@@ -38,6 +40,7 @@ export class ArticleListComponent {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public addBookmark(event: Event, entry: any) {
+    this.feedService.updateBookmarkStatus(entry, true);
     this.bookmarkService.addEntry(entry);
     event.stopPropagation();
   }
@@ -45,6 +48,7 @@ export class ArticleListComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public removeBookmark(event: Event, entry: any) {
     this.bookmarkService.removeEntry(entry);
+    this.feedService.updateBookmarkStatus(entry, false);
     event.stopPropagation();
   }
 
