@@ -39,7 +39,7 @@
 
   <!-- Import/Export OPML -->
   <ion-button (click)="importOPMLInput.click()">Import OPML</ion-button>
-  <input #importOPMLInput type="file" accept=".opml,.xml" style="display:none" (change)="importOPML($event)" />
+  <input #importOPMLInput type="file" accept=".opml,.xml,text/xml,application/xml,application/octet-stream" style="display:none" (change)="importOPML($event)" />
   <ion-button (click)="exportOPML()">Export OPML</ion-button>
   
 
