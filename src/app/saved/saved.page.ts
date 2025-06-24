@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef} from '@angular/core';
 import {
   IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,
   IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonTitle, IonToolbar
@@ -8,19 +8,27 @@ import { bookmark } from 'ionicons/icons';
 import { BookmarkService } from '../services/bookmark.service';
 import { PlatformService } from '../services/platform.service';
 import { formatDateRelative } from '../lib/date-utils';
+import { ArticleListComponent } from '../article-list/article-list.component';
 
 @Component({
   selector: 'app-saved',
   templateUrl: 'saved.page.html',
   styleUrls: ['saved.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardContent, 
-    IonCardSubtitle, IonCardTitle, IonButton, IonLabel, IonList, IonIcon, IonItem],
+  imports: [
+    IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardContent, 
+    IonCardSubtitle, IonCardTitle, IonButton, IonLabel, IonList, IonIcon, IonItem,
+    ArticleListComponent
+  ],
 })
 export class SavedPage {
-  public formatDateRelative = formatDateRelative;
 
-  constructor(public bookmarks: BookmarkService, public platformService: PlatformService) {
+  public formatDateRelative = formatDateRelative;
+  public filter: string = '';
+
+  constructor(public elementRef: ElementRef,
+              public bookmarks: BookmarkService, 
+              public platformService: PlatformService) {
     addIcons({ bookmark });
   }
 
