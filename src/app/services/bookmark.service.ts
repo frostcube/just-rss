@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../services/storage.service';
-import { FeedService } from './feed.service';
 
 const BOOKMARK_FEED_LIST = 'bookmark_feed_list';
 
