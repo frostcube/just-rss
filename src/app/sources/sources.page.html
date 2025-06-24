@@ -34,10 +34,10 @@
       [clearOnEdit]="true"
       style="flex: 1 1 0;"
     ></ion-input>
-    <ion-button (click)="discoverUrl(inputUrl)" [disabled]="!rssForm.valid">Search for Feed</ion-button>
     <ion-button (click)="addUrl(inputUrl)" [disabled]="!rssForm.valid">Add Feed</ion-button>
   </form>
-  <!-- OPML Import/Export Buttons -->
+
+  <!-- Import/Export OPML -->
   <ion-button (click)="importOPMLInput.click()">Import OPML</ion-button>
   <input #importOPMLInput type="file" accept=".opml,.xml" style="display:none" (change)="importOPML($event)" />
   <ion-button (click)="exportOPML()">Export OPML</ion-button>

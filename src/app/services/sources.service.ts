@@ -125,23 +125,40 @@ export class SourcesService {
  */
   public async discoverRssFeed(websiteUrl: string): Promise<string | null> {
     try {
-      // Fetch the HTML content of the website
+      // 1. Try to fetch the URL and check if it's already a feed
       const response = await fetch(websiteUrl);
-      const htmlContent = await response.text();
-
-      // Search for RSS feed links in the HTML content
+      const contentType = response.headers.get('content-type') || '';
+      const urlLower = websiteUrl.toLowerCase();
+      const isLikelyFeed =
+        contentType.includes('application/rss+xml') ||
+        contentType.includes('application/atom+xml') ||
+        contentType.includes('text/xml') ||
+        urlLower.endsWith('.xml') || urlLower.endsWith('.rss') || urlLower.endsWith('.atom');
+      const text = await response.text();
+      if (isLikelyFeed) {
+        // Try to parse as XML and check for <rss> or <feed> root
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, 'text/xml');
+        const rootTag = xml.documentElement.tagName.toLowerCase();
+        if (rootTag === 'rss' || rootTag === 'feed') {
+          return websiteUrl;
+        }
+      }
+      // 2. Fallback: HTML discovery
       const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlContent, 'text/html');
-      const rssLink = doc.querySelector('link[type="application/rss+xml"]');
-
+      const doc = parser.parseFromString(text, 'text/html');
+      const rssLink = doc.querySelector('link[type="application/rss+xml"], link[type="application/atom+xml"]');
       if (rssLink) {
-        const rssLinkUrl = rssLink.getAttribute('href');
-        if (rssLinkUrl && rssLinkUrl.includes(websiteUrl))
-          return rssLinkUrl;
-        else
-          return websiteUrl + rssLinkUrl;
+        let rssLinkUrl = rssLink.getAttribute('href');
+        if (!rssLinkUrl) return null;
+        // Make absolute if needed
+        if (!rssLinkUrl.startsWith('http')) {
+          const base = new URL(websiteUrl);
+          rssLinkUrl = new URL(rssLinkUrl, base).toString();
+        }
+        return rssLinkUrl;
       } else {
-        console.warn('No RSS feed link found in the HTML.');
+        console.warn('No RSS/Atom feed link found in the HTML.');
         return null;
       }
     } catch (error) {

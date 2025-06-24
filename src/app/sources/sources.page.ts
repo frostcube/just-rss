@@ -57,26 +57,17 @@ export class SourcesPage {
     });
   }
 
-  public addUrl(websiteUrl: string) {
-    console.warn('[SourcesComponent] Adding new url');
-    this.sourcesService.addSourceFromUrl(websiteUrl);
-  }
-
-  public discoverUrl(websiteUrl: string) {
-    this.sourcesService.discoverRssFeed(websiteUrl)
-      .then((rssFeedUrl) => {
-        if (rssFeedUrl) {
-          console.log(`[SourcesComponent] Discovered RSS feed URL: ${rssFeedUrl}`);
-          this.addUrl(rssFeedUrl);
-        } else {
-          console.log('[SourcesComponent] No RSS feed found.');
-          this.sourcesService.presentErrorToast('No RSS Feed Found');
-        }
-      })
-      .catch((error) => {
-        console.error('[SourcesComponent] Error discovering RSS feed:', error);
-        this.sourcesService.presentErrorToast('Error when trying to discover RSS Feed');
-      });
+  public async addUrl(websiteUrl: string) {
+    try {
+      const rssFeedUrl = await this.sourcesService.discoverRssFeed(websiteUrl);
+      if (rssFeedUrl) {
+        this.sourcesService.addSourceFromUrl(rssFeedUrl);
+      } else {
+        this.sourcesService.presentErrorToast('No RSS/Atom feed found at this URL.');
+      }
+    } catch (error) {
+      this.sourcesService.presentErrorToast('Error discovering RSS/Atom feed.');
+    }
   }
 
   public load() {
