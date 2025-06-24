@@ -56,7 +56,7 @@ export class FeedPage {
               public sourcesService: SourcesService, public platformService: PlatformService, 
               public bookmarkService: BookmarkService, public feedService: FeedService,
               private modalController: ModalController, public settingsService: SettingsService) {
-    addIcons({ bookmark, bookmarkOutline, shareSocialOutline, ellipsisVertical, filterOutline, chevronForward, 
+    addIcons({ shareSocialOutline, ellipsisVertical, filterOutline, chevronForward, 
       chevronUpOutline });
   }
 

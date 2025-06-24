@@ -5,6 +5,8 @@ import { PlatformService } from 'src/app/services/platform.service';
 import { SettingsService } from 'src/app/services/settings.service';
 import { formatDateAsDay, formatDateRelative } from '../lib/date-utils';
 import { PreviewComponent } from 'src/app/preview/preview.component';
+import { bookmark, bookmarkOutline } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-article-list',
@@ -29,7 +31,9 @@ export class ArticleListComponent {
   constructor(public bookmarkService: BookmarkService,
               public modalController: ModalController,
               public platformService: PlatformService, 
-              public settingsService: SettingsService) { }
+              public settingsService: SettingsService) { 
+    addIcons({ bookmark, bookmarkOutline});
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public addBookmark(event: Event, entry: any) {
