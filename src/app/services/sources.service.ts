@@ -11,7 +11,7 @@ const STORAGE_FEED_LIST = 'storage_feed_list';
 
 export interface IFeedDict {
   url: string,
-  title: boolean,
+  title: string,
   iconUrl: string | undefined,
   description: string,
   /** When the feed was last updated upstream in milliseconds since epoch */
@@ -125,23 +125,40 @@ export class SourcesService {
  */
   public async discoverRssFeed(websiteUrl: string): Promise<string | null> {
     try {
-      // Fetch the HTML content of the website
+      // Try to fetch the URL and check if it's already a feed
       const response = await fetch(websiteUrl);
-      const htmlContent = await response.text();
-
-      // Search for RSS feed links in the HTML content
+      const contentType = response.headers.get('content-type') || '';
+      const urlLower = websiteUrl.toLowerCase();
+      const isLikelyFeed =
+        contentType.includes('application/rss+xml') ||
+        contentType.includes('application/atom+xml') ||
+        contentType.includes('text/xml') ||
+        urlLower.endsWith('.xml') || urlLower.endsWith('.rss') || urlLower.endsWith('.atom');
+      const text = await response.text();
+      if (isLikelyFeed) {
+        // Try to parse as XML and check for <rss> or <feed> root
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, 'text/xml');
+        const rootTag = xml.documentElement.tagName.toLowerCase();
+        if (rootTag === 'rss' || rootTag === 'feed') {
+          return websiteUrl;
+        }
+      }
+      // Fallback to HTML discovery
       const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlContent, 'text/html');
-      const rssLink = doc.querySelector('link[type="application/rss+xml"]');
-
+      const doc = parser.parseFromString(text, 'text/html');
+      const rssLink = doc.querySelector('link[type="application/rss+xml"], link[type="application/atom+xml"]');
       if (rssLink) {
-        const rssLinkUrl = rssLink.getAttribute('href');
-        if (rssLinkUrl && rssLinkUrl.includes(websiteUrl))
-          return rssLinkUrl;
-        else
-          return websiteUrl + rssLinkUrl;
+        let rssLinkUrl = rssLink.getAttribute('href');
+        if (!rssLinkUrl) return null;
+        // Make absolute if needed
+        if (!rssLinkUrl.startsWith('http')) {
+          const base = new URL(websiteUrl);
+          rssLinkUrl = new URL(rssLinkUrl, base).toString();
+        }
+        return rssLinkUrl;
       } else {
-        console.warn('No RSS feed link found in the HTML.');
+        console.warn('No RSS/Atom feed link found in the HTML.');
         return null;
       }
     } catch (error) {
@@ -201,7 +218,7 @@ export class SourcesService {
       item.feedUrl = feed.url;
       item.imgLink = this.getItemMedia(item);
       item.source = feed.title;
-      item.title = item.title.replace('&#8217;', '\'');
+      item.title = this.replaceXMLChars(item.title);
       tempFeedData.push(item);
     }
 
@@ -270,6 +287,74 @@ export class SourcesService {
     } else {
       return null;
     }
+  }
+
+  /**
+   * Export sources list as OPML XML string
+   */
+  exportSourcesToOPML(): string {
+    const sources = this.getSources();
+    const outlines = sources.map(source =>
+      `<outline type="rss" text="${this.escapeXml(source.title ?? '')}" title="${this.escapeXml(source.title ?? '')}" xmlUrl="${this.escapeXml(source.url ?? '')}" description="${this.escapeXml(source.description ?? '')}" />`
+    ).join('\n      ');
+    return `<?xml version="1.0" encoding="UTF-8"?>\n<opml version="2.0">\n  <head>\n    <title>Just RSS Export</title>\n  </head>\n  <body>\n    ${outlines}\n  </body>\n</opml>`;
+  }
+
+  /**
+   * Import sources from OPML XML string
+   */
+  importSourcesFromOPML(opmlText: string): boolean {
+    try {
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(opmlText, 'text/xml');
+      const outlines = Array.from(xml.querySelectorAll('outline[xmlUrl]'));
+      if (!outlines.length) return false;
+      let imported = 0;
+      for (const outline of outlines) {
+        const url = outline.getAttribute('xmlUrl');
+        const title = outline.getAttribute('title') || outline.getAttribute('text') || url || '';
+        const description = outline.getAttribute('description') || '';
+        if (url && !this._feedList.some(feed => feed.url === url)) {
+          const feed: IFeedDict = {
+            url,
+            title,
+            iconUrl: undefined,
+            description,
+            lastPublished: 0,
+            lastRetrieved: 0,
+            pollingFrequency: this.settingsService.getSettings().defaultPollingFrequency,
+            healthy: true,
+            podcast: false,
+            tags: []
+          };
+          this.addSource(feed);
+          imported++;
+        }
+      }
+      return imported > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private escapeXml(str: string): string {
+    return str.replace(/[<>&"']/g, c => {
+      switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case '"': return '&quot;';
+      case '\'': return '&apos;';
+      default: return c;
+      }
+    });
+  }
+
+  private replaceXMLChars(str: string): string {
+    return str.replace('&#8217;', '\'')
+      .replace('&#038;', '&')
+      .replace('&#8216;', '\'')
+      .replace('&amp;', '&');
   }
 
 }

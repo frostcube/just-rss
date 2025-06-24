@@ -23,7 +23,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <form [formGroup]="rssForm">
+  <form [formGroup]="rssForm" style="display: flex; align-items: center; gap: 8px;">
     <ion-input
       [(ngModel)]="inputUrl"
       formControlName="url"
@@ -32,10 +32,17 @@
       helperText="Enter a valid url"
       errorText="Invalid url"
       [clearOnEdit]="true"
+      style="flex: 1 1 0;"
     ></ion-input>
+    <ion-button (click)="addUrl(inputUrl)" [disabled]="!rssForm.valid">Add Feed</ion-button>
   </form>
-  <ion-button ion-button (click)="discoverUrl(inputUrl)" [disabled]="!rssForm.valid">Search for Feed</ion-button>
-  <ion-button ion-button (click)="addUrl(inputUrl)" [disabled]="!rssForm.valid">Add Feed</ion-button>
+
+  <!-- Import/Export OPML -->
+  <ion-button (click)="importOPMLInput.click()">Import OPML</ion-button>
+  <input #importOPMLInput type="file" accept=".opml,.xml,text/xml,application/xml,application/octet-stream" style="display:none" (change)="importOPML($event)" />
+  <ion-button (click)="exportOPML()">Export OPML</ion-button>
+  
+
 
   <ion-list>
     @for (source of sourcesService.getSources(); track source.url) {
