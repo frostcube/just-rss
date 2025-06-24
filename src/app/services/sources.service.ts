@@ -125,7 +125,7 @@ export class SourcesService {
  */
   public async discoverRssFeed(websiteUrl: string): Promise<string | null> {
     try {
-      // 1. Try to fetch the URL and check if it's already a feed
+      // Try to fetch the URL and check if it's already a feed
       const response = await fetch(websiteUrl);
       const contentType = response.headers.get('content-type') || '';
       const urlLower = websiteUrl.toLowerCase();
@@ -144,7 +144,7 @@ export class SourcesService {
           return websiteUrl;
         }
       }
-      // 2. Fallback: HTML discovery
+      // Fallback to HTML discovery
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, 'text/html');
       const rssLink = doc.querySelector('link[type="application/rss+xml"], link[type="application/atom+xml"]');
