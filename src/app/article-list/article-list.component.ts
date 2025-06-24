@@ -1,9 +1,9 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonItem, IonItemOption, IonItemOptions, IonLabel, IonList, IonNote, IonText, IonThumbnail, ModalController } from '@ionic/angular/standalone';
 import { BookmarkService } from 'src/app/services/bookmark.service';
 import { PlatformService } from 'src/app/services/platform.service';
 import { SettingsService } from 'src/app/services/settings.service';
-import { formatDateAsDay, formatDateRelative } from '../date-utils';
+import { formatDateAsDay, formatDateRelative } from '../lib/date-utils';
 import { PreviewComponent } from 'src/app/preview/preview.component';
 
 @Component({

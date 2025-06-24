@@ -8,7 +8,7 @@ import { bookmark } from 'ionicons/icons';
 import { BookmarkService } from '../services/bookmark.service';
 import { PlatformService } from '../services/platform.service';
 import { formatDateRelative } from '../lib/date-utils';
-import { ArticleListComponent } from '../lib/article-list/article-list.component';
+import { ArticleListComponent } from '../article-list/article-list.component';
 
 @Component({
   selector: 'app-saved',
