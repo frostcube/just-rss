@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef} from '@angular/core';
 import {
   IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,
   IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonTitle, IonToolbar
@@ -22,10 +22,13 @@ import { ArticleListComponent } from '../article-list/article-list.component';
   ],
 })
 export class SavedPage {
+
   public formatDateRelative = formatDateRelative;
   public filter: string = '';
 
-  constructor(public bookmarks: BookmarkService, public platformService: PlatformService) {
+  constructor(public elementRef: ElementRef,
+              public bookmarks: BookmarkService, 
+              public platformService: PlatformService) {
     addIcons({ bookmark });
   }
 

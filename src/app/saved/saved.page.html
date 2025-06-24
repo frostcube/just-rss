@@ -6,7 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content #savedFeed id="saved-feed" [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Saved</ion-title>
@@ -17,5 +17,6 @@
   <app-article-list
     [entries]="bookmarks.getBookmarks()"
     [filter]="''"
+    [presentingElementId]="this.elementRef.nativeElement"
   ></app-article-list>
 </ion-content>
