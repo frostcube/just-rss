@@ -42,6 +42,7 @@ export class ArticleListComponent {
   public addBookmark(event: Event, entry: any) {
     this.feedService.updateBookmarkStatus(entry, true);
     this.bookmarkService.addEntry(entry);
+    this.feedService.saveEntries();
     event.stopPropagation();
   }
 
