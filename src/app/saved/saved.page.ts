@@ -19,6 +19,7 @@ import { formatDateRelative } from '../lib/date-utils';
 })
 export class SavedPage {
   public formatDateRelative = formatDateRelative;
+  public filter: string = '';
 
   constructor(public bookmarks: BookmarkService, public platformService: PlatformService) {
     addIcons({ bookmark });

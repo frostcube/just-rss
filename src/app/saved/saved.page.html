@@ -13,29 +13,9 @@
     </ion-toolbar>
   </ion-header>
 
-  <!-- Bookmark list -->
-  <ion-list>
-    @for (entry of bookmarks.getBookmarks(); track entry.url) {
-      <div>
-        <ion-card [button]="true" (click)="platformService.openUrlInPlatformBrowser(entry.link)">
-          <ion-card-header>
-            <ion-card-subtitle>
-              {{entry.source}} | {{formatDateRelative(entry.pubDate, "en-AU")}}
-            </ion-card-subtitle>
-            <ion-card-title>
-              <ion-item class="ion-no-padding">
-                <ion-label>{{entry.title}}</ion-label>
-                <ion-button slot="end" fill="clear" (click)="removeBookmark($event, entry)">
-                  <ion-icon color="medium" name="bookmark"></ion-icon>
-                </ion-button>
-              </ion-item>
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            {{entry.contentStripped}}
-          </ion-card-content>
-        </ion-card>
-      </div>
-    }
-  </ion-list>
+  <!-- Bookmark list using shared ArticleListComponent -->
+  <app-article-list
+    [entries]="bookmarks.getBookmarks()"
+    [filter]="''"
+  ></app-article-list>
 </ion-content>

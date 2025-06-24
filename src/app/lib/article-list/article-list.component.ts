@@ -1,4 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+/* eslint-disable indent */
+import { Component, Input} from '@angular/core';
+import { BookmarkService } from 'src/app/services/bookmark.service';
+import { PlatformService } from 'src/app/services/platform.service';
+import { SettingsService } from 'src/app/services/settings.service';
+import { formatDateRelative } from '../date-utils';
 
 @Component({
   selector: 'app-article-list',
@@ -6,15 +11,25 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./article-list.component.scss']
 })
 export class ArticleListComponent {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() entries: any[] = [];
   @Input() filter: string = '';
-  @Input() settingsService: any;
-  @Input() formatDateRelative: any;
-  @Input() formatDateAsDay: any;
-  @Input() openPreview: any;
-  @Input() addBookmark: any;
-  @Input() removeBookmark: any;
 
-  @Output() bookmarkAdded = new EventEmitter<any>();
-  @Output() bookmarkRemoved = new EventEmitter<any>();
+  public formatDateRelative = formatDateRelative;
+
+  constructor(public bookmarkService: BookmarkService,
+              public platformService: PlatformService, 
+              public settingsService: SettingsService) { }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public addBookmark(event: Event, entry: any) {
+        this.bookmarkService.addEntry(entry);
+        event.stopPropagation();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public removeBookmark(event: Event, entry: any) {
+        this.bookmarkService.removeEntry(entry);
+        event.stopPropagation();
+    }
 }
