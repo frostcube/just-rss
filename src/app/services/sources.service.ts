@@ -11,7 +11,7 @@ const STORAGE_FEED_LIST = 'storage_feed_list';
 
 export interface IFeedDict {
   url: string,
-  title: boolean,
+  title: string,
   iconUrl: string | undefined,
   description: string,
   /** When the feed was last updated upstream in milliseconds since epoch */
@@ -270,6 +270,67 @@ export class SourcesService {
     } else {
       return null;
     }
+  }
+
+  /**
+   * Export sources list as OPML XML string
+   */
+  exportSourcesToOPML(): string {
+    const sources = this.getSources();
+    const outlines = sources.map(source =>
+      `<outline type="rss" text="${this.escapeXml(source.title ?? '')}" title="${this.escapeXml(source.title ?? '')}" xmlUrl="${this.escapeXml(source.url ?? '')}" description="${this.escapeXml(source.description ?? '')}" />`
+    ).join('\n      ');
+    return `<?xml version="1.0" encoding="UTF-8"?>\n<opml version="2.0">\n  <head>\n    <title>Just RSS Export</title>\n  </head>\n  <body>\n    ${outlines}\n  </body>\n</opml>`;
+  }
+
+  /**
+   * Import sources from OPML XML string
+   */
+  importSourcesFromOPML(opmlText: string): boolean {
+    try {
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(opmlText, 'text/xml');
+      const outlines = Array.from(xml.querySelectorAll('outline[xmlUrl]'));
+      if (!outlines.length) return false;
+      let imported = 0;
+      for (const outline of outlines) {
+        const url = outline.getAttribute('xmlUrl');
+        const title = outline.getAttribute('title') || outline.getAttribute('text') || url || '';
+        const description = outline.getAttribute('description') || '';
+        if (url && !this._feedList.some(feed => feed.url === url)) {
+          const feed: IFeedDict = {
+            url,
+            title,
+            iconUrl: undefined,
+            description,
+            lastPublished: 0,
+            lastRetrieved: 0,
+            pollingFrequency: this.settingsService.getSettings().defaultPollingFrequency,
+            healthy: true,
+            podcast: false,
+            tags: []
+          };
+          this.addSource(feed);
+          imported++;
+        }
+      }
+      return imported > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private escapeXml(str: string): string {
+    return str.replace(/[<>&"']/g, c => {
+      switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case '"': return '&quot;';
+      case '\'': return '&apos;';
+      default: return c;
+      }
+    });
   }
 
 }

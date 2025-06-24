@@ -134,6 +134,42 @@ export class SourcesPage {
     settings.present();
   }
 
+  async exportOPML(): Promise<void> {
+    const opml = this.sourcesService.exportSourcesToOPML();
+    const blob = new Blob([opml], { type: 'text/xml' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sources.opml';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
+
+  async importOPML(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (e: ProgressEvent<FileReader>) => {
+      const opmlText = e.target?.result as string;
+      try {
+        const imported = this.sourcesService.importSourcesFromOPML(opmlText);
+        if (imported) {
+          await this.sourcesService.presentWarnToast('Sources imported from OPML!');
+        } else {
+          await this.sourcesService.presentErrorToast('Failed to import OPML.');
+        }
+      } catch (err) {
+        await this.sourcesService.presentErrorToast('Invalid OPML file.');
+      }
+    };
+    reader.readAsText(file);
+    // Reset file input so the same file can be selected again
+    input.value = '';
+  }
+
   // removeUrl(url: string) {
   //   this.sourcesService.removeSource(url);
   // }

@@ -34,8 +34,14 @@
       [clearOnEdit]="true"
     ></ion-input>
   </form>
-  <ion-button ion-button (click)="discoverUrl(inputUrl)" [disabled]="!rssForm.valid">Search for Feed</ion-button>
-  <ion-button ion-button (click)="addUrl(inputUrl)" [disabled]="!rssForm.valid">Add Feed</ion-button>
+  <ion-button (click)="discoverUrl(inputUrl)" [disabled]="!rssForm.valid">Search for Feed</ion-button>
+  <ion-button (click)="addUrl(inputUrl)" [disabled]="!rssForm.valid">Add Feed</ion-button>
+
+  <!-- OPML Import/Export Buttons -->
+  <ion-button (click)="exportOPML()">Export Sources (OPML)</ion-button>
+  <ion-button (click)="importOPMLInput.click()">Import Sources (OPML)</ion-button>
+  <input #importOPMLInput type="file" accept=".opml,.xml" style="display:none" (change)="importOPML($event)" />
+
 
   <ion-list>
     @for (source of sourcesService.getSources(); track source.url) {
