@@ -74,6 +74,7 @@
     <app-article-list
       [entries]="feedService.entries"
       [filter]="filter"
+      [presentingElementId]="this.elementRef.nativeElement"
     ></app-article-list>
 
     <!-- Return to top button -->

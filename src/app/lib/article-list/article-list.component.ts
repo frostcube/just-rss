@@ -1,35 +1,65 @@
-/* eslint-disable indent */
-import { Component, Input} from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonItem, IonItemOption, IonItemOptions, IonLabel, IonList, IonNote, IonText, IonThumbnail, ModalController } from '@ionic/angular/standalone';
 import { BookmarkService } from 'src/app/services/bookmark.service';
 import { PlatformService } from 'src/app/services/platform.service';
 import { SettingsService } from 'src/app/services/settings.service';
-import { formatDateRelative } from '../date-utils';
+import { formatDateAsDay, formatDateRelative } from '../date-utils';
+import { PreviewComponent } from 'src/app/preview/preview.component';
 
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
-  styleUrls: ['./article-list.component.scss']
+  styleUrls: ['./article-list.component.scss'],
+  standalone: true,
+  imports: [IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle,
+    IonNote, IonItem, IonIcon, IonButton, IonItemOption, IonItemOptions, 
+    IonText, IonLabel, IonThumbnail, IonList
+  ]
 })
+
 export class ArticleListComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() entries: any[] = [];
   @Input() filter: string = '';
+  @Input() presentingElementId: any;
 
   public formatDateRelative = formatDateRelative;
+  public formatDateAsDay = formatDateAsDay;
 
   constructor(public bookmarkService: BookmarkService,
+              public modalController: ModalController,
               public platformService: PlatformService, 
               public settingsService: SettingsService) { }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public addBookmark(event: Event, entry: any) {
-        this.bookmarkService.addEntry(entry);
-        event.stopPropagation();
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public addBookmark(event: Event, entry: any) {
+    this.bookmarkService.addEntry(entry);
+    event.stopPropagation();
+  }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public removeBookmark(event: Event, entry: any) {
-        this.bookmarkService.removeEntry(entry);
-        event.stopPropagation();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public removeBookmark(event: Event, entry: any) {
+    this.bookmarkService.removeEntry(entry);
+    event.stopPropagation();
+  }
+
+  async openPreview(title: string, content: string, url: string) {
+    if (this.settingsService.getSettings().preview) {
+      const preview = await this.modalController.create({
+        component: PreviewComponent,
+        componentProps: {
+          articleTitle: title,
+          articleContent: content,
+          articleLink: url
+        },
+        presentingElement: this.presentingElementId,
+
+      });
+
+      preview.present();
     }
+    else {
+      this.platformService.openUrlInPlatformBrowser(url);
+    }
+  }
 }

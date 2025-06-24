@@ -2,19 +2,12 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonButton,
-  IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle, IonCardTitle,
-  IonContent,
+  IonButtons, IonContent,
   IonFab, IonFabButton,
-  IonHeader, IonIcon, IonInput, IonItem,
-  IonItemOption, IonItemOptions,
-  IonLabel, IonList,
+  IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList,
   IonMenu,
   IonMenuToggle,
-  IonNote, IonRefresher,
+  IonRefresher,
   IonRefresherContent, IonText,
   IonThumbnail,
   IonTitle, IonToolbar,
@@ -23,26 +16,29 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { bookmark, bookmarkOutline, chevronForward, chevronUpOutline, ellipsisVertical, filterOutline, shareSocialOutline } from 'ionicons/icons';
-import { PreviewComponent } from '../preview/preview.component';
+import { ArticleListComponent } from '../lib/article-list/article-list.component';
+import { formatDateAsDay, formatDateAsLong, formatDateRelative } from '../lib/date-utils';
 import { BookmarkService } from '../services/bookmark.service';
 import { FeedService } from '../services/feed.service';
 import { PlatformService } from '../services/platform.service';
 import { SettingsService } from '../services/settings.service';
 import { SourcesService } from '../services/sources.service';
 import { SettingsComponent } from '../settings/settings.component';
-import { formatDateAsDay, formatDateAsLong, formatDateRelative } from '../lib/date-utils';
 
 @Component({
   selector: 'app-feed',
   templateUrl: 'feed.page.html',
   styleUrls: ['feed.page.scss'],
   standalone: true,
-  imports: [FormsModule, IonCard, IonCardHeader, IonCardContent, 
-    IonCardSubtitle, IonCardTitle, IonHeader, IonToolbar, IonTitle, IonNote, 
-    IonContent, IonList, IonInput, IonItem, IonItemOption, IonItemOptions, 
+  imports: [
+    FormsModule, IonItem,
+    IonHeader, IonToolbar, IonTitle,
+    IonContent, IonList, IonInput, 
     IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuToggle, 
     IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
-    SettingsComponent]
+    SettingsComponent,
+    ArticleListComponent
+  ]
 })
 
 export class FeedPage {
@@ -56,10 +52,10 @@ export class FeedPage {
   public formatDateAsLong = formatDateAsLong;
   public formatDateRelative = formatDateRelative;
 
-  constructor(public sourcesService: SourcesService, public platformService: PlatformService, 
+  constructor(public elementRef: ElementRef,
+              public sourcesService: SourcesService, public platformService: PlatformService, 
               public bookmarkService: BookmarkService, public feedService: FeedService,
-              private modalController: ModalController, public elementRef: ElementRef,
-              public settingsService: SettingsService) {
+              private modalController: ModalController, public settingsService: SettingsService) {
     addIcons({ bookmark, bookmarkOutline, shareSocialOutline, ellipsisVertical, filterOutline, chevronForward, 
       chevronUpOutline });
   }
@@ -78,38 +74,6 @@ export class FeedPage {
 
   public filterClear() {
     this.filter = '';
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public addBookmark(event: Event, entry: any) {
-    this.bookmarkService.addEntry(entry);
-    event.stopPropagation();
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public removeBookmark(event: Event, entry: any) {
-    this.bookmarkService.removeEntry(entry);
-    event.stopPropagation();
-  }
-
-  async openPreview(title: string, content: string, url: string) {
-    if (this.settingsService.getSettings().preview) {
-      const preview = await this.modalController.create({
-        component: PreviewComponent,
-        componentProps: {
-          articleTitle: title,
-          articleContent: content,
-          articleLink: url
-        },
-        presentingElement: this.elementRef.nativeElement,
-
-      });
-
-      preview.present();
-    }
-    else {
-      this.platformService.openUrlInPlatformBrowser(url);
-    }
   }
 
   async openSettings() {

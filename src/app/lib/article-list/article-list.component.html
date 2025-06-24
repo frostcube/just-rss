@@ -22,12 +22,12 @@
                     <ion-item class="ion-no-padding" style="--ion-item-background: transparent;">
                       <ion-label>{{entry.title}}</ion-label>
                       @if (entry.bookmark !== true) {
-                        <ion-button slot="end" fill="clear" (click)="addBookmark($event, entry)">
+                        <ion-button slot="end" fill="clear" (click)="this.addBookmark($event, entry)">
                           <ion-icon color="medium" name="bookmark-outline"></ion-icon>
                         </ion-button>
                       }
                       @if (entry.bookmark !== false) {
-                        <ion-button slot="end" fill="clear" (click)="removeBookmark($event, entry)">
+                        <ion-button slot="end" fill="clear" (click)="this.removeBookmark($event, entry)">
                           <ion-icon color="medium" name="bookmark"></ion-icon>
                         </ion-button>
                       }

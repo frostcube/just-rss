@@ -8,14 +8,18 @@ import { bookmark } from 'ionicons/icons';
 import { BookmarkService } from '../services/bookmark.service';
 import { PlatformService } from '../services/platform.service';
 import { formatDateRelative } from '../lib/date-utils';
+import { ArticleListComponent } from '../lib/article-list/article-list.component';
 
 @Component({
   selector: 'app-saved',
   templateUrl: 'saved.page.html',
   styleUrls: ['saved.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardContent, 
-    IonCardSubtitle, IonCardTitle, IonButton, IonLabel, IonList, IonIcon, IonItem],
+  imports: [
+    IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardContent, 
+    IonCardSubtitle, IonCardTitle, IonButton, IonLabel, IonList, IonIcon, IonItem,
+    ArticleListComponent
+  ],
 })
 export class SavedPage {
   public formatDateRelative = formatDateRelative;
