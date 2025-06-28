@@ -64,7 +64,7 @@ export class StorageService {
       return JSON.parse(storage_item);
     } catch (e) {
       console.log('[StorageService] Single encoded value, not parsing JSON:', e);
-      return null;
+      return storage_item;
     }
   }
 }
