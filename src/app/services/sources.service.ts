@@ -77,7 +77,7 @@ export class SourcesService {
     if (this._feedList.findIndex(feed => feed.url === newFeed.url) === -1) {
       this._feedList.push(newFeed);
       console.log('[SourcesService] Adding new feed: ' + newFeed.url);
-      this.storageService.set(STORAGE_FEED_LIST, JSON.stringify(this._feedList));
+      this.storageService.set(STORAGE_FEED_LIST, this._feedList);
     }
     else {
       this.presentErrorToast('Feed already exists!');
@@ -92,7 +92,7 @@ export class SourcesService {
     if(index > -1){
       this._feedList.splice(index, 1);
     }
-    this.storageService.set(STORAGE_FEED_LIST, JSON.stringify(this._feedList));
+    this.storageService.set(STORAGE_FEED_LIST, this._feedList);
   }
 
   public setSource(feedUrl: string, updatedDict: IFeedDict) {
@@ -222,7 +222,7 @@ export class SourcesService {
       tempFeedData.push(item);
     }
 
-    this.storageService.set(feed.url, JSON.stringify(tempFeedData));
+    this.storageService.set(feed.url, tempFeedData);
 
     const source = this.getSource(feed.url);
     source.healthy = true;

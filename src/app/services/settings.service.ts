@@ -47,7 +47,7 @@ export class SettingsService {
  
   public updateSettings(settings: ISettingsDict): void {
     this._settingsDict = settings;
-    this.storageService.set(SETTINGS_DICT, JSON.stringify(this._settingsDict));
+    this.storageService.set(SETTINGS_DICT, this._settingsDict);
     console.log(`[SettingsService] Updated settings: ${this._settingsDict}`);
   }
 
@@ -68,6 +68,6 @@ export class SettingsService {
       this._settingsDict = storage_feed;
     }
     else
-      this.storageService.set(SETTINGS_DICT, JSON.stringify(this._settingsDict));
+      this.storageService.set(SETTINGS_DICT, this._settingsDict);
   }
 }

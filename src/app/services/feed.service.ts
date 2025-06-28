@@ -78,7 +78,7 @@ export class FeedService implements OnDestroy {
       tempFeedMasterData = this.sortByDate(tempFeedMasterData.flat());
       this.entries = this.filterArticles(tempFeedMasterData, this.settingsService.getSettings());
       this.hidden = tempFeedMasterData.length - this.entries.length; 
-      this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
+      this.storageService.set(STORAGE_FEED_DATA, this.entries);
       console.log('[FeedService] Rebuilt master feed from upstream');
       this.lastUpdated = Date.now();
       this.storageService.set(STORAGE_FEED_DATA_TIMESTAMP, this.lastUpdated);
@@ -114,7 +114,7 @@ export class FeedService implements OnDestroy {
     this.hidden = fullLength - this.entries.length;
     if (this.hidden > 0)
       this.sourcesService.presentWarnToast(`${this.hidden} articles muted`);
-    this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
+    this.storageService.set(STORAGE_FEED_DATA, this.entries);
     console.log('[FeedService] Appended feed ' + feedUrl + ' from cache');
   }
 
