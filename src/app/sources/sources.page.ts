@@ -143,9 +143,16 @@ export class SourcesPage {
         directory: Directory.Documents,
         encoding: Encoding.UTF8
       });
-      await this.sourcesService.presentWarnToast(
-        'OPML exported! Open the Files app, go to "On My iPhone" > "just-rss" > Documents to access your file.'
-      );
+      if (this.platformService.isAndroid()) {
+        await this.sourcesService.presentWarnToast(
+          'OPML exported! Open the Files app, go to "Internal Storage" > "Documents" to access your file.'
+        );
+      }
+      else {
+        await this.sourcesService.presentWarnToast(
+          'OPML exported! Open the Files app, go to "On My iPhone" > "just-rss" > "Documents" to access your file.'
+        );
+      }
     } else {
       // Browser fallback
       const blob = new Blob([opml], { type: 'text/xml' });

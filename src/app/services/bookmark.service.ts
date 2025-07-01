@@ -29,7 +29,8 @@ export class BookmarkService {
   public addEntry(entry: string) {
     this._bookmarkList.push(entry);
     console.log('[BookmarkService] Adding new feed');
-    this.storageService.set(BOOKMARK_FEED_LIST, JSON.stringify(this._bookmarkList));
+    this.storageService.set(BOOKMARK_FEED_LIST, this._bookmarkList);
+    this.feedService.updateBookmarkStatus(entry, true);
   }
 
   public removeEntry(entry: string) {
@@ -38,7 +39,8 @@ export class BookmarkService {
     if(index > -1){
       this._bookmarkList.splice(index, 1);
     }
-    this.storageService.set(BOOKMARK_FEED_LIST, JSON.stringify(this._bookmarkList));
+    this.storageService.set(BOOKMARK_FEED_LIST, this._bookmarkList);
+    this.feedService.updateBookmarkStatus(entry, false);
   }
 
   public getBookmarks() {
