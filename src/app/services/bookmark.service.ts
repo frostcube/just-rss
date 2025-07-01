@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../services/storage.service';
 
-const BOOKMARK_FEED_LIST = 'bookmark_feed_list';
+const BOOKMARK_FEED_LIST = 'v3_bookmark_feed_list';
 
 @Injectable({
   providedIn: 'root'

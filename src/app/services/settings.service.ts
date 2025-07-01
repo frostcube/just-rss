@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../services/storage.service';
 
-const SETTINGS_DICT = 'settings_dict';
+const SETTINGS_DICT = 'v3_settings_dict';
 
 export interface ISettingsDict {
     preview: boolean,
@@ -60,11 +60,6 @@ export class SettingsService {
     const storage_feed = await this.storageService.getObjectFromStorage(SETTINGS_DICT);
     
     if (storage_feed !== null) {
-      // Backwards compatible check with <= 2.3.4
-      if (!Array.isArray(storage_feed.mutedWords)) {
-        storage_feed.mutedWords = [];
-      }
-
       this._settingsDict = storage_feed;
     }
     else
