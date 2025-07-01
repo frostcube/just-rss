@@ -70,10 +70,6 @@ export class SourcesPage {
     }
   }
 
-  public load() {
-    this.sourcesService.loadSourcesList();
-  }
-
   async editUrl(feed: IFeedDict) {
     const temp_feed = feed;
 
@@ -189,9 +185,5 @@ export class SourcesPage {
     // Reset file input so the same file can be selected again
     input.value = '';
   }
-
-  // removeUrl(url: string) {
-  //   this.sourcesService.removeSource(url);
-  // }
 
 }

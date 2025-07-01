@@ -5,8 +5,8 @@ import { StorageService } from './storage.service';
 import { SourcesService } from './sources.service';
 import { ISettingsDict, SettingsService } from './settings.service';
 
-const STORAGE_FEED_DATA = 'storage_list_feed_data';
-const STORAGE_FEED_DATA_TIMESTAMP = 'storage_list_feed_data_timestamp';
+const STORAGE_FEED_DATA = 'v3_storage_list_feed_data';
+const STORAGE_FEED_DATA_TIMESTAMP = 'v3_storage_list_feed_data_timestamp';
 
 @Injectable({
   providedIn: 'root'

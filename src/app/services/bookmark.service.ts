@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../services/storage.service';
 
-const BOOKMARK_FEED_LIST = 'bookmark_feed_list';
+const BOOKMARK_FEED_LIST = 'v3_bookmark_feed_list';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,6 @@ export class BookmarkService {
     this._bookmarkList.push(entry);
     console.log('[BookmarkService] Adding new feed');
     this.storageService.set(BOOKMARK_FEED_LIST, this._bookmarkList);
-    this.feedService.updateBookmarkStatus(entry, true);
   }
 
   public removeEntry(entry: string) {
@@ -40,7 +39,6 @@ export class BookmarkService {
       this._bookmarkList.splice(index, 1);
     }
     this.storageService.set(BOOKMARK_FEED_LIST, this._bookmarkList);
-    this.feedService.updateBookmarkStatus(entry, false);
   }
 
   public getBookmarks() {

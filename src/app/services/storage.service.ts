@@ -38,7 +38,7 @@ export class StorageService {
       const storage_item = await this.get(list_name);
 
       if (storage_item !== undefined) {
-        const storage_item_json = this.legacyParseJson(storage_item);
+        const storage_item_json = storage_item;
 
         if (storage_item_json !== null) {
           return storage_item_json;
@@ -58,13 +58,4 @@ export class StorageService {
     }
   }
 
-  // Support for legacy single encoded values in version before 2.6.0
-  private legacyParseJson(storage_item: string) {
-    try {
-      return JSON.parse(storage_item);
-    } catch (e) {
-      console.log('[StorageService] Single encoded value, directly returning:', e);
-      return storage_item;
-    }
-  }
 }

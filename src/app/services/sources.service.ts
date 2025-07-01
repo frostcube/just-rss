@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 import { BookmarkService } from './bookmark.service';
 declare const RSSParser: any;
 
-const STORAGE_FEED_LIST = 'storage_feed_list';
+const STORAGE_FEED_LIST = 'v3_storage_feed_list';
 
 export interface IFeedDict {
   url: string,
