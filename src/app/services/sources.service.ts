@@ -5,6 +5,7 @@ import { StorageService } from './storage.service';
 import { SettingsService } from './settings.service';
 import { ToastController } from '@ionic/angular/standalone';
 import { Subject } from 'rxjs';
+import { BookmarkService } from './bookmark.service';
 declare const RSSParser: any;
 
 const STORAGE_FEED_LIST = 'storage_feed_list';
@@ -36,7 +37,7 @@ export class SourcesService {
   private _feedList: Array<IFeedDict> = [];
 
   constructor(private storageService: StorageService, private settingsService: SettingsService,
-              private toastController: ToastController) {
+              private toastController: ToastController, private bookmarkService: BookmarkService) {
     this.storageService.onReady.subscribe(() => {
       this.initSources(this.storageService.onReady.value);
     });
@@ -207,9 +208,11 @@ export class SourcesService {
 
   public updateLocalCache(feed: any, feedData: any): any {
     const tempFeedData: Array<any> = [];
+    const bookmarks = this.bookmarkService.getBookmarks() ?? [];
 
     for (const item of feedData.items) {
-      item.bookmark = false;
+      // Set bookmark status based on bookmarks list
+      item.bookmark = bookmarks.some((b: any) => b.link === item.link);
       if (item['content:encoded'] !== undefined) { // Prefer full content
         item.content = item['content:encoded'];
         item['content:encoded'] = '';

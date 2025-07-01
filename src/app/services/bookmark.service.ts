@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../services/storage.service';
-import { FeedService } from './feed.service';
 
 const BOOKMARK_FEED_LIST = 'bookmark_feed_list';
 
@@ -11,7 +10,7 @@ export class BookmarkService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _bookmarkList: Array<any> = [];
 
-  constructor(private storageService: StorageService, private feedService: FeedService) {
+  constructor(private storageService: StorageService) {
     this.storageService.onReady.subscribe(() => {
       this.initBookmarks(this.storageService.onReady.value);
     });
