@@ -51,7 +51,7 @@ export class FeedService implements OnDestroy {
   }
 
   public async saveEntries() {
-    this.storageService.set(STORAGE_FEED_DATA, JSON.stringify(this.entries));
+    this.storageService.set(STORAGE_FEED_DATA, this.entries);
   }
 
   public async syncEntriesWithUpstream(event: any): Promise<void> {
