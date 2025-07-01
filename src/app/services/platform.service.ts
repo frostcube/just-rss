@@ -26,6 +26,10 @@ export class PlatformService {
     return this._currentPlatform === 'browser';
   }
 
+  isAndroid() {
+    return this.platform.is('android');
+  }
+
   isReady() {
     return this.platform.ready();
   }
