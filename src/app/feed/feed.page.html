@@ -72,7 +72,7 @@
 
     <!-- Feed list -->
     @if (loading) {
-      <app-skeletons [compressed]="settingsService.getSettings().compressedFeed" [rows]="skeletonRows.length" [cards]="skeletonCards.length"></app-skeletons>
+      <app-skeletons [compressed]="settingsService.getSettings().compressedFeed" [rows]="5" [cards]="4"></app-skeletons>
     }
     @else {
       <app-article-list

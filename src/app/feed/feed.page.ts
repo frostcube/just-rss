@@ -52,9 +52,6 @@ export class FeedPage {
   public filter: string = '';
   public currentScrollOffset: number = 0;
   public loading: boolean = true;
-  // Arrays used only to render skeleton placeholders in the template
-  public skeletonRows: number[] = Array.from({ length: 5 }, (_, i) => i);
-  public skeletonCards: number[] = Array.from({ length: 4 }, (_, i) => i);
 
   public formatDateAsDay = formatDateAsDay;
   public formatDateAsLong = formatDateAsLong;
