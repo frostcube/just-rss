@@ -14,9 +14,14 @@
   </ion-header>
 
   <!-- Bookmark list using shared ArticleListComponent -->
-  <app-article-list
-    [entries]="bookmarks.getBookmarks()"
-    [filter]="''"
-    [presentingElementId]="this.elementRef.nativeElement"
-  ></app-article-list>
+  @if (loading) {
+    <app-skeletons [compressed]="settingsService.getSettings().compressedFeed" [cards]="3"></app-skeletons>
+  }
+  @else {
+    <app-article-list
+      [entries]="bookmarks.getBookmarks()"
+      [filter]="''"
+      [presentingElementId]="this.elementRef.nativeElement"
+    ></app-article-list>
+  }
 </ion-content>

@@ -71,11 +71,16 @@
     </ion-refresher>
 
     <!-- Feed list -->
-    <app-article-list
-      [entries]="feedService.entries"
-      [filter]="filter"
-      [presentingElementId]="this.elementRef.nativeElement"
-    ></app-article-list>
+    @if (loading) {
+      <app-skeletons [compressed]="settingsService.getSettings().compressedFeed" [rows]="skeletonRows.length" [cards]="skeletonCards.length"></app-skeletons>
+    }
+    @else {
+      <app-article-list
+        [entries]="feedService.entries"
+        [filter]="filter"
+        [presentingElementId]="this.elementRef.nativeElement"
+      ></app-article-list>
+    }
 
     <!-- Return to top button -->
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">

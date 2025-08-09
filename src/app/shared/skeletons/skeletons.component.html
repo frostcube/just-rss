@@ -1,0 +1,40 @@
+@if (compressed) {
+  <ion-list class="skeleton-list">
+    @for (i of rowsArray; track i) {
+      <ion-item class="skeleton-row">
+        <ion-thumbnail slot="start">
+          <div class="skeleton-circle skeleton"></div>
+        </ion-thumbnail>
+        <ion-label>
+          <div class="skeleton-rect skeleton title"></div>
+          <div class="skeleton-rect skeleton subtitle"></div>
+        </ion-label>
+        <div slot="end" class="skeleton-rect skeleton date"></div>
+      </ion-item>
+    }
+  </ion-list>
+}
+@else {
+  <div class="skeleton-cards">
+    @for (i of cardsArray; track i) {
+      <ion-card class="skeleton-card">
+        <div class="card-image">
+          <div class="skeleton-rect skeleton image"></div>
+        </div>
+        <ion-card-header>
+          <ion-card-title>
+            <div class="skeleton-rect skeleton title big"></div>
+          </ion-card-title>
+          <ion-card-subtitle>
+            <div class="skeleton-rect skeleton subtitle short"></div>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="skeleton-rect skeleton line"></div>
+          <div class="skeleton-rect skeleton line small"></div>
+          <div class="skeleton-rect skeleton line small"></div>
+        </ion-card-content>
+      </ion-card>
+    }
+  </div>
+}

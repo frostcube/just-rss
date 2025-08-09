@@ -12,7 +12,8 @@ import {
   IonThumbnail,
   IonTitle, IonToolbar,
   ModalController,
-  ScrollDetail
+  ScrollDetail,
+  IonSpinner
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronForward, chevronUpOutline, ellipsisVertical, filterOutline, shareSocialOutline } from 'ionicons/icons';
@@ -24,6 +25,8 @@ import { PlatformService } from '../services/platform.service';
 import { SettingsService } from '../services/settings.service';
 import { SourcesService } from '../services/sources.service';
 import { SettingsComponent } from '../settings/settings.component';
+import { StorageService } from '../services/storage.service';
+import { SkeletonsComponent } from '../shared/skeletons/skeletons.component';
 
 @Component({
   selector: 'app-feed',
@@ -35,9 +38,10 @@ import { SettingsComponent } from '../settings/settings.component';
     IonHeader, IonToolbar, IonTitle,
     IonContent, IonList, IonInput, 
     IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuToggle, 
-    IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
+    IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton, IonSpinner,
     SettingsComponent,
-    ArticleListComponent
+    ArticleListComponent,
+    SkeletonsComponent
   ]
 })
 
@@ -47,6 +51,10 @@ export class FeedPage {
   public mainFeed!: IonContent;
   public filter: string = '';
   public currentScrollOffset: number = 0;
+  public loading: boolean = true;
+  // Arrays used only to render skeleton placeholders in the template
+  public skeletonRows: number[] = Array.from({ length: 5 }, (_, i) => i);
+  public skeletonCards: number[] = Array.from({ length: 4 }, (_, i) => i);
 
   public formatDateAsDay = formatDateAsDay;
   public formatDateAsLong = formatDateAsLong;
@@ -55,9 +63,18 @@ export class FeedPage {
   constructor(public elementRef: ElementRef,
               public sourcesService: SourcesService, public platformService: PlatformService, 
               public bookmarkService: BookmarkService, public feedService: FeedService,
+              public storageService: StorageService,
               private modalController: ModalController, public settingsService: SettingsService) {
     addIcons({ shareSocialOutline, ellipsisVertical, filterOutline, chevronForward, 
       chevronUpOutline });
+
+    // Keep the feed hidden until storage is ready and feed entries have been loaded
+    this.storageService.onReady.subscribe((ready) => {
+      if (ready) {
+        // small delay to avoid flicker when fast devices
+        setTimeout(() => { this.loading = false; }, 150);
+      }
+    });
   }
 
   public scrollToTop() {
