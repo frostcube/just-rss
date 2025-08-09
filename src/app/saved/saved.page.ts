@@ -9,7 +9,7 @@ import { BookmarkService } from '../services/bookmark.service';
 import { SettingsService } from '../services/settings.service';
 import { PlatformService } from '../services/platform.service';
 import { formatDateRelative } from '../lib/date-utils';
-import { ArticleListComponent } from '../article-list/article-list.component';
+import { ArticleListComponent } from '../shared/article-list/article-list.component';
 import { SkeletonsComponent } from '../shared/skeletons/skeletons.component';
 
 @Component({
