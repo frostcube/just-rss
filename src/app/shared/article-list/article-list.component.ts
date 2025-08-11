@@ -10,8 +10,8 @@ import { PreviewComponent } from 'src/app/preview/preview.component';
 import { BookmarkService } from 'src/app/services/bookmark.service';
 import { PlatformService } from 'src/app/services/platform.service';
 import { SettingsService } from 'src/app/services/settings.service';
-import { formatDateAsDay, formatDateRelative } from '../lib/date-utils';
-import { FeedService } from '../services/feed.service';
+import { formatDateAsDay, formatDateRelative } from '../../lib/date-utils';
+import { FeedService } from '../../services/feed.service';
 
 @Component({
   selector: 'app-article-list',
