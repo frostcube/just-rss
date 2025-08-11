@@ -92,7 +92,7 @@
     </ion-fab>
 
     <!-- Onboarding -->
-    @if (feedService.entries.length === 0) {
+    @if (feedService.entries.length === 0 && !loading) {
       <div class="ion-text-center">
         It doesn't look like you have any feed items yet, would you like to <a href="/tabs/sources">add some sources?</a>
       </div>
