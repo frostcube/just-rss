@@ -33,7 +33,7 @@
     "@capacitor/ios": "^7.4.0",
     "@capacitor/keyboard": "^7.0.1",
     "@capacitor/status-bar": "^7.0.1",
-    "@derme302/localforage-capacitorsqlitedriver": "^1.1.2",
+    "@derme302/localforage-capacitorsqlitedriver": "^1.2.1",
     "@ionic/angular": "8.6.1",
     "@ionic/storage-angular": "^4.0.0",
     "ionicons": "^7.2.2",
