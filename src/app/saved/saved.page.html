@@ -13,15 +13,9 @@
     </ion-toolbar>
   </ion-header>
 
-  <!-- Bookmark list using shared ArticleListComponent -->
-  @if (loading) {
-    <app-skeletons [compressed]="settingsService.getSettings().compressedFeed" [cards]="3"></app-skeletons>
-  }
-  @else {
-    <app-article-list
-      [entries]="bookmarks.getBookmarks()"
-      [filter]="''"
-      [presentingElementId]="this.elementRef.nativeElement"
-    ></app-article-list>
-  }
+  <app-article-list
+    [entries]="bookmarks.getBookmarks()"
+    [filter]="''"
+    [presentingElementId]="this.elementRef.nativeElement"
+  ></app-article-list>
 </ion-content>

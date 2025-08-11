@@ -30,18 +30,8 @@ export class SavedPage {
   public loading = true;
 
   constructor(public elementRef: ElementRef,
-              public bookmarks: BookmarkService, 
-              public storageService: StorageService,
-              public settingsService: SettingsService) {
+              public bookmarks: BookmarkService) {
     addIcons({ bookmark });
-
-    // Keep the feed hidden until storage is ready and feed entries have been loaded
-    this.storageService.onReady.subscribe((ready) => {
-      if (ready) {
-        // small delay to avoid flicker when fast devices
-        setTimeout(() => { this.loading = false; }, 150);
-      }
-    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
