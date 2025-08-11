@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import {
   IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,
   IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonTitle, IonToolbar
@@ -7,8 +7,6 @@ import { addIcons } from 'ionicons';
 import { bookmark } from 'ionicons/icons';
 import { formatDateRelative } from '../lib/date-utils';
 import { BookmarkService } from '../services/bookmark.service';
-import { SettingsService } from '../services/settings.service';
-import { StorageService } from '../services/storage.service';
 import { ArticleListComponent } from '../shared/article-list/article-list.component';
 import { SkeletonsComponent } from '../shared/skeletons/skeletons.component';
 
