@@ -12,20 +12,19 @@ import {
   IonThumbnail,
   IonTitle, IonToolbar,
   ModalController,
-  ScrollDetail,
-  IonSpinner
+  ScrollDetail
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronForward, chevronUpOutline, ellipsisVertical, filterOutline, shareSocialOutline } from 'ionicons/icons';
-import { ArticleListComponent } from '../shared/article-list/article-list.component';
 import { formatDateAsDay, formatDateAsLong, formatDateRelative } from '../lib/date-utils';
 import { BookmarkService } from '../services/bookmark.service';
 import { FeedService } from '../services/feed.service';
 import { PlatformService } from '../services/platform.service';
 import { SettingsService } from '../services/settings.service';
 import { SourcesService } from '../services/sources.service';
-import { SettingsComponent } from '../settings/settings.component';
 import { StorageService } from '../services/storage.service';
+import { SettingsComponent } from '../settings/settings.component';
+import { ArticleListComponent } from '../shared/article-list/article-list.component';
 import { SkeletonsComponent } from '../shared/skeletons/skeletons.component';
 
 @Component({
@@ -38,7 +37,7 @@ import { SkeletonsComponent } from '../shared/skeletons/skeletons.component';
     IonHeader, IonToolbar, IonTitle,
     IonContent, IonList, IonInput, 
     IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuToggle, 
-    IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton, IonSpinner,
+    IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
     SettingsComponent,
     ArticleListComponent,
     SkeletonsComponent

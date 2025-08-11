@@ -5,10 +5,10 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { bookmark } from 'ionicons/icons';
+import { formatDateRelative } from '../lib/date-utils';
 import { BookmarkService } from '../services/bookmark.service';
 import { SettingsService } from '../services/settings.service';
-import { PlatformService } from '../services/platform.service';
-import { formatDateRelative } from '../lib/date-utils';
+import { StorageService } from '../services/storage.service';
 import { ArticleListComponent } from '../shared/article-list/article-list.component';
 import { SkeletonsComponent } from '../shared/skeletons/skeletons.component';
 
@@ -23,7 +23,7 @@ import { SkeletonsComponent } from '../shared/skeletons/skeletons.component';
     ArticleListComponent, SkeletonsComponent
   ],
 })
-export class SavedPage implements OnInit {
+export class SavedPage {
 
   public formatDateRelative = formatDateRelative;
   public filter: string = '';
@@ -31,18 +31,17 @@ export class SavedPage implements OnInit {
 
   constructor(public elementRef: ElementRef,
               public bookmarks: BookmarkService, 
-              public platformService: PlatformService,
+              public storageService: StorageService,
               public settingsService: SettingsService) {
     addIcons({ bookmark });
-  }
 
-  ngOnInit() {
-    // If bookmarks are already present, hide skeleton. Otherwise hide after short delay.
-    if (this.bookmarks.getBookmarks() && this.bookmarks.getBookmarks().length > 0) {
-      this.loading = false;
-    } else {
-      setTimeout(() => { this.loading = false; }, 250);
-    }
+    // Keep the feed hidden until storage is ready and feed entries have been loaded
+    this.storageService.onReady.subscribe((ready) => {
+      if (ready) {
+        // small delay to avoid flicker when fast devices
+        setTimeout(() => { this.loading = false; }, 150);
+      }
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
