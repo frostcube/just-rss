@@ -7,7 +7,7 @@
           @if (!settingsService.getSettings().compressedFeed) {
             <div>
               <ion-card [button]="true" (click)="openPreview(entry.title, entry.content, entry.link)" [class.highlighted]="entry.highlighted">
-                @if (settingsService.getSettings().showImages) {
+                @if (settingsService.getSettings().showImages === 'always' || (settingsService.getSettings().showImages === 'whenHighlighted' && entry.highlighted)) {
                   <div class="card-image">
                     @if (entry.imgLink !== null) {
                       <img alt="Entry Cover Image" src="{{ entry.imgLink }}" />
@@ -43,7 +43,7 @@
           @if (settingsService.getSettings().compressedFeed) {
             <div>
               <ion-item [button]="true" (click)="openPreview(entry.title, entry.content, entry.link)" [class.highlighted]="entry.highlighted">
-                @if (settingsService.getSettings().showImages) {
+                @if (settingsService.getSettings().showImages === 'always' || (settingsService.getSettings().showImages === 'whenHighlighted' && entry.highlighted)) {
                   <div>
                     @if (entry.imgLink !== null) {
                       <ion-thumbnail slot="start">

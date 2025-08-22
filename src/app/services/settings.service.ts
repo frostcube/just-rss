@@ -5,7 +5,7 @@ const SETTINGS_DICT = 'v3_settings_dict';
 
 export interface ISettingsDict {
     preview: boolean,
-    showImages: boolean,
+    showImages: 'never' | 'whenHighlighted' | 'always',
     compressedFeed: boolean,
     locale: string,
     retrievalTimeout: number,
@@ -21,7 +21,7 @@ export interface ISettingsDict {
 export class SettingsService {
   private _settingsDict: ISettingsDict = {
     preview: true,
-    showImages: false,
+    showImages: 'whenHighlighted',
     compressedFeed: false,
     locale: 'en-AU',
     retrievalTimeout: 5000, // 5 seconds
@@ -47,10 +47,36 @@ export class SettingsService {
     }
   }
  
-  public updateSettings(settings: ISettingsDict): void {
-    this._settingsDict = settings;
+  /**
+   * Normalize incoming settings (merge with defaults and support old formats)
+   */
+  private normalizeSettings(incoming: Partial<ISettingsDict> | unknown): ISettingsDict {
+    const merged: ISettingsDict = { ...this._settingsDict, ...(incoming as Partial<ISettingsDict> || {}) } as ISettingsDict;
+
+    // Backwards compatibility for showImages: older versions used boolean
+    const rawShow = (incoming as Partial<Record<string, unknown>>)?.['showImages'];
+    if (typeof rawShow === 'boolean') {
+      merged.showImages = rawShow ? 'always' : 'never';
+    } else if (typeof rawShow === 'string') {
+      const allowed = ['never', 'whenHighlighted', 'always'];
+      merged.showImages = allowed.includes(rawShow) ? (rawShow as ISettingsDict['showImages']) : this._settingsDict.showImages;
+    } else {
+      // keep default/merged
+      merged.showImages = (merged.showImages as ISettingsDict['showImages']) ?? this._settingsDict.showImages;
+    }
+
+    // Ensure arrays exist
+    merged.mutedWords = (merged.mutedWords ?? []) as string[];
+    merged.highlightedWords = (merged.highlightedWords ?? []) as string[];
+
+    return merged;
+  }
+
+  public updateSettings(settings: Partial<ISettingsDict> | ISettingsDict): void {
+    // Normalize to handle older settings formats and missing fields
+    this._settingsDict = this.normalizeSettings(settings as Partial<ISettingsDict>);
     this.storageService.set(SETTINGS_DICT, this._settingsDict);
-    console.log(`[SettingsService] Updated settings: ${this._settingsDict}`);
+    console.log(`[SettingsService] Updated settings: ${JSON.stringify(this._settingsDict)}`);
   }
 
   public getSettings() {
@@ -62,11 +88,8 @@ export class SettingsService {
     const current_settings = await this.storageService.getObjectFromStorage(SETTINGS_DICT);
 
     if (current_settings !== null) {
-      // Merge stored settings into defaults for backward compatibility
-      this._settingsDict = { ...this._settingsDict, ...(current_settings as Partial<ISettingsDict>) };
-      // Normalize optional arrays that may be missing in older settings
-      this._settingsDict.mutedWords = this._settingsDict.mutedWords ?? [];
-      this._settingsDict.highlightedWords = this._settingsDict.highlightedWords ?? [];
+      // Merge/normalize stored settings into defaults
+      this._settingsDict = this.normalizeSettings(current_settings as Partial<ISettingsDict>);
     }
     else
       this.storageService.set(SETTINGS_DICT, this._settingsDict);
