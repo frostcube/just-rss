@@ -22,8 +22,8 @@ export interface ISettingsDict {
 export class SettingsService {
   private _settingsDict: ISettingsDict = {
     preview: true,
-    showImages: 'never',
-    showSnippet: 'never',
+    showImages: 'whenHighlighted',
+    showSnippet: 'whenHighlighted',
     compressedFeed: false,
     locale: 'en-AU',
     retrievalTimeout: 5000, // 5 seconds
