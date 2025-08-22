@@ -14,6 +14,14 @@
       </ion-select>
     </ion-item>
     <ion-item>
+      <ion-label>Show entry snippet</ion-label>
+      <ion-select slot="end" [(ngModel)]="currentSettings.showSnippet" (ionChange)="update()">
+        <ion-select-option value="never">Never</ion-select-option>
+        <ion-select-option value="whenHighlighted">When Highlighted</ion-select-option>
+        <ion-select-option value="always">Always</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
       <ion-toggle checked="currentSettings.compressedFeed" [(ngModel)]="currentSettings.compressedFeed" 
       (ionChange)="update()"> Compress feed display </ion-toggle>
     </ion-item>

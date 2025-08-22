@@ -35,7 +35,9 @@
                   </ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
-                  {{entry.contentStripped}}
+                  @if (settingsService.getSettings().showSnippet === 'always' || (settingsService.getSettings().showSnippet === 'whenHighlighted' && entry.highlighted)) {
+                    {{entry.contentStripped}}
+                  }
                 </ion-card-content>
               </ion-card>
             </div>
@@ -55,7 +57,9 @@
                 <ion-label>
                   <strong>{{entry.title}}</strong><br />
                   <ion-text>{{entry.source}}</ion-text><br />
-                  <ion-note color="medium" class="ion-text-wrap">{{entry.contentStripped}}</ion-note>
+                  @if (settingsService.getSettings().showSnippet === 'always' || (settingsService.getSettings().showSnippet === 'whenHighlighted' && entry.highlighted)) {
+                    <ion-note color="medium" class="ion-text-wrap">{{entry.contentStripped}}</ion-note>
+                  }
                 </ion-label>
                 <div class="metadata-end-wrapper" slot="end">
                   <ion-note color="medium">{{formatDateAsDay(entry.isoDate, settingsService.getSettings().locale)}}</ion-note>

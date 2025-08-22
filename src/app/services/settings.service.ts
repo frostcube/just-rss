@@ -6,6 +6,7 @@ const SETTINGS_DICT = 'v3_settings_dict';
 export interface ISettingsDict {
     preview: boolean,
     showImages: 'never' | 'whenHighlighted' | 'always',
+    showSnippet: 'never' | 'whenHighlighted' | 'always',
     compressedFeed: boolean,
     locale: string,
     retrievalTimeout: number,
@@ -21,7 +22,8 @@ export interface ISettingsDict {
 export class SettingsService {
   private _settingsDict: ISettingsDict = {
     preview: true,
-    showImages: 'whenHighlighted',
+    showImages: 'never',
+    showSnippet: 'never',
     compressedFeed: false,
     locale: 'en-AU',
     retrievalTimeout: 5000, // 5 seconds
@@ -63,6 +65,17 @@ export class SettingsService {
     } else {
       // keep default/merged
       merged.showImages = (merged.showImages as ISettingsDict['showImages']) ?? this._settingsDict.showImages;
+    }
+
+    // Backwards compatibility for showSnippet: older versions may have used boolean or not existed
+    const rawSnippet = (incoming as Partial<Record<string, unknown>>)?.['showSnippet'];
+    if (typeof rawSnippet === 'boolean') {
+      merged.showSnippet = rawSnippet ? 'always' : 'never';
+    } else if (typeof rawSnippet === 'string') {
+      const allowedS = ['never', 'whenHighlighted', 'always'];
+      merged.showSnippet = allowedS.includes(rawSnippet) ? (rawSnippet as ISettingsDict['showSnippet']) : this._settingsDict.showSnippet;
+    } else {
+      merged.showSnippet = (merged.showSnippet as ISettingsDict['showSnippet']) ?? this._settingsDict.showSnippet;
     }
 
     // Ensure arrays exist
