@@ -11,3 +11,13 @@
   flex-direction: column;
   align-items: flex-end;
 }
+
+.highlighted {
+  border: 2px solid #FFD54F; /* amber-300 */
+  box-shadow: 0 0 6px rgba(255, 213, 79, 0.3);
+}
+
+/* ensure card-image still looks fine when highlighted */
+.highlighted .card-image img {
+  max-width: 100%;
+}

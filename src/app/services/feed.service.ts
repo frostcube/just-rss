@@ -140,8 +140,12 @@ export class FeedService implements OnDestroy {
 
   public filterArticles(array: Array<any>, settings: ISettingsDict): Array<any> {
     const muted = settings.mutedWords.map(w => w.toLowerCase());
+    const highlighted = (settings.highlightedWords || []).map(w => w.toLowerCase());
     return array.filter(a => {
       const content = (a.title + ' ' + a.content).toLowerCase();
+      // Determine highlight status
+      a.highlighted = highlighted.some(word => content.includes(word));
+      // Determine mute status
       return !muted.some(word => content.includes(word));
     });
   }

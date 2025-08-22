@@ -6,8 +6,18 @@
       (ionChange)="update()"> Show entry preview </ion-toggle>
     </ion-item>
     <ion-item>
-      <ion-toggle checked="currentSettings.showImages" [(ngModel)]="currentSettings.showImages" 
-      (ionChange)="update()"> Show entry images </ion-toggle>
+      <ion-select label="Show entry image" [(ngModel)]="currentSettings.showImages" (ionChange)="update()">
+        <ion-select-option value="never">Never</ion-select-option>
+        <ion-select-option value="whenHighlighted">When Highlighted</ion-select-option>
+        <ion-select-option value="always">Always</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Show entry snippet" [(ngModel)]="currentSettings.showSnippet" (ionChange)="update()">
+        <ion-select-option value="never">Never</ion-select-option>
+        <ion-select-option value="whenHighlighted">When Highlighted</ion-select-option>
+        <ion-select-option value="always">Always</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item>
       <ion-toggle checked="currentSettings.compressedFeed" [(ngModel)]="currentSettings.compressedFeed" 
@@ -53,6 +63,10 @@
     <ion-item button (click)="openMutedWordsDialog()">
       <ion-label>Muted Words</ion-label>
       <ion-note slot="end">{{ (currentSettings.mutedWords || []).length }}</ion-note>
+    </ion-item>
+    <ion-item button (click)="openHighlightedWordsDialog()">
+      <ion-label>Highlighted Words</ion-label>
+      <ion-note slot="end">{{ (currentSettings.highlightedWords || []).length }}</ion-note>
     </ion-item>
   </ion-list>
 </ion-content>
