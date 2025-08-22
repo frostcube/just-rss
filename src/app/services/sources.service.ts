@@ -221,7 +221,7 @@ export class SourcesService {
       item.feedUrl = feed.url;
       item.imgLink = this.getItemMedia(item);
       item.source = feed.title;
-      item.title = this.replaceXMLChars(item.title);
+      item.title = this.decodeEntities(item.title);
       tempFeedData.push(item);
     }
 
@@ -353,11 +353,12 @@ export class SourcesService {
     });
   }
 
-  private replaceXMLChars(str: string): string {
-    return str.replace('&#8217;', '\'')
-      .replace('&#038;', '&')
-      .replace('&#8216;', '\'')
-      .replace('&amp;', '&');
+  private decodeEntities(str: string): string {
+    // Works in browser, doesn't render as never attached to the DOM
+    if (typeof document === 'undefined') return str;
+    const el = document.createElement('textarea');
+    el.innerHTML = str;
+    return el.value;
   }
 
 }
