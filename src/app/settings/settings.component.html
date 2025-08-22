@@ -6,8 +6,8 @@
       (ionChange)="update()"> Show entry preview </ion-toggle>
     </ion-item>
     <ion-item>
-      <ion-label>Show entry images</ion-label>
-      <ion-select slot="end" [(ngModel)]="currentSettings.showImages" (ionChange)="update()">
+      <ion-label>Show entry image</ion-label>
+      <ion-select label="Show Entry image" slot="end" [(ngModel)]="currentSettings.showImages" (ionChange)="update()">
         <ion-select-option value="never">Never</ion-select-option>
         <ion-select-option value="whenHighlighted">When Highlighted</ion-select-option>
         <ion-select-option value="always">Always</ion-select-option>
@@ -15,7 +15,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Show entry snippet</ion-label>
-      <ion-select slot="end" [(ngModel)]="currentSettings.showSnippet" (ionChange)="update()">
+      <ion-select label="Show entry snippet" slot="end" [(ngModel)]="currentSettings.showSnippet" (ionChange)="update()">
         <ion-select-option value="never">Never</ion-select-option>
         <ion-select-option value="whenHighlighted">When Highlighted</ion-select-option>
         <ion-select-option value="always">Always</ion-select-option>
