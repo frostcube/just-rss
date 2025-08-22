@@ -86,6 +86,61 @@ export class SettingsComponent  implements OnInit {
     await alert.present();
   }
 
+  async openHighlightedWordsDialog() {
+    const alert = await this.alertController.create({
+      header: 'Highlighted Words',
+      inputs: this.currentSettings.highlightedWords.map(word => ({
+        name: word,
+        type: 'checkbox',
+        label: word,
+        value: word,
+        checked: true,
+      })),
+      buttons: [
+        {
+          text: 'Add New',
+          handler: async () => {
+            const prompt = await this.alertController.create({
+              header: 'Add Highlighted Word',
+              inputs: [
+                {
+                  name: 'newWord',
+                  type: 'text',
+                  placeholder: 'e.g., important'
+                }
+              ],
+              buttons: [
+                { text: 'Cancel', role: 'cancel' },
+                {
+                  text: 'Add',
+                  handler: (data) => {
+                    if (data.newWord?.trim()) {
+                      this.currentSettings.highlightedWords.push(data.newWord.trim().toLowerCase());
+                      this.settingsService.updateSettings(this.currentSettings);
+                    }
+                  }
+                }
+              ]
+            });
+            await prompt.present();
+          }
+        },
+        {
+          text: 'Remove Selected',
+          handler: (selected: string[]) => {
+            this.currentSettings.highlightedWords = this.currentSettings.highlightedWords.filter(w => !selected.includes(w));
+            this.settingsService.updateSettings(this.currentSettings);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   // Getter/Setters for settings stored as numbers to ensure types are correct
   get retrievalTimeout() { return String(this.currentSettings.retrievalTimeout); }
   set retrievalTimeout(v) { this.currentSettings.retrievalTimeout = Number(v); }

@@ -54,5 +54,9 @@
       <ion-label>Muted Words</ion-label>
       <ion-note slot="end">{{ (currentSettings.mutedWords || []).length }}</ion-note>
     </ion-item>
+    <ion-item button (click)="openHighlightedWordsDialog()">
+      <ion-label>Highlighted Words</ion-label>
+      <ion-note slot="end">{{ (currentSettings.highlightedWords || []).length }}</ion-note>
+    </ion-item>
   </ion-list>
 </ion-content>
