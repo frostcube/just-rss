@@ -19,7 +19,10 @@
                     {{entry.source}} | {{formatDateRelative(entry.isoDate, settingsService.getSettings().locale)}}
                   </ion-card-subtitle>
                   <ion-card-title>
-                    <ion-item class="ion-no-padding" style="--ion-item-background: transparent;">
+                    <ion-item 
+                      [lines]="(settingsService.getSettings().showSnippet === 'always' || (settingsService.getSettings().showSnippet === 'whenHighlighted' && entry.highlighted)) ? 'full' : 'none'"
+                      class="ion-no-padding"
+                      style="--ion-item-background: transparent;">
                       <ion-label>{{entry.title}}</ion-label>
                       @if (entry.bookmark !== true) {
                         <ion-button slot="end" fill="clear" (click)="this.addBookmark($event, entry)">
@@ -34,11 +37,11 @@
                     </ion-item>
                   </ion-card-title>
                 </ion-card-header>
-                <ion-card-content>
-                  @if (settingsService.getSettings().showSnippet === 'always' || (settingsService.getSettings().showSnippet === 'whenHighlighted' && entry.highlighted)) {
+                @if (settingsService.getSettings().showSnippet === 'always' || (settingsService.getSettings().showSnippet === 'whenHighlighted' && entry.highlighted)) {
+                  <ion-card-content>
                     {{entry.contentStripped}}
-                  }
-                </ion-card-content>
+                  </ion-card-content>
+                }
               </ion-card>
             </div>
           }
