@@ -53,7 +53,7 @@
             <ion-button slot="end" (click)="addFeed(feed)" [disabled]="isInSources(feed) || addingMap[feed.xmlUrl]">
               <ion-spinner *ngIf="addingMap[feed.xmlUrl]" name="dots"></ion-spinner>
               <ion-icon *ngIf="!isInSources(feed) && !addingMap[feed.xmlUrl]" name="add-outline"></ion-icon>
-              <ion-icon *ngIf="isInSources(feed) && !addingMap[feed.xmlUrl]" name="tick-outline"></ion-icon>
+              <ion-icon *ngIf="isInSources(feed) && !addingMap[feed.xmlUrl]" name="checkmark-outline"></ion-icon>
             </ion-button>
           </ion-item>
         }

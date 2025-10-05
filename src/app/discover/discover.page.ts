@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, chevronDownOutline, chevronUpOutline, refreshOutline, ticketOutline } from 'ionicons/icons';
+import { addOutline, checkmarkOutline, chevronDownOutline, chevronUpOutline, refreshOutline } from 'ionicons/icons';
 import { IOPMLItem } from '../lib/types';
 import { DiscoverService } from '../services/discover.service';
 import { SourcesService } from '../services/sources.service';
@@ -29,7 +29,7 @@ export class DiscoverPage implements OnInit {
   public addingMap: Record<string, boolean> = {};
 
   constructor(public sourcesService: SourcesService, private discoverService: DiscoverService) { 
-    addIcons({ addOutline, chevronDownOutline, chevronUpOutline, refreshOutline, ticketOutline });
+    addIcons({ addOutline, checkmarkOutline, chevronDownOutline, chevronUpOutline, refreshOutline, });
   }
 
   async ngOnInit() {
