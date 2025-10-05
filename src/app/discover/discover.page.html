@@ -46,12 +46,15 @@
         </div>
         @for (feed of suggestedFeeds; track feed.xmlUrl) {
           <ion-item>
-            <ion-checkbox [(ngModel)]="feed.selected">  
-              <div class="feed-label">
-                <div class="feed-title">{{ feed.title || feed.text }}</div>
-                <div class="feed-desc">{{ feed.description }}</div>
-              </div>
-            </ion-checkbox>
+            <ion-label>
+              <h3>{{ feed.title || feed.text }}</h3>
+              <p>{{ feed.description }}</p>
+            </ion-label>
+            <ion-button slot="end" (click)="addFeed(feed)" [disabled]="isInSources(feed) || addingMap[feed.xmlUrl]">
+              <ion-spinner *ngIf="addingMap[feed.xmlUrl]" name="dots"></ion-spinner>
+              <ion-icon *ngIf="!isInSources(feed) && !addingMap[feed.xmlUrl]" name="add-outline"></ion-icon>
+              <ion-icon *ngIf="isInSources(feed) && !addingMap[feed.xmlUrl]" name="tick-outline"></ion-icon>
+            </ion-button>
           </ion-item>
         }
       }

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronDownOutline, chevronUpOutline, refreshOutline } from 'ionicons/icons';
+import { addOutline, chevronDownOutline, chevronUpOutline, refreshOutline, ticketOutline } from 'ionicons/icons';
 import { IOPMLItem } from '../lib/types';
 import { DiscoverService } from '../services/discover.service';
 import { SourcesService } from '../services/sources.service';
@@ -25,9 +25,11 @@ export class DiscoverPage implements OnInit {
   public loadingFeeds = false;
   // Currently selected section (for feed refresh)
   public selectedSection?: { name: string; download_url: string };
+  // Map of feed URL -> adding in progress
+  public addingMap: Record<string, boolean> = {};
 
   constructor(public sourcesService: SourcesService, private discoverService: DiscoverService) { 
-    addIcons({ chevronDownOutline, chevronUpOutline, refreshOutline });
+    addIcons({ addOutline, chevronDownOutline, chevronUpOutline, refreshOutline, ticketOutline });
   }
 
   async ngOnInit() {
@@ -78,6 +80,31 @@ export class DiscoverPage implements OnInit {
     for (const feed of this.suggestedFeeds) {
       if (feed.selected) this.sourcesService.addSourceFromUrl(feed.xmlUrl);
     }
+  }
+
+  /**
+   * Return true if the given OPML feed is already present in SourcesService list.
+   */
+  public isInSources(feed: IOPMLItem): boolean {
+    if (!feed || !feed.xmlUrl) return false;
+    const sources = this.sourcesService.getSources() || [];
+    return sources.some(s => s.url === feed.xmlUrl);
+  }
+
+  /**
+   * Add a single feed if it's not already added. Shows spinner while adding.
+   */
+  public async addFeed(feed: IOPMLItem) {
+    if (!feed || !feed.xmlUrl) return;
+    if (this.isInSources(feed)) return;
+
+    this.addingMap[feed.xmlUrl] = true;
+    try {
+      await this.sourcesService.addSourceFromUrl(feed.xmlUrl);
+    } catch (e) {
+      console.error('[DiscoverPage] Error adding feed', e);
+    }
+    this.addingMap[feed.xmlUrl] = false;
   }
 
 }
