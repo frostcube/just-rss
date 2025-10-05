@@ -1,11 +1,30 @@
 <ion-content class="ion-padding">
-  <h1>Suggested Feeds</h1>
+  <h1>Discover Feeds</h1>
+
+  <div *ngIf="loadingSections">Loading discovery sections...</div>
+
   <ion-list>
-    @for (feed of suggestedFeeds; track feed.xmlUrl) {
+    @for (section of sections; track section.download_url) {
       <ion-item>
-        <ion-checkbox [(ngModel)]="feed.selected">  {{ feed.title }} </ion-checkbox>
+        <ion-button fill="clear" (click)="selectSection(section)">{{ section.name }}</ion-button>
       </ion-item>
     }
   </ion-list>
-  <ion-button ion-button (click)="addFeeds()">Import Feeds</ion-button>
+
+  <div *ngIf="loadingFeeds">Loading feeds...</div>
+
+  <ion-list>
+    @for (feed of suggestedFeeds; track feed.xmlUrl) {
+      <ion-item>
+        <ion-checkbox [(ngModel)]="feed.selected">  
+          <div class="feed-label">
+            <div class="feed-title">{{ feed.title || feed.text }}</div>
+            <div class="feed-desc">{{ feed.description }}</div>
+          </div>
+        </ion-checkbox>
+      </ion-item>
+    }
+  </ion-list>
+
+  <ion-button (click)="addFeeds()" [disabled]="!suggestedFeeds || !anySelected">Import Selected Feeds</ion-button>
 </ion-content>

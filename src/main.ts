@@ -15,6 +15,7 @@ import { StorageService } from './app/services/storage.service';
 import { SourcesService } from './app/services/sources.service';
 import { SettingsService } from './app/services/settings.service';
 import { provideServiceWorker } from '@angular/service-worker';
+import { SuggestedService } from './app/suggested/suggested.service';
 
 if (environment.production) {
   enableProdMode();
@@ -31,7 +32,8 @@ bootstrapApplication(AppComponent, {
     PlatformService,
     StorageService,
     SourcesService,
-    SettingsService, 
+    SettingsService,
+    SuggestedService, 
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
