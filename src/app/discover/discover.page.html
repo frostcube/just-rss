@@ -1,9 +1,27 @@
-<ion-content class="ion-padding">
-  <div class="discover-header">
-    <h1>Discover Feeds</h1>
-    <ion-button size="small" fill="clear" (click)="refreshSections()" [disabled]="loadingSections">Refresh Sections</ion-button>
-    <ion-spinner *ngIf="loadingSections" name="dots"></ion-spinner>
-  </div>
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Discover
+    </ion-title>
+    <ion-buttons collapse="true" slot="end">
+      <ion-button slot="end" (click)="refreshSections()">
+        <ion-icon color="medium" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Discover</ion-title>
+      <ion-buttons collapse="true" slot="end">
+        <ion-button slot="end" (click)="refreshSections()">
+          <ion-icon color="medium" name="refresh-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
   <ion-list>
     @for (section of sections; track section.download_url) {

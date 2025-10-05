@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { IOPMLItem } from '../lib/types';
 import { DiscoverService } from '../services/discover.service';
-import { IonButton, IonCheckbox, IonContent, IonItem, IonList, IonSpinner } from '@ionic/angular/standalone';
+import { IonButton, IonCheckbox, IonContent, IonItem, IonList, IonSpinner, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { SourcesService } from '../services/sources.service';
 
@@ -11,7 +11,7 @@ import { SourcesService } from '../services/sources.service';
   templateUrl: './discover.page.html',
   styleUrls: ['./discover.page.scss'],
   standalone: true,
-  imports: [FormsModule, NgIf, IonContent, IonList, IonItem, IonCheckbox, IonButton, IonSpinner]
+  imports: [FormsModule, NgIf, IonContent, IonList, IonItem, IonCheckbox, IonButton, IonSpinner, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon]
 })
 export class DiscoverPage implements OnInit {
 
