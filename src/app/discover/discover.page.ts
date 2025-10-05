@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { chevronDownOutline, refreshOutline } from 'ionicons/icons';
 import { IOPMLItem } from '../lib/types';
 import { DiscoverService } from '../services/discover.service';
-import { IonButton, IonCheckbox, IonContent, IonItem, IonList, IonSpinner, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon } from '@ionic/angular/standalone';
-import { FormsModule } from '@angular/forms';
 import { SourcesService } from '../services/sources.service';
 
 @Component({
@@ -11,7 +13,7 @@ import { SourcesService } from '../services/sources.service';
   templateUrl: './discover.page.html',
   styleUrls: ['./discover.page.scss'],
   standalone: true,
-  imports: [FormsModule, NgIf, IonContent, IonList, IonItem, IonCheckbox, IonButton, IonSpinner, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon]
+  imports: [FormsModule, NgIf, IonContent, IonList, IonListHeader, IonItem, IonLabel, IonCheckbox, IonButton, IonSpinner, IonHeader, IonToolbar, IonTitle, IonButtons, IonIcon]
 })
 export class DiscoverPage implements OnInit {
 
@@ -24,7 +26,9 @@ export class DiscoverPage implements OnInit {
   // Currently selected section (for feed refresh)
   public selectedSection?: { name: string; download_url: string };
 
-  constructor(public sourcesService: SourcesService, private discoverService: DiscoverService) { }
+  constructor(public sourcesService: SourcesService, private discoverService: DiscoverService) { 
+    addIcons({ chevronDownOutline, refreshOutline });
+  }
 
   async ngOnInit() {
     this.loadingSections = true;
@@ -37,6 +41,12 @@ export class DiscoverPage implements OnInit {
     this.selectedSection = section;
     this.suggestedFeeds = await this.discoverService.fetchOpmlItems(section.download_url);
     this.loadingFeeds = false;
+  }
+
+  // Button will force both sections to refresh
+  public async forceRefresh() {
+    this.refreshSections();
+    this.refreshSelectedSection();
   }
 
   // Force refresh the list of sections (bypass cache)

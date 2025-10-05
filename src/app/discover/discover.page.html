@@ -4,7 +4,7 @@
       Discover
     </ion-title>
     <ion-buttons collapse="true" slot="end">
-      <ion-button slot="end" (click)="refreshSections()">
+      <ion-button slot="end" (click)="forceRefresh()">
         <ion-icon color="medium" name="refresh-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,7 +16,7 @@
     <ion-toolbar>
       <ion-title size="large">Discover</ion-title>
       <ion-buttons collapse="true" slot="end">
-        <ion-button slot="end" (click)="refreshSections()">
+        <ion-button slot="end" (click)="forceRefresh()">
           <ion-icon color="medium" name="refresh-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -25,30 +25,31 @@
 
   <ion-list>
     @for (section of sections; track section.download_url) {
-      <ion-item>
-        <ion-button fill="clear" (click)="selectSection(section)" [disabled]="loadingFeeds">{{ section.name }}</ion-button>
-      </ion-item>
+
+      <ion-list-header>
+        <ion-label>{{ section.name.split('.')[0] }}</ion-label>
+        <ion-button (click)="selectSection(section)" [disabled]="loadingFeeds">
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </ion-button>
+      </ion-list-header>
+
+      @if (selectedSection === section) {
+        <div class="feeds-header">
+          <div *ngIf="loadingFeeds">Loading suggestions...</div>
+          <ion-spinner *ngIf="loadingFeeds" name="dots"></ion-spinner>
+        </div>
+        @for (feed of suggestedFeeds; track feed.xmlUrl) {
+          <ion-item>
+            <ion-checkbox [(ngModel)]="feed.selected">  
+              <div class="feed-label">
+                <div class="feed-title">{{ feed.title || feed.text }}</div>
+                <div class="feed-desc">{{ feed.description }}</div>
+              </div>
+            </ion-checkbox>
+          </ion-item>
+        }
+      }
     }
   </ion-list>
 
-  <div class="feeds-header">
-    <div *ngIf="loadingFeeds">Loading feeds...</div>
-    <ion-button size="small" fill="clear" *ngIf="selectedSection" (click)="refreshSelectedSection()" [disabled]="loadingFeeds">Refresh Section</ion-button>
-    <ion-spinner *ngIf="loadingFeeds" name="dots"></ion-spinner>
-  </div>
-
-  <ion-list>
-    @for (feed of suggestedFeeds; track feed.xmlUrl) {
-      <ion-item>
-        <ion-checkbox [(ngModel)]="feed.selected">  
-          <div class="feed-label">
-            <div class="feed-title">{{ feed.title || feed.text }}</div>
-            <div class="feed-desc">{{ feed.description }}</div>
-          </div>
-        </ion-checkbox>
-      </ion-item>
-    }
-  </ion-list>
-
-  <ion-button (click)="addFeeds()" [disabled]="!suggestedFeeds || !anySelected">Import Selected Feeds</ion-button>
 </ion-content>
