@@ -1,17 +1,23 @@
 <ion-content class="ion-padding">
-  <h1>Discover Feeds</h1>
-
-  <div *ngIf="loadingSections">Loading discovery sections...</div>
+  <div class="discover-header">
+    <h1>Discover Feeds</h1>
+    <ion-button size="small" fill="clear" (click)="refreshSections()" [disabled]="loadingSections">Refresh Sections</ion-button>
+    <ion-spinner *ngIf="loadingSections" name="dots"></ion-spinner>
+  </div>
 
   <ion-list>
     @for (section of sections; track section.download_url) {
       <ion-item>
-        <ion-button fill="clear" (click)="selectSection(section)">{{ section.name }}</ion-button>
+        <ion-button fill="clear" (click)="selectSection(section)" [disabled]="loadingFeeds">{{ section.name }}</ion-button>
       </ion-item>
     }
   </ion-list>
 
-  <div *ngIf="loadingFeeds">Loading feeds...</div>
+  <div class="feeds-header">
+    <div *ngIf="loadingFeeds">Loading feeds...</div>
+    <ion-button size="small" fill="clear" *ngIf="selectedSection" (click)="refreshSelectedSection()" [disabled]="loadingFeeds">Refresh Section</ion-button>
+    <ion-spinner *ngIf="loadingFeeds" name="dots"></ion-spinner>
+  </div>
 
   <ion-list>
     @for (feed of suggestedFeeds; track feed.xmlUrl) {

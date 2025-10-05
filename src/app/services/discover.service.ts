@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IOPMLItem } from './suggested-feeds';
-import { StorageService } from '../services/storage.service';
+import { IOPMLItem } from '../suggested/suggested-feeds';
+import { StorageService } from './storage.service';
 
 interface GithubContentEntry {
   name: string;
@@ -8,12 +8,12 @@ interface GithubContentEntry {
 }
 
 @Injectable({ providedIn: 'root' })
-export class SuggestedService {
+export class DiscoverService {
 
   // GitHub API URL for the repository directory listing
   private readonly GITHUB_CONTENTS_API = 'https://api.github.com/repos/Martinviv/rss-sources/contents';
-  private readonly CACHE_KEY_SECTIONS = 'suggested_sections_v1';
-  private readonly CACHE_KEY_OPML_PREFIX = 'suggested_opml_';
+  private readonly CACHE_KEY_SECTIONS = 'discover_sections_v1';
+  private readonly CACHE_KEY_OPML_PREFIX = 'discover_opml_';
   private readonly CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
   constructor(private storageService: StorageService) {}
@@ -52,7 +52,7 @@ export class SuggestedService {
         const cached = await this.storageService.get(this.CACHE_KEY_SECTIONS);
         if (cached && cached.data) return cached.data as Array<{ name: string; download_url: string }>;
       } catch {
-        // ignore
+        console.warn('[SuggestedService] No cached sections data available');
       }
       return [];
     }
@@ -89,7 +89,7 @@ export class SuggestedService {
         const cached = await this.storageService.get(cacheKey);
         if (cached && cached.data) return cached.data as IOPMLItem[];
       } catch {
-        // ignore
+        console.warn('[SuggestedService] No cached OPML data available');
       }
       return [];
     }
