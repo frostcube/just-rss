@@ -19,9 +19,8 @@ import {
   ModalController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { create, trash, checkmarkCircleOutline, closeCircleOutline, compassOutline } from 'ionicons/icons';
+import { create, trash, checkmarkCircleOutline, closeCircleOutline, compassOutline, swapVerticalOutline } from 'ionicons/icons';
 import { IFeedDict, SourcesService } from '../services/sources.service';
-import { SuggestedComponent } from '../suggested/suggested.component';
 import { PlatformService } from '../services/platform.service';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
@@ -47,7 +46,7 @@ export class SourcesPage {
     private modalController: ModalController,
     private platformService: PlatformService
   ) {
-    addIcons({ trash, create, checkmarkCircleOutline, closeCircleOutline, compassOutline });
+    addIcons({ trash, create, checkmarkCircleOutline, closeCircleOutline, swapVerticalOutline });
 
     this.rssForm = this.formBuild.group({
       url:  new FormControl('', {
@@ -118,14 +117,8 @@ export class SourcesPage {
     });
   }
 
-  async openSuggestions() {
-    const settings = await this.modalController.create({
-      component: SuggestedComponent,
-      breakpoints: [0, 0.5],
-      initialBreakpoint: 0.5
-    });
-
-    settings.present();
+  reorderSources() {
+    // Placeholder for future drag-and-drop reordering implementation
   }
 
   async exportOPML(): Promise<void> {

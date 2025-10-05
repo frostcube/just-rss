@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { IOPMLItem } from './suggested-feeds';
+import { IOPMLItem } from '../lib/types';
 import { DiscoverService } from '../services/discover.service';
 import { IonButton, IonCheckbox, IonContent, IonItem, IonList, IonSpinner } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { SourcesService } from '../services/sources.service';
 
 @Component({
-  selector: 'app-suggested',
-  templateUrl: './suggested.component.html',
-  styleUrls: ['./suggested.component.scss'],
+  selector: 'app-discover',
+  templateUrl: './discover.page.html',
+  styleUrls: ['./discover.page.scss'],
   standalone: true,
   imports: [FormsModule, NgIf, IonContent, IonList, IonItem, IonCheckbox, IonButton, IonSpinner]
 })
-export class SuggestedComponent implements OnInit {
+export class DiscoverPage implements OnInit {
 
   // Available OPML discovery sections from the GitHub repo
   public sections: Array<{ name: string; download_url: string }> = [];

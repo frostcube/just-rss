@@ -4,8 +4,8 @@
       Sources
     </ion-title>
     <ion-buttons collapse="true" slot="end">
-      <ion-button slot="end" (click)="openSuggestions()">
-        <ion-icon color="medium" name="compass-outline"></ion-icon>
+      <ion-button slot="end" (click)="reorderSources()">
+        <ion-icon color="medium" name="swap-vertical-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -16,8 +16,8 @@
     <ion-toolbar>
       <ion-title size="large">Sources</ion-title>
       <ion-buttons collapse="true" slot="end">
-        <ion-button slot="end" (click)="openSuggestions()">
-          <ion-icon color="medium" name="compass-outline"></ion-icon>
+        <ion-button slot="end" (click)="reorderSources()">
+          <ion-icon color="medium" name="swap-vertical-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -77,7 +77,7 @@
   <!-- // Onboarding -->
   @if (sourcesService.getSources().length === 0) {
     <div class="ion-text-center" >
-      It doesn't look like you have any sources yet, would you like to <a (click)="openSuggestions()">add some?</a>
+      It doesn't look like you have any sources yet, would you like to <a href="/tabs/discover">add some?</a>
     </div>
   }
 

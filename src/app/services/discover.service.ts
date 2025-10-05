@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IOPMLItem } from '../suggested/suggested-feeds';
+import { IOPMLItem } from '../lib/types';
 import { StorageService } from './storage.service';
 
 interface GithubContentEntry {

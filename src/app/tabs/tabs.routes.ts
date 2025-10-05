@@ -17,6 +17,11 @@ export const routes: Routes = [
           import('../sources/sources.page').then((m) => m.SourcesPage),
       },
       {
+        path: 'discover',
+        loadComponent: () =>
+          import('../discover/discover.page').then((m) => m.DiscoverPage),
+      },
+      {
         path: 'saved',
         loadComponent: () =>
           import('../saved/saved.page').then((m) => m.SavedPage),
