@@ -11,7 +11,7 @@ interface GithubContentEntry {
 export class DiscoverService {
 
   // GitHub API URL for the repository directory listing
-  private readonly GITHUB_CONTENTS_API = 'https://api.github.com/repos/Martinviv/rss-sources/contents';
+  private readonly GITHUB_CONTENTS_RECOMMENDED_API = 'https://api.github.com/repos/Frostcube/rss-sources/contents/recommended';
   private readonly CACHE_KEY_SECTIONS = 'discover_sections_v1';
   private readonly CACHE_KEY_OPML_PREFIX = 'discover_opml_';
   private readonly CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -32,7 +32,7 @@ export class DiscoverService {
         }
       }
 
-      const res = await fetch(this.GITHUB_CONTENTS_API);
+      const res = await fetch(this.GITHUB_CONTENTS_RECOMMENDED_API);
       const json = await res.json();
       if (!Array.isArray(json)) return [];
 
