@@ -19,7 +19,7 @@ import {
   ModalController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { create, trash, checkmarkCircleOutline, closeCircleOutline, compassOutline, swapVerticalOutline } from 'ionicons/icons';
+import { create, trash, checkmarkCircleOutline, closeCircleOutline, swapVerticalOutline } from 'ionicons/icons';
 import { IFeedDict, SourcesService } from '../services/sources.service';
 import { PlatformService } from '../services/platform.service';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
