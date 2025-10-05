@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronDownOutline, refreshOutline } from 'ionicons/icons';
+import { chevronDownOutline, chevronUpOutline, refreshOutline } from 'ionicons/icons';
 import { IOPMLItem } from '../lib/types';
 import { DiscoverService } from '../services/discover.service';
 import { SourcesService } from '../services/sources.service';
@@ -27,7 +27,7 @@ export class DiscoverPage implements OnInit {
   public selectedSection?: { name: string; download_url: string };
 
   constructor(public sourcesService: SourcesService, private discoverService: DiscoverService) { 
-    addIcons({ chevronDownOutline, refreshOutline });
+    addIcons({ chevronDownOutline, chevronUpOutline, refreshOutline });
   }
 
   async ngOnInit() {
@@ -41,6 +41,11 @@ export class DiscoverPage implements OnInit {
     this.selectedSection = section;
     this.suggestedFeeds = await this.discoverService.fetchOpmlItems(section.download_url);
     this.loadingFeeds = false;
+  }
+
+  unselectSection() {
+    this.selectedSection = undefined;
+    this.suggestedFeeds = [];
   }
 
   // Button will force both sections to refresh
