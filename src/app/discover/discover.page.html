@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Discover
+    </ion-title>
+    <ion-buttons collapse="true" slot="end">
+      <ion-button slot="end" (click)="forceRefresh()">
+        <ion-icon color="medium" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Discover</ion-title>
+      <ion-buttons collapse="true" slot="end">
+        <ion-button slot="end" (click)="forceRefresh()">
+          <ion-icon color="medium" name="refresh-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    @for (section of sections; track section.download_url) {
+
+      <ion-list-header>
+        <ion-label>{{ section.name.split('.')[0] }}</ion-label>
+        @if (selectedSection === section) {
+          <ion-button (click)="unselectSection()" [disabled]="loadingFeeds">
+            <ion-icon name="chevron-up-outline"></ion-icon>
+          </ion-button>
+        } @else {
+          <ion-button (click)="selectSection(section)" [disabled]="loadingFeeds">
+            <ion-icon name="chevron-down-outline"></ion-icon>
+          </ion-button>
+        }
+      </ion-list-header>
+
+      @if (selectedSection === section) {
+        <div class="feeds-header">
+          <div *ngIf="loadingFeeds">Loading suggestions...</div>
+          <ion-spinner *ngIf="loadingFeeds" name="dots"></ion-spinner>
+        </div>
+        @for (feed of suggestedFeeds; track feed.xmlUrl) {
+          <ion-item>
+            <ion-label>
+              <h3>{{ feed.title || feed.text }}</h3>
+              <p>{{ feed.description }}</p>
+            </ion-label>
+            <ion-button slot="end" (click)="addFeed(feed)" [disabled]="isInSources(feed) || addingMap[feed.xmlUrl]">
+              <ion-spinner *ngIf="addingMap[feed.xmlUrl]" name="dots"></ion-spinner>
+              <ion-icon *ngIf="!isInSources(feed) && !addingMap[feed.xmlUrl]" name="add-outline"></ion-icon>
+              <ion-icon *ngIf="isInSources(feed) && !addingMap[feed.xmlUrl]" name="checkmark-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        }
+      }
+    }
+  </ion-list>
+
+</ion-content>
