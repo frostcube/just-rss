@@ -306,7 +306,7 @@ export class SourcesService {
   /**
    * Import sources from OPML XML string
    */
-  importSourcesFromOPML(opmlText: string): boolean {
+  public importSourcesFromOPML(opmlText: string): boolean {
     try {
       const parser = new DOMParser();
       const xml = parser.parseFromString(opmlText, 'text/xml');
@@ -338,6 +338,18 @@ export class SourcesService {
     } catch (e) {
       return false;
     }
+  }
+
+  /**
+   * Reorder sources alphabetically (A -> Z) by title and persist to storage.
+   */
+  public reorderSourcesAlphabetical(): void {
+    this._feedList.sort((a, b) => {
+      const ta = (a.title || '').toString();
+      const tb = (b.title || '').toString();
+      return ta.localeCompare(tb, undefined, { sensitivity: 'base' });
+    });
+    this.storageService.set(STORAGE_FEED_LIST, this._feedList);
   }
 
   private escapeXml(str: string): string {

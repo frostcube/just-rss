@@ -118,7 +118,8 @@ export class SourcesPage {
   }
 
   reorderSources() {
-    // Placeholder for future drag-and-drop reordering implementation
+    // Reorder sources A -> Z by title
+    this.sourcesService.reorderSourcesAlphabetical();
   }
 
   async exportOPML(): Promise<void> {
