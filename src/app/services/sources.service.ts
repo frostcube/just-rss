@@ -133,6 +133,7 @@ export class SourcesService {
       const isLikelyFeed =
         contentType.includes('application/rss+xml') ||
         contentType.includes('application/atom+xml') ||
+        contentType.includes('application/xml') ||
         contentType.includes('text/xml') ||
         urlLower.endsWith('.xml') || urlLower.endsWith('.rss') || urlLower.endsWith('.atom');
       const text = await response.text();

@@ -38,7 +38,7 @@ ionic serve -- --proxy-config proxy.conf.json
 
 RSS local feeds:
 ```
-http://localhost:8100/polygon/rss/index.xml
+http://localhost:8100/polygon/feed/
 http://localhost:8100/verge/rss/index.xml
 ```
 
@@ -81,7 +81,7 @@ ionic cap open ios
 ```text
 https://derme.coffee/index.xml
 https://news.ycombinator.com/rss
-https://www.polygon.com/rss/index.xml
+https://www.polygon.com/feed/
 https://www.theverge.com/rss/index.xml
 https://feeds.megaphone.fm/vergecast
 ```
