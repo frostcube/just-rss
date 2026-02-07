@@ -7,9 +7,6 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https'
   },
-  android: {
-    adjustMarginsForEdgeToEdge: 'auto'
-  },
   plugins: {
     CapacitorHttp: {
       enabled: true
