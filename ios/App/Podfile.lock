@@ -17,8 +17,6 @@ PODS:
     - Capacitor
   - CapacitorKeyboard (8.0.0):
     - Capacitor
-  - CapacitorStatusBar (8.0.0):
-    - Capacitor
   - IONFilesystemLib (1.1.0)
   - SQLCipher (4.9.0):
     - SQLCipher/standard (= 4.9.0)
@@ -36,7 +34,6 @@ DEPENDENCIES:
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
-  - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
 
 SPEC REPOS:
   trunk:
@@ -61,8 +58,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
-  CapacitorStatusBar:
-    :path: "../../node_modules/@capacitor/status-bar"
 
 SPEC CHECKSUMS:
   Capacitor: 2b79172ad27f3be2d103cce88b8eb9803fdcc744
@@ -73,11 +68,10 @@ SPEC CHECKSUMS:
   CapacitorFilesystem: a957d4a4b6860844c4eba5bf441607a5166f92a7
   CapacitorHaptics: 2079d9fa04c5a71e18663b4722323c304c58245c
   CapacitorKeyboard: d7868c079a4d5277a3deca27a10a488fcbbb8b69
-  CapacitorStatusBar: 312e2e67928dfe9514c4a8916a1fd610552f5f35
   IONFilesystemLib: 50b9a0f3052a9b40b9bedb43f328a8fe222f9f87
   SQLCipher: 31878d8ebd27e5c96db0b7cb695c96e9f8ad77da
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: ba118405d61873718e8fb4588d6bf91b5336f105
+PODFILE CHECKSUM: 2b393b371f4b774de1b48ebf1a0e870c2be4a5fc
 
 COCOAPODS: 1.16.2
