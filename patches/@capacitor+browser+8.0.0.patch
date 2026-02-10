@@ -1,5 +1,5 @@
 diff --git a/node_modules/@capacitor/browser/README.md b/node_modules/@capacitor/browser/README.md
-index ac7553a..918ffd0 100644
+index 325f8b9..ddd8045 100644
 --- a/node_modules/@capacitor/browser/README.md
 +++ b/node_modules/@capacitor/browser/README.md
 @@ -148,7 +148,7 @@ Represents the options passed to `open`.
@@ -12,7 +12,7 @@ index ac7553a..918ffd0 100644
  #### PluginListenerHandle
  
 diff --git a/node_modules/@capacitor/browser/dist/esm/definitions.d.ts b/node_modules/@capacitor/browser/dist/esm/definitions.d.ts
-index e554f0d..f9aa53a 100644
+index 921821d..4eb6441 100644
 --- a/node_modules/@capacitor/browser/dist/esm/definitions.d.ts
 +++ b/node_modules/@capacitor/browser/dist/esm/definitions.d.ts
 @@ -88,6 +88,15 @@ export interface OpenOptions {

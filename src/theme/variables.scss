@@ -40,6 +40,10 @@ a {
 	color: var(--ion-color-secondary-shade);
 }
 
+ion-tab-bar {
+  padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+}
+
 /* This sets a different item background when dark mode is enabled on ios and md */
 @media (prefers-color-scheme: dark) {
 	:root.ios a,
