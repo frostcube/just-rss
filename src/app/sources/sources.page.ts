@@ -39,6 +39,7 @@ const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?
 export class SourcesPage {
   inputUrl: string = '';
   public rssForm: FormGroup;
+  private editModalOpen = false;
 
   constructor(
     public sourcesService: SourcesService,
@@ -71,6 +72,9 @@ export class SourcesPage {
   }
 
   async editUrl(feed: IFeedDict) {
+    if (this.editModalOpen) return;
+    this.editModalOpen = true;
+
     const modal = await this.modalController.create({
       component: SourceEditComponent,
       componentProps: { feed },
@@ -78,20 +82,23 @@ export class SourcesPage {
       initialBreakpoint: 1.0,
       backdropDismiss: false
     });
+    try {
+      await modal.present();
 
-    await modal.present();
-
-    const { data } = await modal.onDidDismiss();
-    if (data && data.updatedFeed) {
-      const updated: IFeedDict = data.updatedFeed;
-      if (updated.url === feed.url) {
-        // Same URL: update in-place
-        this.sourcesService.setSource(feed.url, updated);
-      } else {
-        // URL changed: remove old and add new
-        this.sourcesService.removeSource(feed.url);
-        this.sourcesService.addSource(updated);
+      const { data } = await modal.onDidDismiss();
+      if (data && data.updatedFeed) {
+        const updated: IFeedDict = data.updatedFeed;
+        if (updated.url === feed.url) {
+          // Same URL: update in-place
+          this.sourcesService.setSource(feed.url, updated);
+        } else {
+          // URL changed: remove old and add new
+          this.sourcesService.removeSource(feed.url);
+          this.sourcesService.addSource(updated);
+        }
       }
+    } finally {
+      this.editModalOpen = false;
     }
   }
 

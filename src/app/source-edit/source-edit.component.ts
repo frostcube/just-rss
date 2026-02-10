@@ -66,7 +66,7 @@ export class SourceEditComponent implements OnInit {
         title: this.feed.title ?? '',
         url: this.feed.url ?? '',
         description: this.feed.description ?? '',
-        pollingFrequency: this.feed.pollingFrequency ?? 0,
+        pollingFrequency: this.feed.pollingFrequency ?? 60,
         podcast: this.feed.podcast ?? false,
         tags: (this.feed.tags ?? []).join(', ')
       });
