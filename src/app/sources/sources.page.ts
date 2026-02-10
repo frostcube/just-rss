@@ -22,6 +22,7 @@ import { addIcons } from 'ionicons';
 import { create, trash, checkmarkCircleOutline, closeCircleOutline, swapVerticalOutline } from 'ionicons/icons';
 import { IFeedDict, SourcesService } from '../services/sources.service';
 import { PlatformService } from '../services/platform.service';
+import { SourceEditComponent } from '../source-edit/source-edit.component';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 // AngularJS URL Validation
@@ -70,51 +71,22 @@ export class SourcesPage {
   }
 
   async editUrl(feed: IFeedDict) {
-    const temp_feed = feed;
-
-    const alert = await this.alertController.create({
-      header: 'Edit Source',
-      inputs: [
-        {
-          name: 'title',
-          value: feed.title
-        },
-        {
-          name: 'url',
-          value: feed.url
-        },
-        {
-          name: 'description',
-          value: feed.description,
-          type: 'textarea',
-          placeholder: 'What is this feed about?'
-        },
-        {
-          name: 'polling',
-          value: feed.pollingFrequency,
-          type: 'number',
-          placeholder: 'Polling Frequency (Seconds)',
-          min: 0,
-          max: 86400
-        }
-      ],
-      buttons: ['Save'],
+    const modal = await this.modalController.create({
+      component: SourceEditComponent,
+      componentProps: { feed },
+      breakpoints: [1.0],
+      initialBreakpoint: 1.0
     });
 
-    await alert.present();
+    await modal.present();
 
-    await alert.onDidDismiss().then((data) => {
-      if (data.data !== undefined) {
-        temp_feed.title = data.data.values.title;
-        temp_feed.url = data.data.values.url;
-        temp_feed.description = data.data.values.description;
-        temp_feed.pollingFrequency = data.data.values.polling;
-
-        // Update stored Dictionary
-        this.sourcesService.removeSource(feed.url);
-        this.sourcesService.addSource(temp_feed);
-      }
-    });
+    const { data } = await modal.onDidDismiss();
+    if (data && data.updatedFeed) {
+      const updated: IFeedDict = data.updatedFeed;
+      // Remove old and add updated to ensure persistence (matches previous behavior)
+      this.sourcesService.removeSource(feed.url);
+      this.sourcesService.addSource(updated);
+    }
   }
 
   reorderSources() {

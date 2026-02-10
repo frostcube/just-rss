@@ -1,3 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Edit Source</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="ion-padding">
-  <h1>Edit Source</h1>
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-label position="stacked">Title</ion-label>
+      <ion-input formControlName="title" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">URL</ion-label>
+      <ion-input formControlName="url" type="url" inputmode="url"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Description</ion-label>
+      <ion-textarea formControlName="description"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Polling Frequency (seconds)</ion-label>
+      <ion-input formControlName="pollingFrequency" type="number" inputmode="numeric"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Podcast</ion-label>
+      <ion-toggle slot="end" formControlName="podcast"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Tags (comma-separated)</ion-label>
+      <ion-input formControlName="tags" type="text"></ion-input>
+    </ion-item>
+  </form>
 </ion-content>
