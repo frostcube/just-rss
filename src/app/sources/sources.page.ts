@@ -75,7 +75,8 @@ export class SourcesPage {
       component: SourceEditComponent,
       componentProps: { feed },
       breakpoints: [1.0],
-      initialBreakpoint: 1.0
+      initialBreakpoint: 1.0,
+      backdropDismiss: false
     });
 
     await modal.present();
@@ -83,9 +84,14 @@ export class SourcesPage {
     const { data } = await modal.onDidDismiss();
     if (data && data.updatedFeed) {
       const updated: IFeedDict = data.updatedFeed;
-      // Remove old and add updated to ensure persistence (matches previous behavior)
-      this.sourcesService.removeSource(feed.url);
-      this.sourcesService.addSource(updated);
+      if (updated.url === feed.url) {
+        // Same URL: update in-place
+        this.sourcesService.setSource(feed.url, updated);
+      } else {
+        // URL changed: remove old and add new
+        this.sourcesService.removeSource(feed.url);
+        this.sourcesService.addSource(updated);
+      }
     }
   }
 

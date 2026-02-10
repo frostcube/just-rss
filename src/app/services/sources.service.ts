@@ -99,7 +99,14 @@ export class SourcesService {
   public setSource(feedUrl: string, updatedDict: IFeedDict) {
     const index = this._feedList.findIndex(feed => feed.url === feedUrl);
     console.log('[SourcesService] Updating feed: ' + feedUrl);
-    this._feedList[index] = updatedDict;
+    if (index > -1) {
+      this._feedList[index] = updatedDict;
+      // Persist the updated feed list
+      this.storageService.set(STORAGE_FEED_LIST, this._feedList);
+    } else {
+      console.warn('[SourcesService] setSource: feed not found, adding as new feed: ' + feedUrl);
+      this.addSource(updatedDict);
+    }
   }
 
   public getSource(feedUrl: string): IFeedDict {

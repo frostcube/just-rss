@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Edit Source</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="primary" (click)="save()">Save</ion-button>
+      <ion-button color="primary" (click)="save()" [disabled]="form.invalid">Save</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -16,11 +16,13 @@
       <ion-label position="stacked">Title</ion-label>
       <ion-input formControlName="title" type="text"></ion-input>
     </ion-item>
+    <div *ngIf="form.get('title')?.touched && form.get('title')?.invalid" class="ion-padding-start ion-text-danger">Title is required.</div>
 
     <ion-item>
       <ion-label position="stacked">URL</ion-label>
       <ion-input formControlName="url" type="url" inputmode="url"></ion-input>
     </ion-item>
+    <div *ngIf="form.get('url')?.touched && form.get('url')?.invalid" class="ion-padding-start ion-text-danger">Please enter a valid URL.</div>
 
     <ion-item>
       <ion-label position="stacked">Description</ion-label>
