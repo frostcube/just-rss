@@ -11,9 +11,10 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonTextarea
-  ,
-  IonToggle
+  IonTextarea,
+  IonToggle,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/angular/standalone';
 import { IFeedDict, SourcesService } from '../services/sources.service';
 
@@ -37,7 +38,9 @@ const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?
     IonLabel,
     IonInput,
     IonTextarea,
-    IonToggle
+    IonToggle,
+    IonSelect,
+    IonSelectOption
   ]
 })
 export class SourceEditComponent implements OnInit {

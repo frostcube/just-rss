@@ -31,7 +31,12 @@
 
     <ion-item>
       <ion-label position="stacked">Polling Frequency (seconds)</ion-label>
-      <ion-input formControlName="pollingFrequency" type="number" inputmode="numeric"></ion-input>
+      <ion-select formControlName="pollingFrequency">
+        <ion-select-option value="0">Unlimited</ion-select-option>
+        <ion-select-option value="60">1 minute (Default)</ion-select-option>
+        <ion-select-option value="600">10 minutes</ion-select-option>
+        <ion-select-option value="3600">1 hour</ion-select-option>
+      </ion-select>
     </ion-item>
 
     <ion-item>

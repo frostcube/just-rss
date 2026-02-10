@@ -43,8 +43,8 @@
     <ion-item>
       <ion-select label="Default Polling Frequency"
       [(ngModel)]="defaultPollingFrequency" (ionChange)="update()">
-        <ion-select-option value="0">Unlimited (Default)</ion-select-option>
-        <ion-select-option value="60">1 minute</ion-select-option>
+        <ion-select-option value="0">Unlimited</ion-select-option>
+        <ion-select-option value="60">1 minute (Default)</ion-select-option>
         <ion-select-option value="600">10 minutes</ion-select-option>
         <ion-select-option value="3600">1 hour</ion-select-option>
       </ion-select>
