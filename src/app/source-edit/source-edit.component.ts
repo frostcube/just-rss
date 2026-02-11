@@ -17,9 +17,8 @@ import {
   IonSelectOption
 } from '@ionic/angular/standalone';
 import { IFeedDict, SourcesService } from '../services/sources.service';
+import { URL_REGEX } from '../lib/macros';
 
-// Local URL validation (matches SourcesPage pattern)
-const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?(?:\/[^\s]*)?$/;
 
 @Component({
   selector: 'app-source-edit',

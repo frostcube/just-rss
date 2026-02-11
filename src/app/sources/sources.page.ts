@@ -24,9 +24,9 @@ import { IFeedDict, SourcesService } from '../services/sources.service';
 import { PlatformService } from '../services/platform.service';
 import { SourceEditComponent } from '../source-edit/source-edit.component';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { URL_REGEX } from '../lib/macros';
 
-// AngularJS URL Validation
-const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?(?:\/[\w#!:.?+=&%@\-/]*)?$/;
+
 @Component({
   selector: 'app-sources',
   templateUrl: 'sources.page.html',
