@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Edit Source</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="save()" [disabled]="form.invalid">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-label position="stacked">Title</ion-label>
+      <ion-input formControlName="title" type="text"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('title')?.touched && form.get('title')?.invalid" class="ion-padding-start ion-text-danger">Title is required.</div>
+
+    <ion-item>
+      <ion-label position="stacked">URL</ion-label>
+      <ion-input formControlName="url" type="url" inputmode="url"></ion-input>
+    </ion-item>
+    <div *ngIf="form.get('url')?.touched && form.get('url')?.invalid" class="ion-padding-start ion-text-danger">Please enter a valid URL.</div>
+
+    <ion-item>
+      <ion-label position="stacked">Description</ion-label>
+      <ion-textarea formControlName="description"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Polling Frequency (seconds)</ion-label>
+        <ion-select formControlName="pollingFrequency">
+          <ion-select-option [value]="0">Unlimited</ion-select-option>
+          <ion-select-option [value]="60">1 minute (Default)</ion-select-option>
+          <ion-select-option [value]="600">10 minutes</ion-select-option>
+          <ion-select-option [value]="3600">1 hour</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Podcast</ion-label>
+      <ion-toggle slot="end" formControlName="podcast"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Tags (comma-separated)</ion-label>
+      <ion-input formControlName="tags" type="text"></ion-input>
+    </ion-item>
+  </form>
+</ion-content>

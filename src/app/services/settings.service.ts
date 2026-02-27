@@ -27,7 +27,7 @@ export class SettingsService {
     compressedFeed: false,
     locale: 'en-AU',
     retrievalTimeout: 5000, // 5 seconds
-    defaultPollingFrequency: 0, // Unlimited
+    defaultPollingFrequency: 60, // 1 minute
     maxFeedLength: 10,
     mutedWords: [],
     highlightedWords: []

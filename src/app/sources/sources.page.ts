@@ -22,10 +22,11 @@ import { addIcons } from 'ionicons';
 import { create, trash, checkmarkCircleOutline, closeCircleOutline, swapVerticalOutline } from 'ionicons/icons';
 import { IFeedDict, SourcesService } from '../services/sources.service';
 import { PlatformService } from '../services/platform.service';
+import { SourceEditComponent } from '../source-edit/source-edit.component';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { URL_REGEX } from '../lib/macros';
 
-// AngularJS URL Validation
-const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?(?:\/[\w#!:.?+=&%@\-/]*)?$/;
+
 @Component({
   selector: 'app-sources',
   templateUrl: 'sources.page.html',
@@ -38,6 +39,7 @@ const URL_REGEX = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?
 export class SourcesPage {
   inputUrl: string = '';
   public rssForm: FormGroup;
+  private editModalOpen = false;
 
   constructor(
     public sourcesService: SourcesService,
@@ -70,51 +72,34 @@ export class SourcesPage {
   }
 
   async editUrl(feed: IFeedDict) {
-    const temp_feed = feed;
+    if (this.editModalOpen) return;
+    this.editModalOpen = true;
 
-    const alert = await this.alertController.create({
-      header: 'Edit Source',
-      inputs: [
-        {
-          name: 'title',
-          value: feed.title
-        },
-        {
-          name: 'url',
-          value: feed.url
-        },
-        {
-          name: 'description',
-          value: feed.description,
-          type: 'textarea',
-          placeholder: 'What is this feed about?'
-        },
-        {
-          name: 'polling',
-          value: feed.pollingFrequency,
-          type: 'number',
-          placeholder: 'Polling Frequency (Seconds)',
-          min: 0,
-          max: 86400
+    const modal = await this.modalController.create({
+      component: SourceEditComponent,
+      componentProps: { feed },
+      breakpoints: [1.0],
+      initialBreakpoint: 1.0,
+      backdropDismiss: false
+    });
+    try {
+      await modal.present();
+
+      const { data } = await modal.onDidDismiss();
+      if (data && data.updatedFeed) {
+        const updated: IFeedDict = data.updatedFeed;
+        if (updated.url === feed.url) {
+          // Same URL: update in-place
+          this.sourcesService.setSource(feed.url, updated);
+        } else {
+          // URL changed: remove old and add new
+          this.sourcesService.removeSource(feed.url);
+          this.sourcesService.addSource(updated);
         }
-      ],
-      buttons: ['Save'],
-    });
-
-    await alert.present();
-
-    await alert.onDidDismiss().then((data) => {
-      if (data.data !== undefined) {
-        temp_feed.title = data.data.values.title;
-        temp_feed.url = data.data.values.url;
-        temp_feed.description = data.data.values.description;
-        temp_feed.pollingFrequency = data.data.values.polling;
-
-        // Update stored Dictionary
-        this.sourcesService.removeSource(feed.url);
-        this.sourcesService.addSource(temp_feed);
       }
-    });
+    } finally {
+      this.editModalOpen = false;
+    }
   }
 
   reorderSources() {
