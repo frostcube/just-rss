@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OSInAppBrowser } from '@ionic-team/capacitor-os-inappbrowser';
+import { InAppBrowser } from '@capacitor/inappbrowser';
 import { Platform } from '@ionic/angular';
 
 type CurrentPlatform = 'browser' | 'native';
@@ -50,7 +50,7 @@ export class PlatformService {
   public openUrlInPlatformBrowser(entry: string | undefined) {
     if (entry !== undefined) {
       if (this.isNative()) {
-        OSInAppBrowser.open({
+        InAppBrowser.open({
           url: entry,
           entersReaderIfAvailable: true
         });
