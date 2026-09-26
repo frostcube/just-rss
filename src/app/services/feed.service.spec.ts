@@ -17,13 +17,15 @@ describe('FeedService', () => {
   it('filters out articles with muted words', () => {
     const settings = {
       preview: true,
-      showImages: false,
+      showImages: 'never' as const,
+      showSnippet: 'never' as const,
       compressedFeed: false,
       locale: 'en-AU',
       retrievalTimeout: 5000, // 5 seconds
       defaultPollingFrequency: 0, // Unlimited
       maxFeedLength: 10,
-      mutedWords: ['spoiler']
+      mutedWords: ['spoiler'],
+      highlightedWords: []
     };
     const articles = [
       { title: 'Spoiler Alert', content: '...'},
