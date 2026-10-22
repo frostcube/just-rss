@@ -59,6 +59,8 @@ export class PlatformService {
               enableReadersMode: true
             }
           }
+        }).catch((error: unknown) => {
+          console.error('[PlatformService] Failed to open system browser', error);
         });
       }
       else {
