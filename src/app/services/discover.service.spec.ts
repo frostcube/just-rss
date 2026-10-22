@@ -51,6 +51,28 @@ describe('DiscoverService', () => {
     expect(await service.listOpmlFiles()).toEqual([]);
   });
 
+  it('should find the country file matching the locale', async () => {
+    const fetchSpy = spyOn(window, 'fetch').and.resolveTo(new Response(JSON.stringify([
+      { name: 'Australia.opml', download_url: 'https://raw.example/Australia.opml' },
+      { name: 'Hong Kong SAR China.opml', download_url: 'https://raw.example/hk.opml' },
+      { name: 'United States.opml', download_url: 'https://raw.example/us.opml' }
+    ])));
+
+    expect((await service.getCountryOpmlFile('en-AU'))?.download_url).toBe('https://raw.example/Australia.opml');
+    expect((await service.getCountryOpmlFile('en-US'))?.download_url).toBe('https://raw.example/us.opml');
+    expect((await service.getCountryOpmlFile('zh-HK'))?.download_url).toBe('https://raw.example/hk.opml');
+    expect(await service.getCountryOpmlFile('en-NZ')).toBeUndefined();
+    // listing is cached across lookups
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not look up a country for an invalid locale', async () => {
+    const fetchSpy = spyOn(window, 'fetch');
+    expect(await service.getCountryOpmlFile('en')).toBeUndefined();
+    expect(await service.getCountryOpmlFile('')).toBeUndefined();
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   it('should parse OPML items with xmlUrl only', async () => {
     spyOn(window, 'fetch').and.resolveTo(new Response(OPML));
     const items = await service.fetchOpmlItems('https://raw.example/tech.opml');
