@@ -24,6 +24,9 @@
       (ionChange)="update()"> Compress feed display </ion-toggle>
     </ion-item>
     <ion-item>
+      <ion-toggle [(ngModel)]="currentSettings.showTagBar" (ionChange)="update()"> Show tag bar </ion-toggle>
+    </ion-item>
+    <ion-item>
       <ion-select label="Country" placeholder="currentSettings.locale" [(ngModel)]="currentSettings.locale"
       (ionChange)="update()">
       @for (country of countryCodeList; track country.countryNameEn) {

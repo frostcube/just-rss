@@ -31,4 +31,14 @@ describe('FeedPage', () => {
     component.filterByUrl('https://example.com/feed');
     expect(component.filter).toBe('');
   });
+
+  it('should ignore the selected tag when the tag bar is hidden', () => {
+    spyOn(component.sourcesService, 'getAllTags').and.returnValue(['news']);
+    component.filterByTag('news');
+    expect(component.showTagBar).toBeTrue();
+    expect(component.activeTag).toBe('news');
+
+    component.settingsService.updateSettings({ showTagBar: false });
+    expect(component.activeTag).toBe('');
+  });
 });

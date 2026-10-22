@@ -94,9 +94,13 @@ export class FeedPage {
     return this.sourcesService.getAllTags();
   }
 
-  /** The selected tag, or empty if it no longer exists on any source */
+  public get showTagBar(): boolean {
+    return this.settingsService.getSettings().showTagBar;
+  }
+
+  /** The selected tag, or empty if the bar is hidden or the tag no longer exists on any source */
   public get activeTag(): string {
-    return this.tags.includes(this.tag) ? this.tag : '';
+    return this.showTagBar && this.tags.includes(this.tag) ? this.tag : '';
   }
 
   public filterByTag(tag: string) {

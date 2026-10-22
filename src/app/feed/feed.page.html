@@ -43,7 +43,7 @@
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
-    @if (tags.length > 0) {
+    @if (showTagBar && tags.length > 0) {
       <ion-toolbar class="tag-toolbar">
         <div class="tag-list">
           <ion-chip [outline]="activeTag !== ''" [color]="activeTag === '' ? 'primary' : undefined" (click)="filterByTag('')">All</ion-chip>
