@@ -62,11 +62,11 @@ export class SourcesPage {
     try {
       const rssFeedUrl = await this.sourcesService.discoverRssFeed(websiteUrl);
       if (rssFeedUrl) {
-        this.sourcesService.addSourceFromUrl(rssFeedUrl);
+        await this.sourcesService.addSourceFromUrl(rssFeedUrl);
       } else {
         this.sourcesService.presentErrorToast('No RSS/Atom feed found at this URL.');
       }
-    } catch (error) {
+    } catch {
       this.sourcesService.presentErrorToast('Error discovering RSS/Atom feed.');
     }
   }
@@ -120,12 +120,14 @@ export class SourcesPage {
       });
       if (this.platformService.isAndroid()) {
         await this.sourcesService.presentWarnToast(
-          'OPML exported! Open the Files app, go to "Internal Storage" > "Documents" to access your file.'
+          'OPML exported! Open the Files app, go to "Internal Storage" > "Documents" to access your file.',
+          true
         );
       }
       else {
         await this.sourcesService.presentWarnToast(
-          'OPML exported! Open the Files app, go to "On My iPhone" > "just-rss" > "Documents" to access your file.'
+          'OPML exported! Open the Files app, go to "On My iPhone" > "just-rss" > "Documents" to access your file.',
+          true
         );
       }
     } else {
@@ -156,7 +158,7 @@ export class SourcesPage {
         } else {
           await this.sourcesService.presentErrorToast('Failed to import OPML.');
         }
-      } catch (err) {
+      } catch {
         await this.sourcesService.presentErrorToast('Invalid OPML file.');
       }
     };

@@ -9,6 +9,7 @@ import { BookmarkService } from './bookmark.service';
 declare const RSSParser: any;
 
 const STORAGE_FEED_LIST = 'v3_storage_feed_list';
+const TOAST_DURATION_MS = 4000;
 
 export interface IFeedDict {
   url: string,
@@ -109,10 +110,10 @@ export class SourcesService {
     }
   }
 
-  public getSource(feedUrl: string): IFeedDict {
+  public getSource(feedUrl: string): IFeedDict | undefined {
     const index = this._feedList.findIndex(feed => feed.url === feedUrl);
     console.log('[SourcesService] Retrieving feed: ' + feedUrl);
-    return this._feedList[index];
+    return index > -1 ? this._feedList[index] : undefined;
   }
 
   public getSources() {
@@ -142,7 +143,7 @@ export class SourcesService {
   public async loadSourcesList() {
     const storage_feed = await this.storageService.getObjectFromStorage(STORAGE_FEED_LIST);
     
-    if (storage_feed !== null)
+    if (Array.isArray(storage_feed))
       this._feedList = storage_feed;
   }
 
@@ -213,20 +214,21 @@ export class SourcesService {
       console.log(`[SourcesService] Retrieved ${feed.title}`);
     }
     catch (error) {
-      if (error instanceof Error) {
-        console.error('[SourcesService] ' + error.message);
-        const source = this.getSource(url);
-        if (source !== undefined) {
-          source.healthy = false;
-          this.setSource(url, source);
-        }
-        this.presentErrorToast(error.message);
+      const message = error instanceof Error ? error.message : String(error);
+      console.error('[SourcesService] ' + message);
+      const source = this.getSource(url);
+      if (source !== undefined) {
+        source.healthy = false;
+        this.setSource(url, source);
       }
+      this.presentErrorToast(message);
+      throw error;
     }
 
+    feed.items = feed.items ?? [];
     if (maxFeedLength > 0)
       feed.items = feed.items.slice(0, maxFeedLength);
-  
+
     feed.items.forEach((item: any) => {
       console.log(`[SourcesService] ${item.title} : ${item.link}`);
     });
@@ -245,7 +247,7 @@ export class SourcesService {
         item.content = item['content:encoded'];
         item['content:encoded'] = '';
       }
-      item.contentStripped = item.contentSnippet.substring(0, 120);
+      item.contentStripped = (item.contentSnippet ?? '').substring(0, 120);
       item.feedUrl = feed.url;
       item.imgLink = this.getItemMedia(item);
       item.source = feed.title;
@@ -256,31 +258,30 @@ export class SourcesService {
     this.storageService.set(feed.url, tempFeedData);
 
     const source = this.getSource(feed.url);
-    source.healthy = true;
-    source.lastRetrieved = Date.now();
-    this.setSource(feed.url, source);
+    if (source !== undefined) {
+      source.healthy = true;
+      source.lastRetrieved = Date.now();
+      this.setSource(feed.url, source);
+    }
 
     return tempFeedData;
   }
 
-  public async presentErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 2000,
-      position: 'bottom',
-      color: 'danger',
-      positionAnchor: 'tab-bar'
-    });
-
-    await toast.present();
+  public async presentErrorToast(message: string, dismissable = false) {
+    await this.presentToast(message, 'danger', dismissable);
   }
 
-  public async presentWarnToast(message: string) {
+  public async presentWarnToast(message: string, dismissable = false) {
+    await this.presentToast(message, 'warning', dismissable);
+  }
+
+  private async presentToast(message: string, color: string, dismissable: boolean) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: dismissable ? 0 : TOAST_DURATION_MS,
+      buttons: dismissable ? [{ text: 'Dismiss', role: 'cancel' }] : [],
       position: 'bottom',
-      color: 'warning',
+      color: color,
       positionAnchor: 'tab-bar'
     });
 
@@ -363,7 +364,7 @@ export class SourcesService {
         }
       }
       return imported > 0;
-    } catch (e) {
+    } catch {
       return false;
     }
   }

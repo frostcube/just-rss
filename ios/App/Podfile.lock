@@ -3,8 +3,6 @@ PODS:
     - CapacitorCordova
   - CapacitorApp (8.0.0):
     - Capacitor
-  - CapacitorBrowser (8.0.0):
-    - Capacitor
   - CapacitorCommunitySqlite (7.0.3):
     - Capacitor
     - SQLCipher
@@ -15,9 +13,13 @@ PODS:
     - IONFilesystemLib (~> 1.1.0)
   - CapacitorHaptics (8.0.0):
     - Capacitor
+  - CapacitorInappbrowser (4.0.3):
+    - Capacitor
+    - OSInAppBrowserLib (~> 2.3.2)
   - CapacitorKeyboard (8.0.0):
     - Capacitor
   - IONFilesystemLib (1.1.0)
+  - OSInAppBrowserLib (2.3.2)
   - SQLCipher (4.9.0):
     - SQLCipher/standard (= 4.9.0)
   - SQLCipher/common (4.9.0)
@@ -28,16 +30,17 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
-  - "CapacitorBrowser (from `../../node_modules/@capacitor/browser`)"
   - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
+  - "CapacitorInappbrowser (from `../../node_modules/@capacitor/inappbrowser`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
 
 SPEC REPOS:
   trunk:
     - IONFilesystemLib
+    - OSInAppBrowserLib
     - SQLCipher
     - ZIPFoundation
 
@@ -46,8 +49,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/@capacitor/app"
-  CapacitorBrowser:
-    :path: "../../node_modules/@capacitor/browser"
   CapacitorCommunitySqlite:
     :path: "../../node_modules/@capacitor-community/sqlite"
   CapacitorCordova:
@@ -56,22 +57,25 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/filesystem"
   CapacitorHaptics:
     :path: "../../node_modules/@capacitor/haptics"
+  CapacitorInappbrowser:
+    :path: "../../node_modules/@capacitor/inappbrowser"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
 
 SPEC CHECKSUMS:
   Capacitor: 2b79172ad27f3be2d103cce88b8eb9803fdcc744
   CapacitorApp: 3963a84197280757b84f126afd1520a85ae3b092
-  CapacitorBrowser: b7d7f05f840fe042e46f6528bb8db853e3058fb2
   CapacitorCommunitySqlite: 4813d82ad33001e612a39d313cb5d28066cbafda
   CapacitorCordova: 921bdb690ebe82421b24fce45552fd3dea2ae43a
   CapacitorFilesystem: a957d4a4b6860844c4eba5bf441607a5166f92a7
   CapacitorHaptics: 2079d9fa04c5a71e18663b4722323c304c58245c
+  CapacitorInappbrowser: fc888427717f9db4d9b57caf5c28fe7ced4d07f3
   CapacitorKeyboard: d7868c079a4d5277a3deca27a10a488fcbbb8b69
   IONFilesystemLib: 50b9a0f3052a9b40b9bedb43f328a8fe222f9f87
+  OSInAppBrowserLib: c21c8fa3d886654d2f553b9f1bded9d27a0530c7
   SQLCipher: 31878d8ebd27e5c96db0b7cb695c96e9f8ad77da
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 2b393b371f4b774de1b48ebf1a0e870c2be4a5fc
+PODFILE CHECKSUM: 4effb31ce3fda0bd8c4984aaecbcd0c6031b2b33
 
 COCOAPODS: 1.16.2

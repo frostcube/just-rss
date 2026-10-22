@@ -48,7 +48,7 @@ export class BookmarkService {
   public async loadBookmarkList() {
     const storage_bookmarks = await this.storageService.getObjectFromStorage(BOOKMARK_FEED_LIST);
     
-    if (storage_bookmarks !== null)
+    if (Array.isArray(storage_bookmarks))
       this._bookmarkList = storage_bookmarks;
   }
 }

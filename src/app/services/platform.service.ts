@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Browser, OpenOptions } from '@capacitor/browser';
-import { Platform } from '@ionic/angular';
+import { DefaultSystemBrowserOptions, InAppBrowser } from '@capacitor/inappbrowser';
+import { Platform } from '@ionic/angular/standalone';
 
 type CurrentPlatform = 'browser' | 'native';
 
@@ -50,12 +50,18 @@ export class PlatformService {
   public openUrlInPlatformBrowser(entry: string | undefined) {
     if (entry !== undefined) {
       if (this.isNative()) {
-        const config: OpenOptions = {
+        InAppBrowser.openInSystemBrowser({
           url: entry,
-          entersReaderIfAvailable: true
-        };
-      
-        Browser.open(config);
+          options: {
+            ...DefaultSystemBrowserOptions,
+            iOS: {
+              ...DefaultSystemBrowserOptions.iOS,
+              enableReadersMode: true
+            }
+          }
+        }).catch((error: unknown) => {
+          console.error('[PlatformService] Failed to open system browser', error);
+        });
       }
       else {
         window.open(entry, '_blank'); 
