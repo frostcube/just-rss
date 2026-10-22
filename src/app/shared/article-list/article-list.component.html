@@ -2,7 +2,7 @@
 <ion-list>
   @for (entry of entries; track entry) {
     <div>
-      @if (filter === '' || entry.feedUrl === filter) {
+      @if (isVisible(entry)) {
         <div>
           @if (!settingsService.getSettings().compressedFeed) {
             <div>

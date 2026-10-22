@@ -43,6 +43,16 @@
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
+    @if (tags.length > 0) {
+      <ion-toolbar class="tag-toolbar">
+        <div class="tag-list">
+          <ion-chip [outline]="activeTag !== ''" [color]="activeTag === '' ? 'primary' : undefined" (click)="filterByTag('')">All</ion-chip>
+          @for (t of tags; track t) {
+            <ion-chip [outline]="activeTag !== t" [color]="activeTag === t ? 'primary' : undefined" (click)="filterByTag(t)">{{t}}</ion-chip>
+          }
+        </div>
+      </ion-toolbar>
+    }
   </ion-header>
 
   <!-- Collapsable Header iOS -->
@@ -78,6 +88,7 @@
       <app-article-list
         [entries]="feedService.entries"
         [filter]="filter"
+        [tag]="activeTag"
         [presentingElementId]="this.elementRef.nativeElement"
       ></app-article-list>
     }

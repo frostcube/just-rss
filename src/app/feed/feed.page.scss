@@ -4,3 +4,15 @@
         --padding-end: 20%;
     }
 }
+
+.tag-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0 8px;
+    scrollbar-width: none;
+
+    ion-chip {
+        flex: 0 0 auto;
+    }
+}
