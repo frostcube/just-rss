@@ -120,12 +120,14 @@ export class SourcesPage {
       });
       if (this.platformService.isAndroid()) {
         await this.sourcesService.presentWarnToast(
-          'OPML exported! Open the Files app, go to "Internal Storage" > "Documents" to access your file.'
+          'OPML exported! Open the Files app, go to "Internal Storage" > "Documents" to access your file.',
+          true
         );
       }
       else {
         await this.sourcesService.presentWarnToast(
-          'OPML exported! Open the Files app, go to "On My iPhone" > "just-rss" > "Documents" to access your file.'
+          'OPML exported! Open the Files app, go to "On My iPhone" > "just-rss" > "Documents" to access your file.',
+          true
         );
       }
     } else {
