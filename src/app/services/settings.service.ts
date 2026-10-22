@@ -8,6 +8,7 @@ export interface ISettingsDict {
     showImages: 'never' | 'whenHighlighted' | 'always',
     showSnippet: 'never' | 'whenHighlighted' | 'always',
     compressedFeed: boolean,
+    showTagBar: boolean,
     locale: string,
     retrievalTimeout: number,
     defaultPollingFrequency: number,
@@ -25,6 +26,7 @@ export class SettingsService {
     showImages: 'whenHighlighted',
     showSnippet: 'whenHighlighted',
     compressedFeed: false,
+    showTagBar: true,
     locale: 'en-AU',
     retrievalTimeout: 5000, // 5 seconds
     defaultPollingFrequency: 60, // 1 minute

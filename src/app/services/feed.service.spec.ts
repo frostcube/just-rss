@@ -11,6 +11,7 @@ describe('FeedService', () => {
     showImages: 'never',
     showSnippet: 'never',
     compressedFeed: false,
+    showTagBar: true,
     locale: 'en-AU',
     retrievalTimeout: 5000,
     defaultPollingFrequency: 0,

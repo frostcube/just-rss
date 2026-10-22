@@ -4,7 +4,7 @@ import {
   IonButton,
   IonButtons, IonContent,
   IonFab, IonFabButton,
-  IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList,
+  IonChip, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList,
   IonMenu,
   IonMenuToggle,
   IonRefresher,
@@ -37,7 +37,7 @@ import { SkeletonsComponent } from '../shared/skeletons/skeletons.component';
     IonHeader, IonToolbar, IonTitle,
     IonContent, IonList, IonInput, 
     IonIcon, IonButton, IonButtons, IonText, IonMenu, IonThumbnail, IonMenuToggle, 
-    IonLabel, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
+    IonLabel, IonChip, IonRefresher, IonRefresherContent, IonFab, IonFabButton,
     SettingsComponent,
     ArticleListComponent,
     SkeletonsComponent
@@ -49,6 +49,7 @@ export class FeedPage {
   @ViewChild('mainFeed', { static: true })
   public mainFeed!: IonContent;
   public filter: string = '';
+  public tag: string = '';
   public currentScrollOffset: number = 0;
   public loading: boolean = true;
 
@@ -87,6 +88,24 @@ export class FeedPage {
 
   public filterClear() {
     this.filter = '';
+  }
+
+  public get tags(): Array<string> {
+    return this.sourcesService.getAllTags();
+  }
+
+  public get showTagBar(): boolean {
+    return this.settingsService.getSettings().showTagBar;
+  }
+
+  /** The selected tag, or empty if the bar is hidden or the tag no longer exists on any source */
+  public get activeTag(): string {
+    return this.showTagBar && this.tags.includes(this.tag) ? this.tag : '';
+  }
+
+  public filterByTag(tag: string) {
+    this.tag = this.tag === tag ? '' : tag;
+    console.log('[FeedPage] Tag set: ' + this.tag);
   }
 
   async openSettings() {

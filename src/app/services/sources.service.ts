@@ -120,6 +120,26 @@ export class SourcesService {
     return this._feedList;
   }
 
+  /** Returns the unique (case-insensitive) tags assigned across all sources, sorted alphabetically */
+  public getAllTags(): Array<string> {
+    const tags = new Map<string, string>();
+    for (const feed of this._feedList) {
+      for (const tag of feed.tags ?? []) {
+        const trimmed = tag.trim();
+        if (trimmed.length > 0 && !tags.has(trimmed.toLowerCase()))
+          tags.set(trimmed.toLowerCase(), trimmed);
+      }
+    }
+    return Array.from(tags.values()).sort((a, b) => a.localeCompare(b));
+  }
+
+  /** True if the source with the given URL has the given tag (case-insensitive) */
+  public sourceHasTag(feedUrl: string, tag: string): boolean {
+    const feed = this._feedList.find(f => f.url === feedUrl);
+    const needle = tag.trim().toLowerCase();
+    return !!feed && (feed.tags ?? []).some(t => t.trim().toLowerCase() === needle);
+  }
+
   public async loadSourcesList() {
     const storage_feed = await this.storageService.getObjectFromStorage(STORAGE_FEED_LIST);
     

@@ -12,6 +12,7 @@ import { PlatformService } from 'src/app/services/platform.service';
 import { SettingsService } from 'src/app/services/settings.service';
 import { formatDateAsDay, formatDateRelative } from '../../lib/date-utils';
 import { FeedService } from '../../services/feed.service';
+import { SourcesService } from '../../services/sources.service';
 
 @Component({
   selector: 'app-article-list',
@@ -28,6 +29,7 @@ export class ArticleListComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() entries: any[] = [];
   @Input() filter: string = '';
+  @Input() tag: string = '';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() presentingElementId: any;
 
@@ -38,8 +40,15 @@ export class ArticleListComponent {
               public feedService: FeedService,
               public modalController: ModalController,
               public platformService: PlatformService, 
-              public settingsService: SettingsService) { 
+              public settingsService: SettingsService,
+              private sourcesService: SourcesService) { 
     addIcons({ bookmark, bookmarkOutline});
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public isVisible(entry: any): boolean {
+    return (this.filter === '' || entry.feedUrl === this.filter) &&
+      (this.tag === '' || this.sourcesService.sourceHasTag(entry.feedUrl, this.tag));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
