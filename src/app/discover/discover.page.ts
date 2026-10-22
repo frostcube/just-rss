@@ -52,8 +52,7 @@ export class DiscoverPage implements OnInit {
 
   // Button will force both sections to refresh
   public async forceRefresh() {
-    this.refreshSections();
-    this.refreshSelectedSection();
+    await Promise.all([this.refreshSections(), this.refreshSelectedSection()]);
   }
 
   // Force refresh the list of sections (bypass cache)
@@ -76,9 +75,9 @@ export class DiscoverPage implements OnInit {
     return Array.isArray(this.suggestedFeeds) && this.suggestedFeeds.some(f => !!f && f.selected === true);
   }
 
-  addFeeds() {
+  async addFeeds() {
     for (const feed of this.suggestedFeeds) {
-      if (feed.selected) this.sourcesService.addSourceFromUrl(feed.xmlUrl);
+      if (feed.selected) await this.addFeed(feed);
     }
   }
 

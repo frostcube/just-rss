@@ -20,10 +20,31 @@ The intention is to keep Just RSS a simple app with as few features as possible,
 
 # Developer Getting Started
 
+Requires Node.js 20.x or 22.x (Angular 18).
+
 ```bash
 npm install -g @ionic/cli native-run cordova-res
 npm install -g @angular/cli
+npm install
 ```
+
+`npm install` also runs `patch-package` (see `patches/`) to apply a small fix to `@stencil/core` that removes an upstream build warning.
+
+## Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm start` | Serve the app locally (`ng serve`) |
+| `npm run build` | Production build into `www/` |
+| `npm run lint` | Lint `src/` with ESLint (`npm run lint:fix` to auto-fix) |
+| `npm test` | Run unit tests in Chrome in watch mode |
+| `npm run test:ci` | Run unit tests once in headless Chrome |
+
+Lint, tests and the build run in CI on every push and pull request to `main` (`.github/workflows/node.js.yml`). The build is expected to finish with no errors or warnings.
+
+## Testing
+
+Unit tests use Jasmine and Karma and live next to the code as `*.spec.ts` files. Chrome must be installed (set `CHROME_BIN` if it is not on the default path). Specs that touch storage use the in-memory `FakeStorage` and `provideTestingStorage()` from `src/testing/storage-mock.ts`, so no SQLite or IndexedDB is needed.
 
 ## Building
 

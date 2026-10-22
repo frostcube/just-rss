@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -26,6 +27,7 @@ import { URL_REGEX } from '../lib/macros';
   styleUrls: ['./source-edit.component.scss'],
   standalone: true,
   imports: [
+    NgIf,
     ReactiveFormsModule,
     IonHeader,
     IonToolbar,

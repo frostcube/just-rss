@@ -37,6 +37,9 @@
               "src/theme/variables.scss"
             ],
             "scripts": [],
+            "allowedCommonJsDependencies": [
+              "localforage"
+            ],
             "browser": "src/main.ts"
           },
           "configurations": {

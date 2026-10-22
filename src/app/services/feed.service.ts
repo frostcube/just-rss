@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Disabled as we are using an untyped library: RSSPhaser
 import { Injectable, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { StorageService } from './storage.service';
 import { SourcesService } from './sources.service';
 import { ISettingsDict, SettingsService } from './settings.service';
@@ -16,20 +17,20 @@ export class FeedService implements OnDestroy {
   public entries: any = [];
   public lastUpdated: number = 0;
   public hidden: number = 0;
+  private subscriptions = new Subscription();
 
   constructor(private settingsService: SettingsService, private sourcesService: SourcesService, private storageService: StorageService) { 
-    this.storageService.onReady.subscribe(() => {
+    this.subscriptions.add(this.storageService.onReady.subscribe(() => {
       this.initFeedData(this.storageService.onReady.value);
-    });
+    }));
 
-    this.sourcesService.newSource.subscribe((feedUrl) => {
+    this.subscriptions.add(this.sourcesService.newSource.subscribe((feedUrl) => {
       this.appendEntryFromCache(feedUrl);
-    });
+    }));
   }
 
   ngOnDestroy() {
-    this.storageService.onReady.unsubscribe();
-    this.sourcesService.newSource.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   private initFeedData(status: boolean) {
@@ -44,9 +45,9 @@ export class FeedService implements OnDestroy {
 
   private async loadEntries() {
     const storage_feed = await this.storageService.getObjectFromStorage(STORAGE_FEED_DATA);
-    this.lastUpdated = await this.storageService.getObjectFromStorage(STORAGE_FEED_DATA_TIMESTAMP);
+    this.lastUpdated = (await this.storageService.getObjectFromStorage(STORAGE_FEED_DATA_TIMESTAMP)) ?? 0;
     
-    if (storage_feed !== null)
+    if (Array.isArray(storage_feed))
       this.entries = storage_feed;
   }
 
@@ -108,7 +109,7 @@ export class FeedService implements OnDestroy {
   public async appendEntryFromCache(feedUrl: string) {
     const feedData = await this.storageService.getObjectFromStorage(feedUrl);
 
-    for (const item of feedData) {
+    for (const item of feedData ?? []) {
       this.entries.push(item);
     }
 

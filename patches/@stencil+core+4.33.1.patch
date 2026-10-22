@@ -1,0 +1,19 @@
+diff --git a/node_modules/@stencil/core/internal/client/index.js b/node_modules/@stencil/core/internal/client/index.js
+index d44ea1b..f4c2947 100644
+--- a/node_modules/@stencil/core/internal/client/index.js
++++ b/node_modules/@stencil/core/internal/client/index.js
+@@ -150,12 +150,8 @@ var loadModule = (cmpMeta, hostRef, hmrVersionId) => {
+     return module[exportName];
+   }
+   /*!__STENCIL_STATIC_IMPORT_SWITCH__*/
+-  return import(
+-    /* @vite-ignore */
+-    /* webpackInclude: /\.entry\.js$/ */
+-    /* webpackExclude: /\.system\.entry\.js$/ */
+-    /* webpackMode: "lazy" */
+-    `./${bundleId}.entry.js${BUILD5.hotModuleReplacement && hmrVersionId ? "?s-hmr=" + hmrVersionId : ""}`
++  return Promise.reject(
++    new Error(`Lazy loading <${cmpMeta.$tagName$}> is not supported in custom elements builds`)
+   ).then(
+     (importedModule) => {
+       if (!BUILD5.hotModuleReplacement) {
