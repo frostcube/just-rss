@@ -4,11 +4,13 @@
   "author": "FrostCube",
   "homepage": "https://frostcube.com/",
   "scripts": {
+    "postinstall": "patch-package",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCI",
     "lint": "eslint ./src/",
     "lint:fix": "eslint ./src/ --fix"
   },

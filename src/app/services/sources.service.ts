@@ -110,10 +110,10 @@ export class SourcesService {
     }
   }
 
-  public getSource(feedUrl: string): IFeedDict {
+  public getSource(feedUrl: string): IFeedDict | undefined {
     const index = this._feedList.findIndex(feed => feed.url === feedUrl);
     console.log('[SourcesService] Retrieving feed: ' + feedUrl);
-    return this._feedList[index];
+    return index > -1 ? this._feedList[index] : undefined;
   }
 
   public getSources() {
@@ -123,7 +123,7 @@ export class SourcesService {
   public async loadSourcesList() {
     const storage_feed = await this.storageService.getObjectFromStorage(STORAGE_FEED_LIST);
     
-    if (storage_feed !== null)
+    if (Array.isArray(storage_feed))
       this._feedList = storage_feed;
   }
 
@@ -194,20 +194,21 @@ export class SourcesService {
       console.log(`[SourcesService] Retrieved ${feed.title}`);
     }
     catch (error) {
-      if (error instanceof Error) {
-        console.error('[SourcesService] ' + error.message);
-        const source = this.getSource(url);
-        if (source !== undefined) {
-          source.healthy = false;
-          this.setSource(url, source);
-        }
-        this.presentErrorToast(error.message);
+      const message = error instanceof Error ? error.message : String(error);
+      console.error('[SourcesService] ' + message);
+      const source = this.getSource(url);
+      if (source !== undefined) {
+        source.healthy = false;
+        this.setSource(url, source);
       }
+      this.presentErrorToast(message);
+      throw error;
     }
 
+    feed.items = feed.items ?? [];
     if (maxFeedLength > 0)
       feed.items = feed.items.slice(0, maxFeedLength);
-  
+
     feed.items.forEach((item: any) => {
       console.log(`[SourcesService] ${item.title} : ${item.link}`);
     });
@@ -226,7 +227,7 @@ export class SourcesService {
         item.content = item['content:encoded'];
         item['content:encoded'] = '';
       }
-      item.contentStripped = item.contentSnippet.substring(0, 120);
+      item.contentStripped = (item.contentSnippet ?? '').substring(0, 120);
       item.feedUrl = feed.url;
       item.imgLink = this.getItemMedia(item);
       item.source = feed.title;
@@ -237,9 +238,11 @@ export class SourcesService {
     this.storageService.set(feed.url, tempFeedData);
 
     const source = this.getSource(feed.url);
-    source.healthy = true;
-    source.lastRetrieved = Date.now();
-    this.setSource(feed.url, source);
+    if (source !== undefined) {
+      source.healthy = true;
+      source.lastRetrieved = Date.now();
+      this.setSource(feed.url, source);
+    }
 
     return tempFeedData;
   }
@@ -341,7 +344,7 @@ export class SourcesService {
         }
       }
       return imported > 0;
-    } catch (e) {
+    } catch {
       return false;
     }
   }

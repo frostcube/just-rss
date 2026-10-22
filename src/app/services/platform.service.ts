@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DefaultSystemBrowserOptions, InAppBrowser } from '@capacitor/inappbrowser';
-import { Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular/standalone';
 
 type CurrentPlatform = 'browser' | 'native';
 
