@@ -1,0 +1,12 @@
+@media (orientation: landscape) {
+    #discover-feed {
+        --padding-start: 20%;
+        --padding-end: 20%;
+    }
+}
+
+ion-card ion-list,
+ion-card ion-list ion-item {
+    --background: transparent;
+    background: transparent;
+}
