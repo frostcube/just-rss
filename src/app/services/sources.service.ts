@@ -9,6 +9,7 @@ import { BookmarkService } from './bookmark.service';
 declare const RSSParser: any;
 
 const STORAGE_FEED_LIST = 'v3_storage_feed_list';
+const TOAST_DURATION_MS = 4000;
 
 export interface IFeedDict {
   url: string,
@@ -243,24 +244,21 @@ export class SourcesService {
     return tempFeedData;
   }
 
-  public async presentErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 2000,
-      position: 'bottom',
-      color: 'danger',
-      positionAnchor: 'tab-bar'
-    });
-
-    await toast.present();
+  public async presentErrorToast(message: string, dismissable = false) {
+    await this.presentToast(message, 'danger', dismissable);
   }
 
-  public async presentWarnToast(message: string) {
+  public async presentWarnToast(message: string, dismissable = false) {
+    await this.presentToast(message, 'warning', dismissable);
+  }
+
+  private async presentToast(message: string, color: string, dismissable: boolean) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: dismissable ? 0 : TOAST_DURATION_MS,
+      buttons: dismissable ? [{ text: 'Dismiss', role: 'cancel' }] : [],
       position: 'bottom',
-      color: 'warning',
+      color: color,
       positionAnchor: 'tab-bar'
     });
 
